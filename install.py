@@ -2,7 +2,6 @@
 """Install or remove Omacontra for the current user; no root access required."""
 import argparse
 import importlib
-import os
 from pathlib import Path
 import shlex
 import shutil
@@ -55,10 +54,8 @@ def install(prefix):
     with tempfile.TemporaryDirectory(prefix='.omacontra-', dir=target.parent) as temp:
         staged = Path(temp)/'game'
         staged.mkdir()
-        for source in ROOT.glob('*.py'):
-            if source.name.startswith('test_') or source.name in ('install.py', 'asset_review.py') or source.name.endswith('_playtest.py'):
-                continue
-            shutil.copy2(source, staged/source.name)
+        shutil.copy2(ROOT/'main.py', staged/'main.py')
+        shutil.copytree(ROOT/'src', staged/'src', ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
         shutil.copytree(ROOT/'assets', staged/'assets')
         shutil.copytree(ROOT/'THIRD_PARTY', staged/'THIRD_PARTY')
         shutil.copy2(ROOT/'README.md', staged/'README.md')

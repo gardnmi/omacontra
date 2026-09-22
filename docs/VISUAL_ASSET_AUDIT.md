@@ -27,7 +27,7 @@ Four new atlases supply 24 illustrated sprite frames for those gaps.
 
 The detailed arenas, bosses, vehicles, waves, harpoon, space explosion and portal
 remain the visual references. Canonical character routing remains in
-`character_assets.py`. The recovered original opening and its animated wine cellar
+`src/omacontra/rendering/character_assets.py`. The recovered original opening and its animated wine cellar
 were preserved. Health bars, aiming marks, thin tracers and tiny sparks remain
 deliberately simple so the action is readable.
 
@@ -64,7 +64,7 @@ boss health, story beats and audio settings are unchanged.
 Generate 13 gameplay review states and an eight-second effects video:
 
 ```sh
-python asset_review.py --output /tmp/omacontra-art --video
+python tools/asset_review.py --output /tmp/omacontra-art --video
 ```
 
 Review the actual scenes interactively:

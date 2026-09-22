@@ -25,13 +25,13 @@
 | Lamborghini catch | finale-catch-car-canonical.png | Both occupants corrected; magenta-key background removes brown haze |
 | Rear driving payoff | finale-car-rear-canonical.png | Tobi blue suit; DHH brown hair/black shirt |
 
-`character_assets.py` routes shared logical sprite names to their approved replacements. Original alpha mattes are applied at load time for unchanged silhouettes, preventing generated background halos from entering scenes. The catch sheet uses chroma-key decoding and explicit frame/wheel coordinates.
+`src/omacontra/rendering/character_assets.py` routes shared logical sprite names to their approved replacements. Original alpha mattes are applied at load time for unchanged silhouettes, preventing generated background halos from entering scenes. The catch sheet uses chroma-key decoding and explicit frame/wheel coordinates.
 
 Legacy `cover-v1.png`, `dhh-sprites.png`, `finale-catch-car.png`, `finale-catch-car-v2.png`, and `finale-catch-close.png` remain historical assets, not live character sources. Original human cells in `finale-atlas.png` are superseded at render time. Background, enemy, weapon, and effect sheets do not portray Tobi/DHH and were not redesigned.
 
 ## Opening recovered, not re-created
 
-Exact original opening source was recovered from the local Codex session history and saved under `docs/original-opening/`. `story.py` restores its seven beats and durations. `art.py` restores its original `wine_cellar` and `story_card` methods. The later portal story still starts only after Enter at the title screen.
+Exact original opening source was recovered from the local Codex session history and saved under `docs/original-opening/`. `src/omacontra/ui/story.py` restores its seven beats and durations. `src/omacontra/ui/art.py` restores its original `wine_cellar` and `story_card` methods. The later portal story still starts only after Enter at the title screen.
 
 The cellar has blinking LEDs, spinning fan spokes, rising red illumination and a slow camera push. Review video: `review/opening-restored.mp4`.
 

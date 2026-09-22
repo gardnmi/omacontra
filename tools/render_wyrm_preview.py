@@ -1,9 +1,9 @@
 """Silent art/motion preview of intro and attacks using the actual game renderer."""
 from pathlib import Path
 import sys,subprocess,cairo
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from foundry import Foundry
-from foundry_art import FoundryRenderer,FoundryIntro
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
+from omacontra.stages.dragon.foundry import Foundry
+from omacontra.stages.dragon.foundry_art import FoundryRenderer, FoundryIntro
 ROOT=Path(__file__).resolve().parents[1];fps=24
 r=FoundryRenderer();f=Foundry();intro=FoundryIntro()
 s=cairo.ImageSurface(cairo.FORMAT_ARGB32,1280,720);c=cairo.Context(s)

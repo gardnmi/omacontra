@@ -39,9 +39,9 @@ def build():
 def rasterize():
     # Bake terminal interpretation and glyph rendering out of the game loop.
     import sys,struct,zlib
-    sys.path.insert(0,str(ROOT))
+    sys.path.insert(0,str(ROOT/"src"))
     import cairo
-    from screensaver_art import frame_cells
+    from omacontra.stages.space.screensaver_art import frame_cells
     for effect in EFFECTS:
         target=ROOT/'assets/screensaver'
         clip=json.loads(gzip.decompress((target/f'{effect}.json.gz').read_bytes()))
