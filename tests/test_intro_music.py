@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock,patch
-from omacontra.audio.intro_music import IntroMusic, TRACK, START_SOUND, GAME_TRACKS
+from omacontra.audio.intro_music import IntroMusic, TRACK, START_SOUND, GAME_TRACKS, FINALE_TRACK
 
 class IntroMusicTests(unittest.TestCase):
     def test_only_starts_for_visible_opening_and_stops_after_start(self):
@@ -43,7 +43,7 @@ class IntroMusicTests(unittest.TestCase):
             self.assertIn('--loop-file=no',args)
             self.assertEqual(args[args.index('--')+1:],[str(p) for p in GAME_TRACKS])
             self.assertEqual([p.name for p in GAME_TRACKS],[
-                'wine-cellar-off-duty-mercenary.mp3','quattro-run-omarchy-oligarchy.mp3',
+                'wine-cellar-off-duty-mercenary.mp3',
                 'contra.mp3','the-descent.mp3','omacontra-opening-theme.mp3'])
             for _ in range(10):music.update(True)
             launch.assert_called_once();music.stop()
@@ -59,6 +59,8 @@ class IntroMusicTests(unittest.TestCase):
         def tick(active):
             with patch('omacontra.boss_app.time.monotonic',return_value=app.last+.02):app.tick()
             app.game_music.update.assert_called_with(active,True)
+            app.game_music.select_playlist.assert_called_with(
+                (FINALE_TRACK,) if app.level==5 and app.intro is None else GAME_TRACKS)
         tick(False)
         app.intro=Intro(journey=True)
         for index in range(len(app.intro.beats)):
@@ -68,9 +70,27 @@ class IntroMusicTests(unittest.TestCase):
             app.level=level
             for state in ('play','dying','dead','won'):
                 app.f.state=state;tick(True)
+        app.level=5;app.f.state='departure';tick(True)
         app.level=1;app.reset_encounter();tick(True)
         app.game_music.restart.assert_not_called()
         app.game_music.stop.assert_not_called()
+
+    def test_finale_track_switches_once_and_loops_without_restarting_on_retry(self):
+        process=Mock();process.poll.return_value=None
+        with patch('omacontra.audio.intro_music.subprocess.Popen',return_value=process) as launch:
+            music=IntroMusic(playlist=GAME_TRACKS);music.set_volume(63);music.update(True)
+            music.select_playlist((FINALE_TRACK,));process.terminate.assert_called_once()
+            music.update(True)
+            args=launch.call_args.args[0]
+            self.assertEqual(args[args.index('--')+1:],[str(FINALE_TRACK)])
+            self.assertIn('--loop-playlist=inf',args)
+            self.assertIn('--volume=63',args)
+            for _ in range(10):
+                music.select_playlist((FINALE_TRACK,));music.update(True)
+            self.assertEqual(launch.call_count,2)
+            music.select_playlist(GAME_TRACKS);music.update(True)
+            self.assertEqual(launch.call_count,3)
+            music.stop()
 
     def test_missing_player_does_not_break_game_or_retry_every_tick(self):
         with patch('omacontra.audio.intro_music.subprocess.Popen',side_effect=FileNotFoundError),patch('builtins.print'):

@@ -35,7 +35,7 @@
     "file": "quattro-run-omarchy-oligarchy.mp3",
     "source": "https://radio.omarchy.org/playlist/omarchy-oligarchy-synthwave-mix",
     "download": "https://radio.omarchy.org/tracks/yzl81-omarchy-oligarchy-synthwave-mix.mp3",
-    "usage": "Continuous gameplay playlist; independent of scenes and levels",
+    "usage": "Final level exclusive; starts at rocket boarding/departure cutscene and loops through Black Moon",
     "duration_seconds": 276.8
   },
   "contra": {
@@ -56,19 +56,19 @@
     "loop": true,
     "tracks": [
       "wine_cellar_journey",
-      "quattro_run",
       "contra",
       "the_descent",
       "opening_theme"
     ],
-    "starts": "Wine-rack demonstration after Start, or direct level launch",
+    "starts": "Wine-rack demonstration after Start, or direct launch of levels 1–4",
     "continues_through": [
       "cutscenes",
       "level transitions",
       "victory",
       "death",
       "retry"
-    ]
+    ],
+    "ends": "Replaced by Omarchy Oligarchy at final-level departure"
   },
   "unlimited_lives_unlock": {
     "title": "Unlimited Lives Unlock",

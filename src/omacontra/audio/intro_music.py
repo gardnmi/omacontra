@@ -9,8 +9,8 @@ START_SOUND=ASSETS/'audio/omacontra-start-impact.wav'
 TRACK=ASSETS/'audio/omacontra-opening-theme.mp3'
 
 JOURNEY_TRACK=ASSETS/'audio/wine-cellar-off-duty-mercenary.mp3'
-CHASE_TRACK=ASSETS/'audio/quattro-run-omarchy-oligarchy.mp3'
-GAME_TRACKS=(JOURNEY_TRACK,CHASE_TRACK,
+FINALE_TRACK=ASSETS/'audio/quattro-run-omarchy-oligarchy.mp3'
+GAME_TRACKS=(JOURNEY_TRACK,
              TRACK.parent/'contra.mp3',TRACK.parent/'the-descent.mp3',TRACK)
 
 class IntroMusic:
@@ -21,6 +21,13 @@ class IntroMusic:
         self.extra_args=extra_args
         self.start_effect=False
         self.volume=85
+
+    def select_playlist(self,tracks):
+        """Switch music once at a scene boundary; retain volume and retry state."""
+        tracks=tuple(tracks)
+        if self.playlist==tracks:return
+        self.stop()
+        self.playlist=tracks
 
     def set_volume(self,value):
         value=max(0,min(150,value))

@@ -387,12 +387,11 @@ Start confirmation blinks the cover prompt for 2.4 seconds and replaces the them
 After Start, the wine-rack demonstration starts one looping playlist:
 
 1. Off Duty Mercenary
-2. Omarchy Oligarchy (Synthwave Mix) — YZL81 / Omarchy Radio
-3. Contra
-4. The Descent
-5. Omacontra Opening Theme
+2. Contra
+3. The Descent
+4. Omacontra Opening Theme
 
-Each song plays to completion. The playlist continues across scenes, level changes, victory, death and retries. Pause or hiding the workspace pauses playback; closing the game stops it. Direct level launches also start the playlist. The pre-Start opening theme and Start explosion remain separate. Quattro (Let’s Go, Nerds) is archived and no longer plays. Track sources and order are registered in `assets/audio/library.json`; all MP3s are local.
+Each song plays to completion. The playlist continues across scenes, level changes, victory, death and retries. Pause or hiding the workspace pauses playback; closing the game stops it. Direct launches of levels 1–4 also start the playlist. Black Moon replaces it with Omarchy Oligarchy from the rocket boarding cutscene onward. The pre-Start opening theme and Start explosion remain separate. Quattro (Let’s Go, Nerds) is archived and no longer plays. Track sources and order are registered in `assets/audio/library.json`; all MP3s are local.
 
 ### Secret title-screen code
 
@@ -599,3 +598,8 @@ reveal, and build during the dragon’s final charge. Readiness cues play once w
 a used ability recovers; they do not repeat while ready.
 Rebuild these additions with `python tools/build_arcade_details.py`. The full
 background music playlist repeats indefinitely after its final track.
+
+Omarchy Oligarchy is reserved for Black Moon. The ordinary looping playlist omits
+it; the track starts from the beginning as the rocket boarding/departure cutscene
+begins and loops throughout the final level, continuing across deaths and retries.
+Returning to earlier stages or starting a new run restores the ordinary playlist.

@@ -14,7 +14,7 @@ from omacontra.campaign_progress import prepare_encounter
 from omacontra.ui.story import Intro
 from omacontra.ui.art import Renderer
 from omacontra.audio.weapon_audio import WeaponAudio, SFX_BOOST
-from omacontra.audio.intro_music import IntroMusic, GAME_TRACKS, UNLOCK_SOUND
+from omacontra.audio.intro_music import IntroMusic, GAME_TRACKS, FINALE_TRACK, UNLOCK_SOUND
 from omacontra.rendering.frame_buffer import FrameBuffer
 from omacontra.ui.release_ui import Frontend
 
@@ -174,6 +174,7 @@ class BossApp:
         self.music.update(bool(self.intro and not self.intro.journey),
                           not self.placed or not self.visible or bool(self.intro and self.intro.paused))
         if getattr(self,'game_music',None):
+            self.game_music.select_playlist((FINALE_TRACK,) if self.level==5 and self.intro is None else GAME_TRACKS)
             self.game_music.update(self.intro is None or self.intro.journey,
                                    not self.placed or not self.visible or
                                    (self.intro.paused if self.intro else self.paused))
