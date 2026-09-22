@@ -7,7 +7,7 @@ class Jukebox:
     def __init__(self):
         library=json.loads((ASSETS/'audio/library.json').read_text())
         by_file={v['file']:v for v in library.values() if isinstance(v,dict) and 'file' in v}
-        self.tracks=tuple(by_file[p.name] for p in (*GAME_TRACKS,TRACK,FINALE_TRACK))
+        self.tracks=tuple(by_file[p.name] for p in (*GAME_TRACKS,TRACK.parent/'the-descent.mp3',TRACK,FINALE_TRACK))
         self.audio=IntroMusic()
         self.index=None;self.paused=False
 

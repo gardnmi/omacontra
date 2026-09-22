@@ -49,7 +49,7 @@
     "title": "The Descent",
     "file": "the-descent.mp3",
     "source": "User-provided the-descent [usesuno.com].mp3",
-    "usage": "Continuous gameplay playlist",
+    "usage": "Manual playback in the menu soundtrack player only; excluded from gameplay shuffle",
     "duration_seconds": 288.792
   },
   "gameplay_playlist": {
@@ -57,7 +57,6 @@
     "tracks": [
       "wine_cellar_journey",
       "contra",
-      "the_descent",
       "boss_battle_protocol",
       "arcade_armageddon"
     ],
