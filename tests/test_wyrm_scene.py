@@ -55,7 +55,7 @@ class WyrmSceneTests(unittest.TestCase):
         self.assertEqual(f.hp,6)
 
     def test_stationary_laser_tanking_cannot_win_phase_two(self):
-        for platform in (0,2,3,4,5,7):
+        for platform in range(len(Foundry().platforms)):
             f=Foundry();f.mount_hp=0;f.laser=True;f.lava_age=7
             f.support=f.platforms[platform];f.x=sum(f.support[:2])/2;f.y=f.floor
             for _ in range(1600):

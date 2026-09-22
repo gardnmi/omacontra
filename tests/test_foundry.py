@@ -19,15 +19,15 @@ class FoundryTests(unittest.TestCase):
 
     def test_top_platform_double_jump_has_no_invisible_ceiling(self):
         f=Foundry();f.mount_hp=0;f.forge_timer=999
-        f.support=f.platforms[3];f.x=530;f.y=f.floor
-        highest=f.y
+        f.support=min(f.platforms,key=lambda p:p[2]);f.x=(f.support[0]+f.support[1])/2;f.y=f.floor
+        highest=start_y=f.y
         for i in range(70):
             f.step(.02,jump=i in (0,18))
             highest=min(highest,f.y)
             sx,sy=700,300+f.camera_y
             self.assertEqual(f.screen_to_world((sx,sy)),(700,300))
             self.assertGreaterEqual(f.y+f.camera_y,190)
-        self.assertLess(highest,50)
+        self.assertLess(highest,start_y-175)
         self.assertEqual(f.y,f.floor)
 
     def test_rotating_beam_stays_rooted_in_the_mouth(self):
@@ -198,17 +198,20 @@ class FoundryTests(unittest.TestCase):
         from omacontra.stages.dragon.foundry import SHOULDER_FAST_PERIOD
         f=Foundry();f.mount_hp=0;f.forge_timer=999
         # Isolate traversal geometry; no teleports, boosted speed, or jumps
-        # beyond the player's normal double jump. Include every landing.
-        route=[(347,535),(230,435),(315,335),(530,170),(747,170),
-               (965,335),(1110,435),(900,535),(1100,630),(750,630),
+        # beyond the player's normal double jump and air dash. The top gap
+        # uses a delayed second jump and a dash; include every landing.
+        route=[(347,535),(230,435),(405,335),(875,335),
+               (1110,435),(900,535),(1100,630),(750,630),
                (450,630),(210,630)]
         index=0
         for tick in range(int(SHOULDER_FAST_PERIOD/.02)):
             x,y=route[index]
-            move=1 if f.x<x-6 else -1 if f.x>x+6 else 0
-            jump=y<f.y-10 and (f.y>=f.floor-.1 or f.jumps_used==1 and f.vy>-80)
-            f.step(.02,move=move,jump=jump and not f.was_jump)
-            if abs(f.x-x)<10 and abs(f.y-y)<.1 and f.vy==0:
+            move=1 if f.x<x-3 else -1 if f.x>x+3 else 0
+            crossing=index==3
+            jump=(y<f.y-10 or crossing) and (f.y>=f.floor-.1 or f.jumps_used==1 and f.vy>(350 if crossing else -80))
+            dash=crossing and f.jumps_used==2 and f.vy>-80 and not f.dash_used
+            f.step(.02,move=move,jump=jump and not f.was_jump,slide_pressed=dash)
+            if abs(f.x-x)<5 and abs(f.y-y)<.1 and f.vy==0:
                 index+=1
                 if index==len(route):break
         self.assertEqual(index,len(route))
@@ -238,6 +241,23 @@ class FoundryTests(unittest.TestCase):
         f.begin_rescue();f.step(.04)
         self.assertEqual(f.lava_surface,LAVA_TOP)
         self.assertIsNone(Foundry().lava_surface)
+
+    def test_rising_water_hurts_on_foot_contact_and_respects_recovery(self):
+        from omacontra.stages.dragon.foundry import LAVA_RISE_TIME
+        for unlimited in (False,True):
+            f=Foundry();f.mount_hp=0;f.unlimited_lives=unlimited;f.invuln=0
+            f.lava_age=LAVA_RISE_TIME*.85;f.y=f.lava_surface-1
+            hp=f.hp;hits=getattr(f,'damage_taken',0)
+            f.update_lava(0);self.assertEqual(getattr(f,'damage_taken',0),hits)
+            # Rising surface touches the feet while the projectile hitbox
+            # remains above it. Contact must still cost a life.
+            f.update_lava(.04)
+            self.assertEqual(f.damage_taken,hits+1)
+            self.assertEqual(f.hp,hp if unlimited else hp-1)
+            self.assertIsNotNone(f.hit_age)
+            f.update_lava(.04);self.assertEqual(f.damage_taken,hits+1)
+            f.invuln=0;f.update_lava(0)
+            self.assertEqual(f.damage_taken,hits+2)
 
     def test_lava_hurts_ground_but_leaves_all_platforms_safe(self):
         for platform in (None,0,1,2):

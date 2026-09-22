@@ -82,9 +82,9 @@ class Foundry(Fight):
         self.power_time=0.;self.power_kind=None;self.collected=0
         self.rescue_age=0.;self.rescue_start_x=self.x;self.rescue_start_boss_x=1020.
         self.notice='';self.notice_time=0.
-        # A climbable circuit: left stairs, overhead crossing, right stairs.
+        # Side platforms leave the dragon's forehead and the overhead route open.
         self.platforms=((250.,445.,535.),(140.,320.,435.),(225.,405.,335.),
-                        (440.,625.,170.),(655.,840.,170.),(875.,1055.,335.),
+                        (875.,1055.,335.),
                         (960.,1140.,435.),(835.,1030.,535.))
         self.pickup_spot=(345.,516.)
         self.combat_age=0.;self.disarm_age=0.;self.drop_origin=(0.,0.)
@@ -200,7 +200,9 @@ class Foundry(Fight):
     def update_lava(self,dt):
         if self.lava_age is None:return
         self.lava_age+=dt
-        if self.player_hitbox[3]>self.lava_surface:self.hurt()
+        # Water contacts the visible feet, not the smaller projectile hitbox.
+        # Keep normal recovery protection and unlimited-lives hit accounting.
+        if self.y>=self.lava_surface:self.hurt()
 
     def path_hits(self,points,radius):
         l,t,r,b=self.player_hitbox

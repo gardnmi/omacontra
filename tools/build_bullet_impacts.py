@@ -79,7 +79,6 @@ WEIGHTED={
  'dragon_core':(.100,'crunch',1.95,250,.72,.54,.38,3),
  'dragon_scale':(.100,'crunch',.76,130,.67,.72,.26,1),
  'dragon_laser':(.110,'field',1.12,175,.65,.64,.29,4),
- 'jellyfish':(.115,'water',.75,95,.65,.72,.19,2),
  'space_node':(.100,'field',2.1,265,.65,.56,.36,1),
 }
 
@@ -104,7 +103,25 @@ def weighted_impact(material,take):
   values.append(math.tanh(lp*4)*min(1,t/.0015)*tail)
  return values
 
+def electrical_contact(take):
+ """Dry broadband arc/static, with irregular sputters instead of a wet thud."""
+ rng=random.Random(7319+take)
+ duration=.11;values=[];low=high=0.;flutter=1.
+ for i in range(round(duration*RATE)):
+  t=i/RATE
+  noise=rng.uniform(-1,1)
+  # Band-limit the fizz: no piercing top end or booming low-frequency pulse.
+  low+=.42*(noise-low);high+=.035*(low-high)
+  if i%round(.003*RATE)==0:flutter=rng.uniform(.70,1.)
+  static=math.tanh((low-high)*7)*flutter
+  # A few short arcing snaps sit in a continuous bed of electrical grain.
+  crackle=sum(math.exp(-(t-at)/.0025) for at in (.008,.032+take*.002,.061) if t>=at)
+  tail=max(0,1-max(0,t-.035)/(duration-.035))**1.1
+  values.append(static*(.8+.2*min(1,crackle))*min(1,t/.001)*tail)
+ return values
+
 def make(material,take):
+ if material=='jellyfish':return electrical_contact(take)
  if material in WEIGHTED:return weighted_impact(material,take)
  if material in ('reaper_body','reaper_eye'):return reaper_damage(material,take)
  if material in ('heavy','panel','mechanical'):return recorded_metal(material,take)
@@ -135,7 +152,7 @@ def main():
    for take in range(3):
     values=make(material,take);count=len(values)
     values=[v*min(1,i/90,(count-1-i)/400) for i,v in enumerate(values)]
-    db=-35 if material in WEIGHTED else -34 if material=='reaper_body' else -35 if material=='reaper_eye' else -39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
+    db=-35 if material in WEIGHTED or material=='jellyfish' else -34 if material=='reaper_body' else -35 if material=='reaper_eye' else -39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
     gain=32767*10**(db/20)/(max(map(abs,values)) or 1)
     path=out/f'{name}.wav' if take==0 else out/'variants'/f'{name}-{take}.wav'
     with wave.open(str(path),'wb') as f:

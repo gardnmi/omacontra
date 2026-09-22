@@ -139,3 +139,10 @@ are layered with original descending low pulses. Each target has a separate
 preset and three takes. Envelopes run 80–115 ms at -35 dBFS peak before the
 shared effects gain. These replace the previous thin clicks and ringing
 resonances in those four stages; Reaper assets are unchanged.
+
+### Jellyfish electrical contact
+
+`finale/laser_hit.wav` and its two alternate takes now use original seeded
+band-limited static with irregular short arc snaps (110 ms, -35 dBFS peak).
+`electrical_contact` in `tools/build_bullet_impacts.py` replaces the earlier wet
+impact preset for the jellyfish body only. No external sample is used.

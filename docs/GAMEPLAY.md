@@ -665,3 +665,12 @@ The music volume setting also controls previews; hidden windows pause playback.
 
 The opening theme is exclusive to the opening/title screen and the menu music
 player. It is excluded from the five-song gameplay shuffle.
+
+The dragon arena has six side platforms; the two forehead platforms are removed
+from rendering and collision. Cross the open upper gap with a delayed second
+jump and air dash. Jellyfish body hits now use short electrical/static crackles;
+space node impacts retain their separate energy texture.
+
+Rising storm water damages DHH as soon as it touches his feet, including during
+a jump or dash. Normal recovery protection still applies; unlimited-lives mode
+records the hit and plays the reaction without consuming a ribbon.
