@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import math
+import time
 import cairo
 from omacontra.rendering.health_medals import medal
 from omacontra.audio.weapon_audio import SFX_BOOST
@@ -58,17 +59,30 @@ class Frontend:
         self.app=app;self.profile=profile or Profile();self.page=None;self.selection=0;self.parent='pause';self.pending=None
         self.record=RunRecord(app.level,getattr(app,'guardian_practice',False));self.award=None;self.award_age=0.;self.result_saved=False
         self.credits_page=0;self.apply_audio()
+        self.opened_at=time.monotonic();self.last_menu_sound=0.;self.menu_positions={}
         self.blocked=set();self.finish_age=99.;self.last_state=app.f.state
     def apply_audio(self):
         s=self.profile.settings
         for music in (self.app.music,self.app.game_music):music.set_volume(85*s['music']/100)
         self.app.unlock_sound.set_volume(85*SFX_BOOST*s['effects']/100)
         self.app.weapon_audio.set_volumes(s['effects']/100)
+    def cue(self,name):
+        now=time.monotonic()
+        if name in ('move','adjust') and now-self.last_menu_sound<.045:return
+        self.last_menu_sound=now
+        self.app.weapon_audio.menu_effects.trigger(name)
+
     def open(self,page='pause'):
-        self.page=page;self.selection=0;self.app.paused=True
+        previous=self.page
+        if previous:self.menu_positions[previous]=self.selection
+        self.page=page;self.selection=0 if page=='confirm' else self.menu_positions.get(page,0)
+        self.selection=min(self.selection,len(self.rows())-1)
+        self.opened_at=time.monotonic();self.app.paused=True
         if self.app.intro:self.app.intro.paused=True
         self.app.keyboard.clear();self.app.shooting=False;self.app.slide_requested=False
         self.app.weapon_audio.silence()
+        if page=='results' and previous is None:self.cue('complete')
+        elif previous is None:self.cue('open')
     def resume(self):
         self.blocked=set(self.app.keys)
         self.page=None;self.app.paused=False
@@ -106,7 +120,35 @@ class Frontend:
         elif action=='quit':a.close()
         elif action=='again':
             self.resume();self.new_run(hardcore=self.record.hardcore);a.guardian_practice=False;a.level=1;a.intro=None;a.reset_encounter()
+    def pointer(self,x,y,click=False):
+        if not self.page:return
+        from omacontra.ui.menu_art import row_boxes
+        for i,(rx,ry,w,h) in enumerate(row_boxes(self)):
+            if not (rx<=x<=rx+w and ry<=y<=ry+h):continue
+            if self.selection!=i:self.selection=i;self.cue('move')
+            if click:
+                if self.page=='options' and i<len(DEFAULTS):
+                    if y<ry+35 or x<rx+38 or x>rx+428:return
+                    name=tuple(DEFAULTS)[i]
+                    value=max(0,min(150,round((x-rx-38)/390*30)*5))
+                    if value!=self.profile.settings[name]:
+                        self.profile.settings[name]=value;self.apply_audio();self.profile.save();self.cue('adjust')
+                else:self.key('return')
+            break
+
     def key(self,key):
+        if not self.page:return False
+        old_page=self.page;old_selection=self.selection;old_credits=self.credits_page
+        before=dict(self.profile.settings);choice=self.rows()[self.selection]
+        handled=self._key(key)
+        if before!=self.profile.settings:self.cue('adjust')
+        elif self.page!=old_page or key in ('return','space'):
+            if key in ('escape','p') or choice in ('Back','Cancel','Resume'):self.cue('back')
+            elif key in ('return','space'):self.cue('move' if old_page=='credits' and key=='space' else 'confirm')
+        elif self.selection!=old_selection or self.credits_page!=old_credits:self.cue('move')
+        return handled
+
+    def _key(self,key):
         if not self.page:return False
         rows=self.rows()
         if key in ('up','w'):self.selection=(self.selection-1)%len(rows)
@@ -189,44 +231,5 @@ class Frontend:
                 c.save();c.translate(850,105);c.scale(1.3,1.3)
                 c.set_source_surface(medal(True));c.paint();c.restore()
         if not self.page:return
-        c.set_source_rgba(.018,.024,.035,.96);c.paint()
-        c.set_source_rgb(.39,.55,.34);c.set_line_width(2);c.rectangle(200,55,880,610);c.stroke()
-        title={'mode':'CHOOSE YOUR RUN','pause':'PAUSED','options':'AUDIO OPTIONS','controls':'CONTROLS','results':'MISSION COMPLETE','bosses':'BOSS SELECT / PRACTICE','credits':'CREDITS','confirm':'ARE YOU SURE?'}[self.page]
-        label(c,260,108,title,30)
-        y=180
-        if self.page=='results':
-            r=self.record;label(c,260,158,f'{r.category.upper()} RUN   CLEAR TIME {time_text(r.elapsed)}',18)
-            label(c,260,192,f'LIVES LOST {r.losses}    CONTINUES {r.continues}    RESTARTS {r.restarts}',16)
-            label(c,260,223,f'NO-HIT STAGES {r.clean}/5',17)
-            best=self.profile.best.get(r.category)
-            if best:label(c,650,223,'PERSONAL BEST '+time_text(best),17)
-            for i,name in enumerate(NAMES):
-                if i+1 not in r.cleared:continue
-                c.save();c.translate(725,280+i*52);c.scale(.85,.85);c.set_source_surface(medal(True));c.paint();c.restore()
-                label(c,758,299+i*52,name,14)
-                label(c,758,317+i*52,'NO HIT' if not r.hits.get(i+1,0) else 'CLEARED',11,(.65,.83,.47))
-            y=295
-        elif self.page=='mode':
-            label(c,260,355,'STANDARD: 10-second continue countdown.',18)
-            label(c,260,400,'HARDCORE: lose every life and the run ends.',18,(.95,.63,.43))
-            label(c,260,440,'No continues, encounter restarts or unlimited lives.',16)
-            label(c,260,480,'Both modes carry lives forward and award extra ribbons.',16)
-        elif self.page=='controls':
-            lines=['A/D or Arrows: move     Space/K: jump / double jump','J/Z: fire     Mouse + left click: aim and fire','S/Down: crouch     Shift: slide / air dash','Quattro: Space jumps; Shift boosts','Space: W/A/S/D move; Shift uses thrusters','Esc/P: pause menu     R: confirm restart','Menus: arrows select, Enter confirms','Options: Left/Right adjusts volume']
-            for i,line in enumerate(lines):label(c,260,180+i*40,line,16)
-            y=550
-        elif self.page=='credits':
-            pages=[['OMACONTRA','Created by gardnmi','DHH and Tobi: fictional action-adventure portrayals','Pixel artwork: AI-assisted original game assets','Visual direction: Omarchy wallpaper worlds','Movement inspiration: Contra; gun effects: Blazing Chrome'],['SOUNDTRACK','Off Duty Mercenary / user-provided track','Omarchy Oligarchy (Synthwave Mix) / YZL81','Contra / user-provided track','The Descent / user-provided track','Omacontra Opening Theme / user-provided track','Music source: Omarchy Radio and supplied recordings'],['SOUND AND TOOLS','Kenney / Sci-Fi Sounds (CC0)','Free Firearm Sound Library (CC0)','Ben Jaszczak, Brian Nelson, Kevin Heras, Matthew Nanney','Ocean Splash / Thimras (CC0)','Short Water Splashes / ezwa, qubodup (CC0)','Screensaver: Omarchy / terminal text effects','Full source notes: assets/audio/sources/README.md']]
-            for i,line in enumerate(pages[self.credits_page]):label(c,260,170+i*40,line,15 if len(line)>55 else 18)
-            label(c,260,515,f'LEFT / RIGHT: PAGE {self.credits_page+1}/3',15);y=560
-        elif self.page=='confirm':label(c,260,168,'This will '+{'quit':'close the game.','title':'leave the current encounter.','restart':'restart the current encounter.'}.get(self.pending,'leave this run.'),18);y=260
-        for i,row in enumerate(self.rows()):
-            label(c,270,y+i*43,('> ' if i==self.selection else '  ')+row,22,(.72,.9,.5) if i==self.selection else (.78,.79,.73))
-            if self.page=='options' and i<len(DEFAULTS):
-                value=self.profile.settings[tuple(DEFAULTS)[i]]
-                c.set_source_rgb(.14,.19,.15);c.rectangle(675,y+i*43-15,270,10);c.fill()
-                c.set_source_rgb(.65,.83,.47);c.rectangle(675,y+i*43-15,270*value/150,10);c.fill()
-                c.set_source_rgb(.8,.81,.68);c.rectangle(854,y+i*43-19,2,18);c.fill()
-        label(c,260,638,'ARROWS / SELECT     ENTER / CONFIRM'+('' if self.page=='results' else '     ESC / BACK'),13)
-        if self.page=='options' and not self.profile.error:label(c,260,570,'LEFT / RIGHT ADJUSTS BY 5%  /  SAVED AUTOMATICALLY',13)
-        if self.profile.error:label(c,260,609,self.profile.error,13,(1,.55,.35))
+        from omacontra.ui.menu_art import draw
+        draw(c,self)

@@ -456,5 +456,18 @@
     ],
     "source": "Existing credited Kenney CC0 sci-fi and recorded model12 sources; see sources/README.md.",
     "modifications": "Layered, resampled, filtered, enveloped and attenuated, three takes per cue."
+  },
+  "menu_effects": {
+    "title": "Arcade Menu Feedback",
+    "files": [
+      "menu/move.wav",
+      "menu/adjust.wav",
+      "menu/confirm.wav",
+      "menu/back.wav",
+      "menu/open.wav",
+      "menu/complete.wav"
+    ],
+    "source": "Original synthesis; tools/build_menu_sounds.py",
+    "usage": "Soft menu navigation and completion cues; follows Effects volume"
   }
 }

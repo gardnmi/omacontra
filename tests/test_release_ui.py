@@ -156,6 +156,36 @@ class ReleaseTests(unittest.TestCase):
         original=array.array('h',[100]*4).tobytes();self.assertEqual(e.mix(original),original)
         a=self.app();a.weapon_audio.set_volumes(0)
         self.assertTrue(all(b.gain==0 for b in a.weapon_audio.banks.values()))
+    def test_menu_cues_and_mouse_selection_are_deliberate(self):
+        a=self.app();f=a.frontend;bank=a.weapon_audio.menu_effects
+        with patch('omacontra.ui.release_ui.time.monotonic',side_effect=range(100,200)):
+            f.open();self.assertIn('open',bank.takes)
+            f.key('down');self.assertIn('move',bank.takes)
+            f.key('return');self.assertEqual(f.page,'controls');self.assertIn('confirm',bank.takes)
+            f.key('escape');self.assertEqual(f.page,'pause');self.assertIn('back',bank.takes)
+            self.assertEqual(f.selection,1)
+            f.pointer(100,320);self.assertEqual(f.selection,2)
+            takes=dict(bank.takes);f.pointer(101,320);self.assertEqual(bank.takes,takes)
+            f.pointer(100,320,True);self.assertEqual(f.page,'options')
+            # Clicking labels selects without unexpectedly muting the channel.
+            f.pointer(150,240,True);self.assertEqual(f.profile.settings['music'],100)
+            f.pointer(118+195,275,True);self.assertEqual(f.profile.settings['music'],75)
+            self.assertIn('adjust',bank.takes)
+            self.assertEqual(Profile(f.profile.path).settings['music'],75)
+
+    def test_menu_audio_plays_while_combat_is_paused_and_clears_when_hidden(self):
+        a=self.app();audio=a.weapon_audio;audio.device=7;audio.lib=Mock()
+        audio.lib.SDL_GetQueuedAudioSize.return_value=0;audio.lib.SDL_QueueAudio.return_value=0
+        a.frontend.open();a.f.sound('jump');clock=a.f.clock
+        a.tick()
+        self.assertEqual(a.f.clock,clock)
+        self.assertTrue(audio.lib.SDL_QueueAudio.called)
+        self.assertFalse(audio.effects.voices)
+        a.visible=False;a.tick();self.assertFalse(audio.menu_effects.voices)
+        self.assertFalse(audio.ui_effects.voices)
+        audio.set_volumes(0);audio.menu_effects.trigger('confirm')
+        self.assertEqual(audio.menu_effects.mix(bytes(1764)),bytes(1764))
+
     def test_award_does_not_duplicate_or_mutate_health(self):
         a=self.app();hp=a.f.hp;a.f.state='won'
         for _ in range(10):a.frontend.observe(.02,a.f,hp,0,False)

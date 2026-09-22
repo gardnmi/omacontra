@@ -22,12 +22,14 @@ class WeaponAudio:
         self.banks={'reaper':self.effects,'chase':ChaseEffects(),'tide':TideEffects(),'foundry':FoundryEffects(),'finale':FinaleEffects()}
         self.banks['continue']=ReaperEffects(audio=AUDIO/'continue',priority={'tick':1,'accept':3,'death_blow':4})
         self.ui_effects=ReaperEffects(audio=AUDIO/'continue',priority={'accept':3})
+        self.menu_effects=ReaperEffects(audio=AUDIO/'menu',priority={'confirm':3,'complete':4})
         self.lib=None;self.device=0;self.initialized=False;self.failed=False
         self.owner=None
 
     def set_volumes(self,effects):
         for bank in self.banks.values():bank.gain=SFX_BOOST*max(0,min(1.5,effects))
         self.ui_effects.gain=SFX_BOOST*max(0,min(1.5,effects))
+        self.menu_effects.gain=SFX_BOOST*max(0,min(1.5,effects))
         if self.device:self.lib.SDL_ClearQueuedAudio(self.device)
 
     def open(self):
@@ -62,15 +64,25 @@ class WeaponAudio:
 
     def update(self,f,enabled,effects_enabled=False):
         if f is not self.owner:
-            self.owner=f;self.silence()
+            self.owner=f
+            self.effects.clear();self.ui_effects.clear()
+            if self.device:self.lib.SDL_ClearQueuedAudio(self.device)
             self.effects=self.banks[getattr(f,'sound_bank','reaper')]
         events=getattr(f,'sfx_events',[])
         pending=list(events);events.clear()
         if not effects_enabled:self.effects.clear()
         else:
             for name in pending:self.effects.trigger(name)
-        if not effects_enabled and not self.ui_effects.voices:self.silence();return
-        if not self.effects.voices and not self.ui_effects.voices:return
+        if not effects_enabled and not self.ui_effects.voices and not self.menu_effects.voices:self.silence();return
+        self.pump()
+
+    def update_menu(self,visible=True):
+        self.effects.clear();self.ui_effects.clear()
+        if not visible:self.silence();return
+        self.pump()
+
+    def pump(self):
+        if not self.effects.voices and not self.ui_effects.voices and not self.menu_effects.voices:return
         if not self.open():return
         # One device mixes bounded effects, only 40 ms ahead.
         queued=self.lib.SDL_GetQueuedAudioSize(self.device)
@@ -80,6 +92,7 @@ class WeaponAudio:
             length=1764;data=bytes(length)
             data=self.effects.mix(data)
             data=self.ui_effects.mix(data)
+            data=self.menu_effects.mix(data)
             if self.lib.SDL_QueueAudio(self.device,data,len(data)):
                 self.failed=True;self.close();return
             queued+=len(data)
@@ -87,10 +100,11 @@ class WeaponAudio:
     def silence(self):
         self.effects.clear()
         self.ui_effects.clear()
+        self.menu_effects.clear()
         if self.device:self.lib.SDL_ClearQueuedAudio(self.device)
 
     def close(self):
-        self.effects.clear()
+        self.effects.clear();self.ui_effects.clear();self.menu_effects.clear()
         if self.device:
             self.lib.SDL_ClearQueuedAudio(self.device);self.lib.SDL_CloseAudioDevice(self.device)
             self.device=0

@@ -83,3 +83,10 @@ thrusterFire and laserLarge sources credited above. Boost-ready and thruster-rea
 cues are original soft two-note sine synthesis. Other effects gain 10%; music
 volume is unchanged. Run this builder after the individual bank builders to
 reproduce these additional cues.
+
+## Menu feedback
+
+`../menu/*.wav` contains six original synthesized arcade cues: move, adjust,
+confirm, back, open and complete. `tools/build_menu_sounds.py` reproduces them
+from enveloped sine harmonics, with rounded attacks and silent tails. They use
+no external samples or metallic impact layers.

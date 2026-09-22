@@ -233,7 +233,7 @@ class BossApp:
         if menu and self.placed and self.visible:self.area.queue_draw()
         if getattr(self,'weapon_audio',None):
             if menu:
-                self.weapon_audio.silence();return True
+                self.weapon_audio.update_menu(self.placed and self.visible);return True
             if getattr(self,'continue_screen',None):
                 self.weapon_audio.update(self.continue_screen,False,self.placed and self.visible)
                 return True
@@ -258,7 +258,10 @@ class BossApp:
         return (width-W*scale)/2,(height-H*scale)/2,scale
 
     def draw(self,area,c):
-        c.save();self.draw_scene(area,c);c.restore()
+        if getattr(self,'frontend',None) and self.frontend.page:
+            c.set_source_rgb(0,0,0);c.paint()
+        else:
+            c.save();self.draw_scene(area,c);c.restore()
         if getattr(self,'frontend',None):
             ox,oy,scale=self.viewport();c.save();c.translate(ox,oy);c.scale(scale,scale)
             self.frontend.draw(c);c.restore()
@@ -301,10 +304,14 @@ class BossApp:
 
     def motion(self,area,event):
         ox,oy,scale=self.viewport();self.aim=((event.x-ox)/scale,(event.y-oy)/scale)
+        if getattr(self,'frontend',None) and self.frontend.page:self.frontend.pointer(*self.aim)
         return True
 
     def button(self,area,event):
-        if getattr(self,'frontend',None) and self.frontend.page:return True
+        if getattr(self,'frontend',None) and self.frontend.page:
+            ox,oy,scale=self.viewport()
+            if event.button==1 and event.type==Gdk.EventType.BUTTON_PRESS:self.frontend.pointer((event.x-ox)/scale,(event.y-oy)/scale,True)
+            return True
         self.motion(area,event)
         if event.button==1:self.shooting=event.type==Gdk.EventType.BUTTON_PRESS
         return True

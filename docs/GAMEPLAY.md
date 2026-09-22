@@ -603,3 +603,18 @@ Omarchy Oligarchy is reserved for Black Moon. The ordinary looping playlist omit
 it; the track starts from the beginning as the rocket boarding/departure cutscene
 begins and loops throughout the final level, continuing across deaths and retries.
 Returning to earlier stages or starting a new run restores the ordinary playlist.
+
+### Arcade menu polish
+
+Pause, run selection, audio, controls, practice, credits, confirmation and results
+share an opaque framed menu with cached stage artwork, strong selection bands,
+subtle cursor motion and Omarchy green/cream accents. Results use separate stat
+cards and compact earned ribbons; gameplay pause text cannot show through.
+Mouse hover selects rows, clicks confirm, and clicking an audio meter sets its
+volume. Keyboard controls remain immediate and submenu returns remember selection.
+
+Six original quiet menu cues cover opening, movement, confirmation, back, volume
+adjustment and mission completion. Menu audio uses the Effects setting and a
+bounded mixer while combat stays paused; hidden windows clear the cues. Final
+level music continues across the results menus. Rebuild the sounds using
+`python tools/build_menu_sounds.py`.
