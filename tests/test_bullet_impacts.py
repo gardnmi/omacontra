@@ -36,7 +36,22 @@ class BulletImpactTests(unittest.TestCase):
     def test_metal_tails_finish_before_the_next_round(self):
         for bank,name in [('reaper','armor'),('reaper','eye_hit'),('chase','impact'),('chase','drone_hit'),('tide','suit_hit')]:
             with wave.open(str(ASSETS/'audio'/bank/f'{name}.wav')) as f:
-                self.assertLess(f.getnframes()/f.getframerate(),.08)
+                self.assertLessEqual(f.getnframes()/f.getframerate(),.10 if name=='eye_hit' else .08)
+
+    def test_reaper_damage_has_body_beyond_the_initial_click(self):
+        for name in ('eye_hit','impact'):
+            for suffix in (f'{name}.wav',f'variants/{name}-1.wav',f'variants/{name}-2.wav'):
+                with wave.open(str(ASSETS/'audio/reaper'/suffix)) as f:
+                    rate=f.getframerate();pcm=array.array('h',f.readframes(f.getnframes()))
+                energy=sum(v*v for v in pcm)
+                # Avoid the previous near-empty tail after a tiny transient.
+                self.assertGreater(sum(v*v for v in pcm[int(.025*rate):]),energy*.20)
+                rms=(energy/len(pcm))**.5
+                self.assertGreater(rms,max(map(abs,pcm))*.35)
+        f=Fight();f.nodes={key:0 for key in f.nodes};x,y=f.body
+        hp=f.boss_hp;f.hit_target(x-1,y,x+1,y,1)
+        self.assertIn('impact',f.sfx_events);self.assertNotIn('armor',f.sfx_events)
+        self.assertLess(f.boss_hp,hp)
 
     def test_material_takes_are_distinct_quiet_and_end_cleanly(self):
         banks={'reaper':['armor','impact','eye_hit','raven_hit'],
@@ -54,7 +69,7 @@ class BulletImpactTests(unittest.TestCase):
                         self.assertEqual((f.getframerate(),f.getnchannels(),f.getsampwidth()),(44100,1,2))
                         raw=f.readframes(f.getnframes());pcm=array.array('h',raw);takes.append(raw)
                     self.assertEqual(pcm[0],0);self.assertEqual(pcm[-1],0)
-                    self.assertLess(max(map(abs,pcm)),600)
+                    self.assertLess(max(map(abs,pcm)),700 if bank=='reaper' and name in ('impact','eye_hit') else 600)
                     self.assertGreater(max(map(abs,pcm)),300)
                     mixer.trigger(name)
                 self.assertEqual(len(set(takes)),3)

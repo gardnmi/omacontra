@@ -110,3 +110,21 @@ medium and light takes (000, 002, 004) are in `kenney-impact/`. The builder remo
 hollow midrange resonance, softens treble and uses a 60–75 ms dry envelope.
 Metal samples peak at -39 dBFS before the shared effects gain. Each actual bullet
 collision produces a cue; only continuous laser contact retains a cooldown.
+
+## Reaper eye and exposed-body damage revision
+
+Only `reaper/eye_hit` and `reaper/impact` (and their two alternate takes) use
+the new `reaper_damage` recipe in `tools/build_bullet_impacts.py`. Existing
+Kenney CC0 explosionCrunch and lowFrequency_explosion textures are layered
+with an original descending low pulse, saturation and a 95–100 ms envelope.
+The eye emphasizes the crunch; the exposed body emphasizes the lower impact.
+They trigger on every bullet collision, retaining the established cadence.
+
+Reference research (not included in shipped assets):
+- Contra enemy-hit reference: https://www.realmofdarkness.net/sb/contra/
+- Contra effects collection: https://sounds.spriters-resource.com/nes/contra/asset/397153/
+- Blazing Chrome official release trailer: https://www.youtube.com/watch?v=JVYBSL8aQHE
+
+The local Blazing Chrome recording supplied earlier contains video only.
+The trailer’s mixed soundtrack was retrieved for reference; it is not an
+isolated hit sample. Reference downloads remain outside the repository.

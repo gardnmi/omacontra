@@ -641,3 +641,8 @@ Rebuild with `python tools/build_bullet_impacts.py` after other stage builders.
 Metal hits use recorded heavy/light metal and panel transients, with hollow
 resonances reduced and tails shortened to 60–75 ms. They follow the actual
 bullet pattern instead of suppressing alternate impacts.
+
+The Reaper’s eye and exposed body now have dedicated compact bass/crunch
+impacts, with a fuller 30–55 ms body instead of a click that decays immediately.
+The eye is tighter; the exposed Reaper hits lower. Other target sounds and the
+one-impact-per-bullet timing remain unchanged.
