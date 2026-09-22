@@ -34,6 +34,7 @@ class ReleaseTests(unittest.TestCase):
         front.open('mode');front.selection=front.rows().index('Music player');front.key('return')
         self.assertEqual(front.page,'music');self.assertEqual(front.parent,'mode')
         self.assertEqual(len(player.tracks),6)
+        self.assertIn('omacontra-opening-theme.mp3',[t['file'] for t in player.tracks])
         self.assertNotIn('reaper-quattro-lets-go-nerds.mp3',[t['file'] for t in player.tracks])
         front.key('return');self.tick(a)
         self.assertEqual(player.index,0);self.assertFalse(player.paused)

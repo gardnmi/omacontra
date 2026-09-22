@@ -3,7 +3,7 @@
     "title": "Omacontra Opening Theme",
     "file": "omacontra-opening-theme.mp3",
     "source": "User-provided konami-hero-lead [usesuno.com].mp3",
-    "usage": "Pre-Start opening/title theme; also final track in gameplay playlist",
+    "usage": "Opening/title screen and menu music player only; excluded from gameplay shuffle",
     "duration_seconds": 208.848
   },
   "start_impact": {
@@ -58,7 +58,6 @@
       "wine_cellar_journey",
       "contra",
       "the_descent",
-      "opening_theme",
       "boss_battle_protocol"
     ],
     "starts": "Wine-rack demonstration after Start, or direct launch of levels 1\u20134",

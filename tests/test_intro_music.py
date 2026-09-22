@@ -44,7 +44,7 @@ class IntroMusicTests(unittest.TestCase):
             self.assertEqual(args[args.index('--')+1:],[str(p) for p in GAME_TRACKS])
             self.assertEqual([p.name for p in GAME_TRACKS],[
                 'wine-cellar-off-duty-mercenary.mp3',
-                'contra.mp3','the-descent.mp3','omacontra-opening-theme.mp3','boss-battle-protocol.mp3'])
+                'contra.mp3','the-descent.mp3','boss-battle-protocol.mp3'])
             for _ in range(10):music.update(True)
             launch.assert_called_once();music.stop()
 
