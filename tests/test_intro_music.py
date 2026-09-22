@@ -92,6 +92,24 @@ class IntroMusicTests(unittest.TestCase):
             self.assertEqual(launch.call_count,3)
             music.stop()
 
+    def test_results_and_credits_keep_finale_music_playing_but_hidden_window_pauses(self):
+        from types import SimpleNamespace
+        from omacontra.boss_app import BossApp
+        app=BossApp.__new__(BossApp)
+        app.closed=False;app.last=0.;app.placed=True;app.visible=True;app.paused=True
+        app.intro=None;app.level=5;app.f=SimpleNamespace(state='won',hp=3)
+        app.music=Mock(start_effect=False);app.game_music=Mock();app.area=Mock()
+        app.frontend=SimpleNamespace(page='results',result_saved=True,
+                                     profile=SimpleNamespace(settings={'music':100,'effects':100}))
+        for page in ('results','credits','bosses','confirm'):
+            app.frontend.page=page;app.tick()
+            app.game_music.update.assert_called_with(True,False)
+            app.game_music.select_playlist.assert_called_with((FINALE_TRACK,))
+        app.visible=False;app.tick()
+        app.game_music.update.assert_called_with(True,True)
+        app.visible=True;app.f.state='play';app.frontend.page='pause';app.tick()
+        app.game_music.update.assert_called_with(True,True)
+
     def test_missing_player_does_not_break_game_or_retry_every_tick(self):
         with patch('omacontra.audio.intro_music.subprocess.Popen',side_effect=FileNotFoundError),patch('builtins.print'):
             music=IntroMusic();music.update(True);self.assertTrue(music.failed)

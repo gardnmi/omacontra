@@ -174,10 +174,12 @@ class BossApp:
         self.music.update(bool(self.intro and not self.intro.journey),
                           not self.placed or not self.visible or bool(self.intro and self.intro.paused))
         if getattr(self,'game_music',None):
+            # Results menus freeze gameplay, but the finale soundtrack continues.
+            results_music=bool(menu and self.level==5 and self.f.state=='won' and front.result_saved)
             self.game_music.select_playlist((FINALE_TRACK,) if self.level==5 and self.intro is None else GAME_TRACKS)
             self.game_music.update(self.intro is None or self.intro.journey,
                                    not self.placed or not self.visible or
-                                   (self.intro.paused if self.intro else self.paused))
+                                   (self.intro.paused if self.intro else self.paused and not results_music))
         if getattr(self,'unlock_sound',None):
             ringing=bool(self.intro and self.intro.unlock_age is not None and self.intro.unlock_age<2.05 and self.intro.start_age is None)
             self.unlock_sound.update(ringing,not self.placed or not self.visible or bool(self.intro and self.intro.paused))
