@@ -226,6 +226,7 @@ class Foundry(Fight):
         # active, body and legs must not eat bullets aimed through it.
         if self.mount_hp>0:return False
         if not segment_box(ax,ay,bx,by,(self.boss_x-80,310,self.boss_x+125,630)):return False
+        self.sound('scale_hit',.18)
         self.armor_flash=.09;self.burst(bx,by,'cream',3)
         return True
 
@@ -257,6 +258,7 @@ class Foundry(Fight):
         for x,y in rope_path(sx,sy,angle,self.clock):
             self.beam.append((x,y))
             if self.boss_x-125<x<self.boss_x+125 and 210<y<630:
+                self.sound('laser_hit',.3)
                 self.beam_hit=True;self.boss_flash=.09
                 self.boss_hp=max(0,self.boss_hp-dt*19)
                 self.burst(x,y,'gold',2)

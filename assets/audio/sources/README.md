@@ -90,3 +90,13 @@ reproduce these additional cues.
 confirm, back, open and complete. `tools/build_menu_sounds.py` reproduces them
 from enveloped sine harmonics, with rounded attacks and silent tails. They use
 no external samples or metallic impact layers.
+
+## Material-specific bullet impacts
+
+`tools/build_bullet_impacts.py` supersedes the generic impact recipes for reaper,
+chase, tide, wyrm and finale banks. Armor, panels, mechanical parts, bone,
+soft targets, shells, crystal, energy and gel use original deterministic
+short noise transients and damped resonances, with three takes per material.
+Water uses the previously credited ezwa CC0 water_splash-01/02/03 recordings.
+No firearm samples or long metal-impact recordings are used for these impacts.
+Run this builder last to preserve the material palette after rebuilding stages.

@@ -478,5 +478,10 @@
     "source": "User-provided boss-battle-protocol [usesuno.com].mp3",
     "usage": "Shuffled gameplay playlist",
     "duration_seconds": 245.952
+  },
+  "bullet_impacts": {
+    "title": "Material-specific Bullet Impacts",
+    "source": "Original synthesis and existing ezwa CC0 water splash recordings; tools/build_bullet_impacts.py",
+    "usage": "Throttled per-material collision feedback across all five stages; three alternate takes per target type"
   }
 }

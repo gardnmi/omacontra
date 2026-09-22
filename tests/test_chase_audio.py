@@ -78,7 +78,7 @@ class ChaseAudioTests(unittest.TestCase):
         s.lib.SDL_QueueAudio.assert_not_called()
 
     def test_assets_have_quiet_peaks_and_complete_tails(self):
-        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),23)
+        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),25)
         for p in paths:
             with wave.open(str(p)) as f:
                 self.assertEqual((f.getframerate(),f.getnchannels(),f.getsampwidth()),(44100,1,2))

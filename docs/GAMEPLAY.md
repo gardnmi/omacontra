@@ -625,3 +625,14 @@ or practice run, including Play again. Stage transitions, deaths, continues and
 encounter restarts keep the current song and order. Songs play in full and the
 shuffled list loops. Omarchy Oligarchy stays outside the shuffle, starting at
 rocket boarding and continuing through the final battle and results.
+
+### Material-specific bullet impacts
+
+Successful collision callbacks now distinguish the Reaper’s armor and exposed
+body, its mechanical eye and raven, truck panels, drones, the robot heart,
+water, the guardians’ suit/shell, dragon scales/throat crystal and space
+energy nodes/jellyfish. The acquired laser also gives throttled contact feedback.
+Each material has three alternating takes, short tails and restrained levels.
+Impact cooldowns remain 0.14–0.30 seconds; destruction cues keep priority in the
+six-voice mixer. Damage, aiming and collision geometry are unchanged.
+Rebuild with `python tools/build_bullet_impacts.py` after other stage builders.

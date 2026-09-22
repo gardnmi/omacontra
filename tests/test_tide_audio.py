@@ -32,7 +32,7 @@ class TideAudioTests(unittest.TestCase):
         self.assertFalse(s.effects.voices);self.assertFalse(f.sfx_events)
 
     def test_quiet_nonempty_assets_and_soft_edges(self):
-        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),31)
+        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),32)
         for path in paths:
             with self.subTest(path=path.name),wave.open(str(path)) as f:
                 self.assertEqual((f.getframerate(),f.getnchannels(),f.getsampwidth()),(44100,1,2))

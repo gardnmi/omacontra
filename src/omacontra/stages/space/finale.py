@@ -137,7 +137,7 @@ class Finale:
                         self.nodes[i]=max(0,self.nodes[i]-48*dt)
                         if self.nodes[i]==0:self.sound('node_break')
                     else:self.boss_hp=max(0,self.boss_hp-96*dt)
-                    self.sound('laser_hit',.45)
+                    self.sound('node_hit' if i>=0 else 'laser_hit',.3)
                     self.beam_hit=True;self.boss_flash=.08
                     return
 

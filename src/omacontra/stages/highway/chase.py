@@ -298,7 +298,7 @@ class Chase:
                 for d in self.drones:
                     if d['hp']>0 and segment_box(ox,oy,b.x,b.y,(d['x']-45,d['y']-25,d['x']+45,d['y']+25)):
                         d['hp']-=1;b.life=0;self.burst(b.x,b.y,6)
-                        self.sound('drone_break' if d['hp']<=0 else 'impact',.14,position=(d['x'],d['y']))
+                        self.sound('drone_break' if d['hp']<=0 else 'drone_hit',.14,position=(d['x'],d['y']))
                         if d['hp']<=0:self.burst(d['x'],d['y'],30,'red');self.destroyed+=1
                         break
                 if b.life>0 and self.encounter_phase==2:
@@ -306,7 +306,7 @@ class Chase:
                     if segment_box(ox,oy,b.x,b.y,(tx-65,ty-80,tx+65,ty+80)):
                         b.life=0
                         if chase_robot.heart_open(self)>.8:
-                            self.sound('impact',.14)
+                            self.sound('heart_hit',.18)
                             self.boss_hp=max(12,self.boss_hp-2);self.impact=.1;self.burst(tx,ty,8)
                         else:self.sound('armor',.2);self.burst(tx,ty,3,'cream')
                     continue
