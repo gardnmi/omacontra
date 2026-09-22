@@ -687,3 +687,9 @@ The phase-one enclosure has a translucent segmented energy shell. Stable
 panels chip away and seams crack as total node health falls; connected laser
 hits emit local ripples and electric arcs. The shell disappears in exposed
 phases, leaving the screensaver background uncluttered.
+
+The synthetic shield buzz and geometric hex overlay were replaced. Shield
+contact now uses a licensed, leveled excerpt of Hansjörg Malthaner's force-field
+hum. The enclosure is an authored energy-membrane sprite atlas with intact,
+fractured and collapsing states, blended by remaining node health. A matching
+painted electrical flare marks laser contact. Exposed-body sound is unchanged.

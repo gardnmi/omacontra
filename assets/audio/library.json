@@ -498,7 +498,7 @@
       "finale/loops/shield.wav",
       "finale/loops/flesh.wav"
     ],
-    "source": "Original deterministic synthesis; tools/build_bullet_impacts.py",
+    "source": "Shield: Force field electric hum by Hansj\u00f6rg Malthaner (CC BY 4.0), https://opengameart.org/content/force-field-electric-hum; excerpted, filtered, leveled and looped. Flesh: original synthesis. Builder: tools/build_bullet_impacts.py",
     "usage": "Sustained force-field static for phase one and wet electrical contact for the exposed jellyfish; 15ms fades, cursor preserved while contact continues. Replaces periodic node_hit/laser_hit one-shots in space gameplay."
   }
 }

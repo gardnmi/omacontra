@@ -158,3 +158,20 @@ The seamless 1.9-second textures peak at -35 dBFS before shared effects gain.
 Runtime playback preserves position, ramps contact changes over 15 ms, and
 clears immediately on pause, hidden workspace, encounter changes and exit.
 Earlier one-shot assets remain available but are no longer emitted by Finale.
+
+### Shield contact replacement: authored force-field recording
+
+The rejected synthetic `shield.wav` has been replaced with an excerpt from
+**Force field electric hum** by **Hansjörg Malthaner (Varkalandar)**.
+- Source: https://opengameart.org/content/force-field-electric-hum
+- Author: https://opengameart.org/users/varkalandar
+- License selected: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+- Original and license notes: `force-field/hjm-shield_hum_50.wav`, `force-field/LICENSE.md`.
+
+Changes: use seconds 6–10, mono conversion, high/low-pass filtering, level
+the slow amplitude swell, reduce level and crossfade into a 3.9-second loop.
+No synthetic buzz/noise layer is added. Exposed-body audio is unchanged.
+
+Also researched bart's CC0 Space Ship Shield Sounds collection:
+https://opengameart.org/content/space-ship-shield-sounds . Those short impact
+sounds were not chosen for the sustained contact loop and are not shipped.

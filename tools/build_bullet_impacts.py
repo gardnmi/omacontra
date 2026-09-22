@@ -161,22 +161,33 @@ def main():
 
 
 def build_space_contact_loops():
- """Two-second seamless textures; no per-hit envelope or rhythmic retrigger."""
+ """Source-backed shield hum and the existing exposed-body contact texture."""
  out=ROOT/'finale/loops';out.mkdir(exist_ok=True)
  for kind in ('shield','flesh'):
-  rng=random.Random(908 if kind=='shield' else 1908)
-  count=RATE*2;values=[];low=high=wet=0.
-  for i in range(count):
-   t=i/RATE;noise=rng.uniform(-1,1)
-   low+=.34*(noise-low);high+=.025*(low-high);wet+=.007*(noise-wet)
-   # Continuous static over a restrained electrical carrier. Exposed tissue
-   # adds a thick, noise-driven squelch, without discrete pops or beat pulses.
-   if kind=='shield':v=math.tanh((low-high)*5)*.72+math.sin(math.tau*173*t)*.16
-   else:v=math.tanh((low-high)*4)*.40+math.tanh(wet*22)*.65
-   values.append(v)
-  # Crossfade the wrap and rotate it inside the file: sample zero isn't a
-  # special attack, and crossing the loop boundary never inserts silence.
-  fade=RATE//10
+  if kind=='shield':
+   # Use the settled portion of Malthaner's authored force field sound.
+   # No generated static/carrier layer and no repeated impact transients.
+   path=ROOT/'sources/force-field/hjm-shield_hum_50.wav'
+   raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(path),
+       '-ss','6','-t','4','-af','highpass=f=65,lowpass=f=2800',
+       '-ac','1','-ar',str(RATE),'-f','f32le','-'])
+   values=list(array.array('f',raw))
+   # Level the source's slow swell so held contact doesn't throb in beats.
+   # Keep its recorded timbre; only the local amplitude envelope changes.
+   power=[0.]
+   for v in values:power.append(power[-1]+v*v)
+   radius=RATE//50;target=(power[-1]/len(values))**.5
+   for i,v in enumerate(values):
+    lo=max(0,i-radius);hi=min(len(values),i+radius)
+    rms=((power[hi]-power[lo])/(hi-lo))**.5
+    values[i]=v*min(4.,target/max(.0001,rms))
+  else:
+   rng=random.Random(1908);values=[];low=high=wet=0.
+   for i in range(RATE*2):
+    noise=rng.uniform(-1,1)
+    low+=.34*(noise-low);high+=.025*(low-high);wet+=.007*(noise-wet)
+    values.append(math.tanh((low-high)*4)*.40+math.tanh(wet*22)*.65)
+  count=len(values);fade=RATE//10
   for i in range(fade):
    u=i/fade;values[i]=values[count-fade+i]*(1-u)+values[i]*u
   values=values[:count-fade]

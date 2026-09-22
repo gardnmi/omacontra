@@ -47,11 +47,15 @@ class SpaceContactTests(unittest.TestCase):
             self.assertIsNone(f.laser_contact)
 
     def test_shield_damage_is_progressive_and_exposed_phase_has_no_shield(self):
-        previous=set(range(128))
-        for health in (1.,.75,.5,.25,0.):
-            remaining={i for i in range(128) if containment_shield.panel_survives(i,health)}
-            self.assertLessEqual(remaining,previous);previous=remaining
-        self.assertFalse(previous)
+        previous_damage=-1
+        for health in (1.,.75,.55,.5,.25,.15,.05,0.):
+            layers=containment_shield.damage_layers(health)
+            self.assertTrue(all(0<=alpha<=1 for _,alpha in layers))
+            weight=sum(alpha for _,alpha in layers)
+            self.assertLessEqual(weight,1.00001)
+            damage=sum(index*alpha for index,alpha in layers)/(weight or 1) if health else 2
+            self.assertGreaterEqual(damage,previous_damage);previous_damage=damage
+        self.assertEqual(containment_shield.damage_layers(0),((2,0.),))
         f=Finale();f.skip();images=[]
         for hp in (f.node_max,f.node_max*.5,0):
             f.nodes=[hp,hp]
