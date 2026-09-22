@@ -87,7 +87,7 @@ class BulletImpactTests(unittest.TestCase):
                         self.assertEqual((f.getframerate(),f.getnchannels(),f.getsampwidth()),(44100,1,2))
                         raw=f.readframes(f.getnframes());pcm=array.array('h',raw);takes.append(raw)
                     self.assertEqual(pcm[0],0);self.assertEqual(pcm[-1],0)
-                    self.assertLess(max(map(abs,pcm)),700 if bank=='reaper' and name in ('impact','eye_hit') else 600)
+                    self.assertLess(max(map(abs,pcm)),700 if (bank=='reaper' and name in ('impact','eye_hit')) or (bank=='finale' and name=='laser_hit') else 600)
                     self.assertGreater(max(map(abs,pcm)),300)
                     mixer.trigger(name)
                 self.assertEqual(len(set(takes)),3)

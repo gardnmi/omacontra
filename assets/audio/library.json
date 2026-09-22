@@ -496,9 +496,9 @@
     "title": "Continuous space laser contact",
     "files": [
       "finale/loops/shield.wav",
-      "finale/loops/flesh.wav"
+      "finale/laser_hit.wav"
     ],
-    "source": "Shield: Force field electric hum by Hansj\u00f6rg Malthaner (CC BY 4.0), https://opengameart.org/content/force-field-electric-hum; excerpted, filtered, leveled and looped. Flesh: original synthesis. Builder: tools/build_bullet_impacts.py",
-    "usage": "Sustained force-field static for phase one and wet electrical contact for the exposed jellyfish; 15ms fades, cursor preserved while contact continues. Replaces periodic node_hit/laser_hit one-shots in space gameplay."
+    "source": "Shield: Force field electric hum by Hansj\u00f6rg Malthaner (CC BY 4.0), https://opengameart.org/content/force-field-electric-hum; excerpted, filtered, leveled and looped. Exposed body: Kenney CC0 crunch/low textures and original pulse, identical to Reaper impact. Builder: tools/build_bullet_impacts.py",
+    "usage": "Continuous licensed shield hum in phase one. Exposed jellyfish uses the approved Reaper body impact and its variants at 0.10-second contact intervals; no static loop."
   }
 }

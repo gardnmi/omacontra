@@ -11,7 +11,7 @@ EVENTS={
  'chase':{'armor':'vehicle_armor','impact':'vehicle_panel','heart_hit':'robot_heart','drone_hit':'drone'},
  'tide':{'guardian_hit':'guardian_shell','suit_hit':'guardian_suit','water_hit':'wave'},
  'wyrm':{'core_hit':'dragon_core','scale_hit':'dragon_scale','laser_hit':'dragon_laser'},
- 'finale':{'laser_hit':'jellyfish','node_hit':'space_node'},
+ 'finale':{'laser_hit':'reaper_body','node_hit':'space_node'},
 }
 # Duration, resonant partials, decay seconds, noise texture weight.
 MATERIALS={
@@ -103,25 +103,7 @@ def weighted_impact(material,take):
   values.append(math.tanh(lp*4)*min(1,t/.0015)*tail)
  return values
 
-def electrical_contact(take):
- """Dry broadband arc/static, with irregular sputters instead of a wet thud."""
- rng=random.Random(7319+take)
- duration=.11;values=[];low=high=0.;flutter=1.
- for i in range(round(duration*RATE)):
-  t=i/RATE
-  noise=rng.uniform(-1,1)
-  # Band-limit the fizz: no piercing top end or booming low-frequency pulse.
-  low+=.42*(noise-low);high+=.035*(low-high)
-  if i%round(.003*RATE)==0:flutter=rng.uniform(.70,1.)
-  static=math.tanh((low-high)*7)*flutter
-  # A few short arcing snaps sit in a continuous bed of electrical grain.
-  crackle=sum(math.exp(-(t-at)/.0025) for at in (.008,.032+take*.002,.061) if t>=at)
-  tail=max(0,1-max(0,t-.035)/(duration-.035))**1.1
-  values.append(static*(.8+.2*min(1,crackle))*min(1,t/.001)*tail)
- return values
-
 def make(material,take):
- if material=='jellyfish':return electrical_contact(take)
  if material in WEIGHTED:return weighted_impact(material,take)
  if material in ('reaper_body','reaper_eye'):return reaper_damage(material,take)
  if material in ('heavy','panel','mechanical'):return recorded_metal(material,take)
@@ -152,7 +134,7 @@ def main():
    for take in range(3):
     values=make(material,take);count=len(values)
     values=[v*min(1,i/90,(count-1-i)/400) for i,v in enumerate(values)]
-    db=-35 if material in WEIGHTED or material=='jellyfish' else -34 if material=='reaper_body' else -35 if material=='reaper_eye' else -39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
+    db=-35 if material in WEIGHTED else -34 if material=='reaper_body' else -35 if material=='reaper_eye' else -39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
     gain=32767*10**(db/20)/(max(map(abs,values)) or 1)
     path=out/f'{name}.wav' if take==0 else out/'variants'/f'{name}-{take}.wav'
     with wave.open(str(path),'wb') as f:
@@ -161,40 +143,32 @@ def main():
 
 
 def build_space_contact_loops():
- """Source-backed shield hum and the existing exposed-body contact texture."""
+ """Source-backed shield hum; exposed-body damage uses reaper_damage."""
  out=ROOT/'finale/loops';out.mkdir(exist_ok=True)
- for kind in ('shield','flesh'):
-  if kind=='shield':
-   # Use the settled portion of Malthaner's authored force field sound.
-   # No generated static/carrier layer and no repeated impact transients.
-   path=ROOT/'sources/force-field/hjm-shield_hum_50.wav'
-   raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(path),
-       '-ss','6','-t','4','-af','highpass=f=65,lowpass=f=2800',
-       '-ac','1','-ar',str(RATE),'-f','f32le','-'])
-   values=list(array.array('f',raw))
-   # Level the source's slow swell so held contact doesn't throb in beats.
-   # Keep its recorded timbre; only the local amplitude envelope changes.
-   power=[0.]
-   for v in values:power.append(power[-1]+v*v)
-   radius=RATE//50;target=(power[-1]/len(values))**.5
-   for i,v in enumerate(values):
-    lo=max(0,i-radius);hi=min(len(values),i+radius)
-    rms=((power[hi]-power[lo])/(hi-lo))**.5
-    values[i]=v*min(4.,target/max(.0001,rms))
-  else:
-   rng=random.Random(1908);values=[];low=high=wet=0.
-   for i in range(RATE*2):
-    noise=rng.uniform(-1,1)
-    low+=.34*(noise-low);high+=.025*(low-high);wet+=.007*(noise-wet)
-    values.append(math.tanh((low-high)*4)*.40+math.tanh(wet*22)*.65)
-  count=len(values);fade=RATE//10
-  for i in range(fade):
-   u=i/fade;values[i]=values[count-fade+i]*(1-u)+values[i]*u
-  values=values[:count-fade]
-  peak=max(map(abs,values));gain=32767*10**(-35/20)/peak
-  with wave.open(str(out/f'{kind}.wav'),'wb') as f:
-   f.setparams((1,2,RATE,0,'NONE','not compressed'))
-   f.writeframes(array.array('h',(round(v*gain) for v in values)).tobytes())
+ # Use the settled portion of Malthaner's authored force field sound.
+ # No generated static/carrier layer and no repeated impact transients.
+ path=ROOT/'sources/force-field/hjm-shield_hum_50.wav'
+ raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(path),
+     '-ss','6','-t','4','-af','highpass=f=65,lowpass=f=2800',
+     '-ac','1','-ar',str(RATE),'-f','f32le','-'])
+ values=list(array.array('f',raw))
+ # Level the source's slow swell so held contact doesn't throb in beats.
+ # Keep its recorded timbre; only the local amplitude envelope changes.
+ power=[0.]
+ for v in values:power.append(power[-1]+v*v)
+ radius=RATE//50;target=(power[-1]/len(values))**.5
+ for i,v in enumerate(values):
+  lo=max(0,i-radius);hi=min(len(values),i+radius)
+  rms=((power[hi]-power[lo])/(hi-lo))**.5
+  values[i]=v*min(4.,target/max(.0001,rms))
+ count=len(values);fade=RATE//10
+ for i in range(fade):
+  u=i/fade;values[i]=values[count-fade+i]*(1-u)+values[i]*u
+ values=values[:count-fade]
+ peak=max(map(abs,values));gain=32767*10**(-35/20)/peak
+ with wave.open(str(out/'shield.wav'),'wb') as f:
+  f.setparams((1,2,RATE,0,'NONE','not compressed'))
+  f.writeframes(array.array('h',(round(v*gain) for v in values)).tobytes())
 
 if __name__=='__main__':
  main()

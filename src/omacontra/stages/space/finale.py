@@ -45,7 +45,7 @@ class Finale:
         self.x=640.;self.y=590.;self.hp=7;self.max_hp=self.hp;self.invuln=0.;self.shots=[]
         self.final_phase_max=1500.
         self.boss_hp=self.boss_max=750.+self.final_phase_max
-        self.node_max=450.;self.nodes=[self.node_max,self.node_max]
+        self.node_max=675.;self.nodes=[self.node_max,self.node_max]
         self.fire=0.;self.volley=1.5;self.round=0;self.boss_flash=0.
         self.dash_time=0.;self.dash_cooldown=0.;self.dash_vector=(0.,-1.);self.was_slide=False
         self.emission=0.;self.death_origin=None
@@ -67,6 +67,12 @@ class Finale:
         return (x-55,y+38) if self.phase==1 else (x,y)
     def node(self,i):
         x,y=self.boss;return x+(-110 if i==0 else -25),y+(65 if i==0 else 108)
+    @property
+    def shield_hitbox(self):
+        # Whole containment area: helmet, hands and enclosed jellyfish.
+        x,y=self.boss
+        return x-210,y-105,x+150,y+215
+
     def begin_encounter(self):
         self.state='encounter';self.age=0.;self.shots=[];self.beam=[]
 
@@ -127,7 +133,13 @@ class Finale:
         self.laser_held=shoot
         if not shoot:return
         points=rope_path(*self.laser_muzzle,-math.pi/2,self.clock,1000.)
-        targets=[(i,*self.node(i),47,35) for i,hp in enumerate(self.nodes) if hp>0] if self.phase==1 else [(-1,*self.boss,85,55)]
+        if self.phase==1:
+            left,top,right,bottom=self.shield_hitbox
+            # Both shield reserves cover the entire enclosure. Breaking one
+            # must not leave an untargetable half of the visible shield.
+            reserve=next(i for i,hp in enumerate(self.nodes) if hp>0)
+            targets=[(reserve,(left+right)/2,(top+bottom)/2,(right-left)/2,(bottom-top)/2)]
+        else:targets=[(-1,*self.boss,85,55)]
         self.beam=[points[0]]
         for a,b in zip(points,points[1:]):
             self.beam.append(b)
@@ -138,6 +150,7 @@ class Finale:
                         if self.nodes[i]==0:self.sound('node_break')
                     else:self.boss_hp=max(0,self.boss_hp-96*dt)
                     self.laser_contact='shield' if i>=0 else 'flesh'
+                    if i<0:self.sound('laser_hit',.10)
                     self.beam_hit=True;self.boss_flash=.08
                     return
 

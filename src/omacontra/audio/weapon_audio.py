@@ -71,7 +71,7 @@ class WeaponAudio:
         events=getattr(f,'sfx_events',[])
         pending=list(events);events.clear()
         if isinstance(self.effects,FinaleEffects):
-            self.effects.set_contact(getattr(f,'laser_contact',None) if effects_enabled and f.state=='play' and f.beam_hit else None)
+            self.effects.set_contact('shield' if effects_enabled and f.state=='play' and f.beam_hit and getattr(f,'laser_contact',None)=='shield' else None)
         if not effects_enabled:self.effects.clear()
         else:
             for name in pending:self.effects.trigger(name)

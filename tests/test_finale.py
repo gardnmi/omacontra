@@ -52,6 +52,25 @@ class FinaleTests(unittest.TestCase):
             before=boarding_pose(t-.0001);after=boarding_pose(t+.0001)
             self.assertLess(math.dist(before[:3],after[:3]),.1)
 
+    def test_whole_enclosure_takes_damage_even_after_first_reserve_breaks(self):
+        from unittest.mock import patch
+        for broken in (False,True):
+            for side in (-190,0,130):
+                f=Finale();f.skip()
+                if broken:f.nodes[0]=0
+                bx,by=f.boss;x=bx+side
+                before=sum(f.nodes)
+                with patch('omacontra.stages.space.finale.rope_path',return_value=[(x,by+300),(x,by-150)]):
+                    f.update_laser(.04,True)
+                self.assertTrue(f.beam_hit)
+                self.assertAlmostEqual(sum(f.nodes),before-48*.04)
+                self.assertEqual(f.laser_contact,'shield')
+        f=Finale();f.skip();bx,by=f.boss
+        with patch('omacontra.stages.space.finale.rope_path',return_value=[(bx+170,by+300),(bx+170,by-150)]):
+            f.update_laser(.04,True)
+        self.assertFalse(f.beam_hit)
+        self.assertEqual(sum(f.nodes),1350)
+
     def test_stolen_laser_replaces_player_bullets_and_stops_on_release(self):
         f=Finale();f.skip();f.volley=999
         f.x=f.node(0)[0]-10

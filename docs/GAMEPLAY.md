@@ -693,3 +693,11 @@ contact now uses a licensed, leveled excerpt of Hansjörg Malthaner's force-fiel
 hum. The enclosure is an authored energy-membrane sprite atlas with intact,
 fractured and collapsing states, blended by remaining node health. A matching
 painted electrical flare marks laser contact. Exposed-body sound is unchanged.
+
+Phase-one Black Moon laser hits cover the full containment area around the
+helmet, hands and jellyfish (360 × 320 world pixels), following boss movement.
+Both shield reserves share that full hitbox, including after the first breaks.
+Total shield health is 1,350 (up from 900); exposed-phase health is unchanged.
+
+Exposed jellyfish contact now uses the approved Reaper damage impacts at ten
+hits per second while the beam connects. The rejected static loop is removed.

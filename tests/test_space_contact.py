@@ -9,7 +9,7 @@ from omacontra.stages.space import containment_shield
 
 class SpaceContactTests(unittest.TestCase):
     def test_contact_stream_is_unbroken_and_does_not_restart_each_frame(self):
-        for kind in ('shield','flesh'):
+        for kind in ('shield',):
             bank=FinaleEffects();chunks=[]
             for _ in range(210):
                 bank.set_contact(kind)
@@ -26,8 +26,9 @@ class SpaceContactTests(unittest.TestCase):
 
     def test_switch_material_and_pause_clear_sustained_audio(self):
         bank=FinaleEffects();bank.set_contact('shield');bank.mix(bytes(1764))
-        bank.set_contact('flesh');bank.mix(bytes(1764))
-        self.assertEqual(bank.contact_gain,{'shield':0.,'flesh':1.})
+        bank.set_contact(None);bank.trigger('laser_hit');bank.mix(bytes(1764))
+        self.assertEqual(bank.contact_gain,{'shield':0.})
+        self.assertTrue(bank.voices)
         bank.clear();self.assertFalse(bank.active)
         sound=WeaponAudio();f=Finale();f.skip();f.beam_hit=True;f.laser_contact='shield'
         with patch.object(sound,'open',return_value=False):sound.update(f,False,True)
@@ -42,7 +43,8 @@ class SpaceContactTests(unittest.TestCase):
             f.sfx_events.clear();f.update_laser(.02,True)
             self.assertTrue(f.beam_hit)
             self.assertEqual(f.laser_contact,expected)
-            self.assertNotIn('node_hit',f.sfx_events);self.assertNotIn('laser_hit',f.sfx_events)
+            self.assertNotIn('node_hit',f.sfx_events)
+            self.assertEqual(f.sfx_events.count('laser_hit'),1 if exposed else 0)
             f.update_laser(.02,False)
             self.assertIsNone(f.laser_contact)
 
@@ -63,3 +65,14 @@ class SpaceContactTests(unittest.TestCase):
             containment_shield.draw(cairo.Context(s),f);images.append(bytes(s.get_data()))
         self.assertNotEqual(images[0],images[1])
         self.assertFalse(any(images[2]))
+
+    def test_exposed_contact_uses_reaper_impact_and_never_static_loop(self):
+        from omacontra.resources import ASSETS
+        self.assertEqual((ASSETS/'audio/finale/laser_hit.wav').read_bytes(),
+                         (ASSETS/'audio/reaper/impact.wav').read_bytes())
+        sound=WeaponAudio();f=Finale();f.skip();f.nodes=[0,0]
+        f.x=f.boss[0];f.y=550;f.update_laser(.02,True)
+        self.assertTrue(f.beam_hit)
+        with patch.object(sound,'open',return_value=False):sound.update(f,False,True)
+        self.assertIsNone(sound.effects.contact)
+        self.assertIn('laser_hit',[voice[0] for voice in sound.effects.voices])

@@ -175,3 +175,11 @@ No synthetic buzz/noise layer is added. Exposed-body audio is unchanged.
 Also researched bart's CC0 Space Ship Shield Sounds collection:
 https://opengameart.org/content/space-ship-shield-sounds . Those short impact
 sounds were not chosen for the sustained contact loop and are not shipped.
+
+### Exposed jellyfish: approved boss impact
+
+The rejected `finale/loops/flesh.wav` and static synthesis were removed.
+`finale/laser_hit.wav` and its two variants are now byte-identical to the
+approved Reaper exposed-body impact, using the credited Kenney CC0 textures
+and original low pulse. Exposed laser contact triggers this at 0.10-second
+intervals; the licensed phase-one shield hum remains continuous.

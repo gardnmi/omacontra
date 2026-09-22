@@ -14,9 +14,10 @@ class FinaleEffects(ReaperEffects):
             'curtain':2,'laser_start':1,'laser_hit':1})
 
         self.contact=None;self.contact_samples={}
-        self.contact_gain={'shield':0.,'flesh':0.};self.contact_pos={'shield':0,'flesh':0}
+        self.contact_gain={'shield':0.};self.contact_pos={'shield':0}
 
     def set_contact(self,kind):
+        if kind!='shield':kind=None
         if kind and kind not in self.contact_samples:
             try:
                 with wave.open(str(self.audio/'loops'/f'{kind}.wav')) as f:
@@ -44,4 +45,4 @@ class FinaleEffects(ReaperEffects):
 
     def clear(self):
         super().clear();self.contact=None
-        self.contact_gain={'shield':0.,'flesh':0.};self.contact_pos={'shield':0,'flesh':0}
+        self.contact_gain={'shield':0.};self.contact_pos={'shield':0}
