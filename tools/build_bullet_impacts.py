@@ -158,4 +158,33 @@ def main():
     with wave.open(str(path),'wb') as f:
      f.setparams((1,2,RATE,0,'NONE','not compressed'))
      f.writeframes(array.array('h',(round(v*gain) for v in values)).tobytes())
-if __name__=='__main__':main()
+
+
+def build_space_contact_loops():
+ """Two-second seamless textures; no per-hit envelope or rhythmic retrigger."""
+ out=ROOT/'finale/loops';out.mkdir(exist_ok=True)
+ for kind in ('shield','flesh'):
+  rng=random.Random(908 if kind=='shield' else 1908)
+  count=RATE*2;values=[];low=high=wet=0.
+  for i in range(count):
+   t=i/RATE;noise=rng.uniform(-1,1)
+   low+=.34*(noise-low);high+=.025*(low-high);wet+=.007*(noise-wet)
+   # Continuous static over a restrained electrical carrier. Exposed tissue
+   # adds a thick, noise-driven squelch, without discrete pops or beat pulses.
+   if kind=='shield':v=math.tanh((low-high)*5)*.72+math.sin(math.tau*173*t)*.16
+   else:v=math.tanh((low-high)*4)*.40+math.tanh(wet*22)*.65
+   values.append(v)
+  # Crossfade the wrap and rotate it inside the file: sample zero isn't a
+  # special attack, and crossing the loop boundary never inserts silence.
+  fade=RATE//10
+  for i in range(fade):
+   u=i/fade;values[i]=values[count-fade+i]*(1-u)+values[i]*u
+  values=values[:count-fade]
+  peak=max(map(abs,values));gain=32767*10**(-35/20)/peak
+  with wave.open(str(out/f'{kind}.wav'),'wb') as f:
+   f.setparams((1,2,RATE,0,'NONE','not compressed'))
+   f.writeframes(array.array('h',(round(v*gain) for v in values)).tobytes())
+
+if __name__=='__main__':
+ main()
+ build_space_contact_loops()

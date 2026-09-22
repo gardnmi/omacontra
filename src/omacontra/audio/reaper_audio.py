@@ -53,4 +53,7 @@ class ReaperEffects:
         # Bound the complete effect + gun mix so a busy frame stays soft.
         return array.array('h',(max(-LIMIT,min(LIMIT,v)) for v in output)).tobytes()
 
+    @property
+    def active(self):return bool(self.voices)
+
     def clear(self):self.voices=[]

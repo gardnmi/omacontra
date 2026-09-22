@@ -674,3 +674,16 @@ space node impacts retain their separate energy texture.
 Rising storm water damages DHH as soon as it touches his feet, including during
 a jump or dash. Normal recovery protection still applies; unlimited-lives mode
 records the hit and plays the reaction without consuming a ribbon.
+
+### Space containment feedback
+
+Laser contact now sustains a seamless force-field buzz while a containment
+node is hit. Exposed jellyfish contact sustains wet electrical static. These
+replace the old 0.3-second hit retriggers; misses and releases fade the stream
+out, and pause/death/scene changes stop it. Existing music/effects volume
+settings apply. The other encounters retain their material impacts.
+
+The phase-one enclosure has a translucent segmented energy shell. Stable
+panels chip away and seams crack as total node health falls; connected laser
+hits emit local ripples and electric arcs. The shell disappears in exposed
+phases, leaving the screensaver background uncluttered.

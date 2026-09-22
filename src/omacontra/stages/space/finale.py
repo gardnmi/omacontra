@@ -50,7 +50,7 @@ class Finale:
         self.dash_time=0.;self.dash_cooldown=0.;self.dash_vector=(0.,-1.);self.was_slide=False
         self.emission=0.;self.death_origin=None
         self.trail=[];self.phase_age=0.;self.last_phase=1
-        self.beam=[];self.beam_hit=False;self.screensaver_age=0.
+        self.beam=[];self.beam_hit=False;self.laser_contact=None;self.screensaver_age=0.
         self.sfx_events=[];self.sfx_last={};self.laser_held=False
 
     def sound(self,name,cooldown=0):
@@ -74,7 +74,7 @@ class Finale:
         if self.state in ('departure','encounter'):
             self.state='play';self.age=0.;self.clock=ENCOUNTER_DURATION
             self.x,self.y=640.,590.;self.volley=2.25;self.invuln=2.25
-            self.shots=[];self.beam=[];self.beam_hit=False
+            self.shots=[];self.beam=[];self.beam_hit=False;self.laser_contact=None
     def hurt(self):
         if self.state=='play' and self.invuln<=0 and self.dash_time<=0:
             self.damage_taken=getattr(self,'damage_taken',0)+1;self.damage_clock=self.clock;self.hp-=0 if getattr(self,'unlimited_lives',False) else 1;self.invuln=3.;self.hit_clock=self.clock
@@ -122,7 +122,7 @@ class Finale:
     def laser_muzzle(self):return laser_muzzle(self.x,self.y)
 
     def update_laser(self,dt,shoot):
-        self.beam=[];self.beam_hit=False
+        self.beam=[];self.beam_hit=False;self.laser_contact=None
         if shoot and not self.laser_held:self.sound('laser_start',.35)
         self.laser_held=shoot
         if not shoot:return
@@ -137,13 +137,13 @@ class Finale:
                         self.nodes[i]=max(0,self.nodes[i]-48*dt)
                         if self.nodes[i]==0:self.sound('node_break')
                     else:self.boss_hp=max(0,self.boss_hp-96*dt)
-                    self.sound('node_hit' if i>=0 else 'laser_hit',.3)
+                    self.laser_contact='shield' if i>=0 else 'flesh'
                     self.beam_hit=True;self.boss_flash=.08
                     return
 
     def step(self,dt,move=0,vertical=0,shoot=False,slide=False,slide_pressed=False,**unused):
         dt=max(0,min(.04,dt));self.clock+=dt
-        self.beam=[];self.beam_hit=False
+        self.beam=[];self.beam_hit=False;self.laser_contact=None
         if self.state in ('departure','encounter','ending'):
             self.age+=dt
             if self.state=='departure' and self.age>=DEPARTURE_DURATION:
@@ -201,4 +201,4 @@ class Finale:
             self.volley=2.
         if self.boss_hp<=0 and self.state=='play':
             self.sound('defeat')
-            self.death_origin=self.boss;self.state='ending';self.age=0.;self.shots.clear();self.beam=[];self.beam_hit=False
+            self.death_origin=self.boss;self.state='ending';self.age=0.;self.shots.clear();self.beam=[];self.beam_hit=False;self.laser_contact=None

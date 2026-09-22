@@ -10,6 +10,7 @@ from omacontra.rendering.space_pose import SPACE_SCALE, SPACE_ANCHOR
 from omacontra.rendering import combat_fx as fx
 from omacontra.stages.dragon.wyrm_scene import ground as mist_ground, fog as mist_fog, lightning as mist_lightning
 from omacontra.rendering.laser_art import draw_arc_beam
+from omacontra.stages.space import containment_shield
 from omacontra.stages.space.finale import REAR_VIEW_AT, ENDING_DURATION, DEPARTURE_LAUNCH_AT, boarding_pose, ENCOUNTER_DURATION
 from omacontra.stages.reaper.battle_art import color, glow, line, label
 
@@ -160,6 +161,7 @@ class FinaleRenderer:
                     fx.projectile(c,b.kind,b.x,b.y,b.vx,b.vy,f.clock)
                 else:line(c,[(b.x,b.y+15),(b.x,b.y)],'gold',3)
             draw_arc_beam(c,f.beam,f.clock,f.beam_hit)
+            containment_shield.draw(c,f)
             color(c,'cream');c.arc(f.x,f.y,3,0,math.tau);c.fill()
             color(c,'ink',.9);c.rectangle(0,0,1280,58);c.fill()
             label(c,25,25,'05 / BLACK MOON',16);draw_health(c,f.hp,25,30,unlimited=getattr(f,'unlimited_lives',False),damage_age=f.clock-getattr(f,'damage_clock',-99),capacity=f.max_hp,scale=.75)

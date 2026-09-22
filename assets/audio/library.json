@@ -491,5 +491,14 @@
     "source": "User-provided arcade-armageddon [usesuno.com].mp3",
     "usage": "Shuffled continuous gameplay playlist and menu music player",
     "duration_seconds": 219.792
+  },
+  "space_laser_contact": {
+    "title": "Continuous space laser contact",
+    "files": [
+      "finale/loops/shield.wav",
+      "finale/loops/flesh.wav"
+    ],
+    "source": "Original deterministic synthesis; tools/build_bullet_impacts.py",
+    "usage": "Sustained force-field static for phase one and wet electrical contact for the exposed jellyfish; 15ms fades, cursor preserved while contact continues. Replaces periodic node_hit/laser_hit one-shots in space gameplay."
   }
 }

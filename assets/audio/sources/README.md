@@ -146,3 +146,15 @@ resonances in those four stages; Reaper assets are unchanged.
 band-limited static with irregular short arc snaps (110 ms, -35 dBFS peak).
 `electrical_contact` in `tools/build_bullet_impacts.py` replaces the earlier wet
 impact preset for the jellyfish body only. No external sample is used.
+
+### Continuous space laser contact
+
+Space gameplay now replaces periodic `node_hit` / `laser_hit` one-shots with
+`finale/loops/shield.wav` and `finale/loops/flesh.wav`. Both are original seeded
+synthesis, built with `build_space_contact_loops` in the bullet-impact builder.
+The shield uses continuous band-limited static and a quiet electrical carrier;
+the exposed jellyfish adds filtered noise squelch beneath electrical crackle.
+The seamless 1.9-second textures peak at -35 dBFS before shared effects gain.
+Runtime playback preserves position, ramps contact changes over 15 ms, and
+clears immediately on pause, hidden workspace, encounter changes and exit.
+Earlier one-shot assets remain available but are no longer emitted by Finale.

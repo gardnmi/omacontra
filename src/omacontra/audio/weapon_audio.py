@@ -70,6 +70,8 @@ class WeaponAudio:
             self.effects=self.banks[getattr(f,'sound_bank','reaper')]
         events=getattr(f,'sfx_events',[])
         pending=list(events);events.clear()
+        if isinstance(self.effects,FinaleEffects):
+            self.effects.set_contact(getattr(f,'laser_contact',None) if effects_enabled and f.state=='play' and f.beam_hit else None)
         if not effects_enabled:self.effects.clear()
         else:
             for name in pending:self.effects.trigger(name)
@@ -82,7 +84,7 @@ class WeaponAudio:
         self.pump()
 
     def pump(self):
-        if not self.effects.voices and not self.ui_effects.voices and not self.menu_effects.voices:return
+        if not self.effects.active and not self.ui_effects.voices and not self.menu_effects.voices:return
         if not self.open():return
         # One device mixes bounded effects, only 40 ms ahead.
         queued=self.lib.SDL_GetQueuedAudioSize(self.device)
