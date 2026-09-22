@@ -306,7 +306,7 @@ class Fight:
             self.slide_direction=(1 if move>0 else -1) if move else self.facing
         self.was_slide=slide
         if jump and not self.was_jump and self.jumps_used<2:
-            self.sound('jump')
+            self.sound('double_jump' if self.jumps_used==1 else 'jump')
             self.jumps_used+=1;self.vy=-510 if self.jumps_used==1 else -475
             self.slide_time=0.;self.dash_time=0.;self.slide_buffer=0.;grounded=False
             if self.jumps_used==2:

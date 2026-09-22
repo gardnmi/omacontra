@@ -25,7 +25,7 @@ class FoundryAudioTests(unittest.TestCase):
 
     def test_all_sound_assets_load_and_sprite_has_alpha(self):
         mixer=FoundryEffects();paths=list(AUDIO.glob('*.wav'))
-        self.assertEqual(len(paths),20)
+        self.assertEqual(len(paths),22)
         for path in paths:
             for _ in range(3):mixer.trigger(path.stem);mixer.mix(bytes(1764))
         self.assertFalse(mixer.failed)

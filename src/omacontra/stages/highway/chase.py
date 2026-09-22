@@ -186,6 +186,7 @@ class Chase:
         if self.state!='play':return
         self.was_shoot=shoot;self.finisher_cooldown=max(0,self.finisher_cooldown-dt)
         self.invuln=max(0,self.invuln-dt);self.notice_time=max(0,self.notice_time-dt)
+        if 0<self.boost_cooldown<=dt:self.sound('boost_ready')
         self.boost=max(0,self.boost-dt);self.boost_cooldown=max(0,self.boost_cooldown-dt)
         self.impact=max(0,self.impact-dt);self.muzzle=max(0,self.muzzle-dt);self.fire-=dt
         if jump and not self.was_jump and self.jump_height<=0:self.sound('takeoff');self.vy=610;self.burst(self.x,590,10,'smoke')

@@ -398,15 +398,15 @@ Each song plays to completion. The playlist continues across scenes, level chang
 
 On the Press Start screen, tap **Up, Up, Down, Down, Left, Right, Left, Right**. A bright rising metallic chime and Omarchy activation badge confirm unlimited lives. The unlock persists through all five levels and retries for this game session. Hits still trigger the normal reaction and recovery protection, but no lives are deducted; the health HUD shows an infinity emblem. Restarting the application resets the unlock.
 
-Machine-gun fire streams `assets/audio/machine-gun-burst.wav`, a sustained CC0 AK-47 recording, retaining its natural automatic-fire rattle. Softened treble, gentle compression and a -34 dBFS peak keep it beneath the music. Credits and original recording are in `assets/audio/sources/`; rebuild with `tools/build_machine_gun_sound.py`. `src/omacontra/audio/weapon_audio.py` uses one SDL2 device with a short audio queue, no per-shot processes. Shooting release, laser use, cutscenes, pause, hidden workspaces and hit recovery silence it. Missing audio fails gracefully.
+Historical gun-audio implementation (now disabled): machine-gun fire streamed `assets/audio/machine-gun-burst.wav`, a sustained CC0 AK-47 recording, retaining its natural automatic-fire rattle. Softened treble, gentle compression and a -34 dBFS peak keep it beneath the music. Credits and original recording are in `assets/audio/sources/`; rebuild with `tools/build_machine_gun_sound.py`. `src/omacontra/audio/weapon_audio.py` uses one SDL2 device with a short audio queue, no per-shot processes. Shooting release, laser use, cutscenes, pause, hidden workspaces and hit recovery silence it. Missing audio fails gracefully.
 
-Player machine-gun visuals use `src/omacontra/rendering/player_gun_fx.py`: three short starburst muzzle poses and pointed ivory rounds with yellow/orange edging, following the supplied Blazing Chrome recording. Shared cached pixel stamps cover the rifle and car gun in levels 1–4, including aimed/airborne poses. Enemy attacks, lasers, damage and fire cadence retain their existing behavior. Gunfire audio remains the quiet filtered recording so the soundtrack stays foreground.
+Player machine-gun visuals use `src/omacontra/rendering/player_gun_fx.py`: three short starburst muzzle poses and pointed ivory rounds with yellow/orange edging, following the supplied Blazing Chrome recording. Shared cached pixel stamps cover the rifle and car gun in levels 1–4, including aimed/airborne poses. Enemy attacks, lasers, damage and fire cadence retain their existing behavior. Player machine-gun audio is disabled; muzzle flashes and bullets remain unchanged.
 
 The water boss and both living guardians take damage throughout active combat, including windups and recovery. Water health is 600; each guardian has 190. Recovery timers still pace attacks but do not gate damage. Phase transitions retain excess damage; reveal/enrage cinematics remain protected.
 
-Gunfire tuning: the recorded burst plays at 88% pitch (about two semitones lower), with stronger 70–240 Hz impacts, reduced upper crack and lighter compression to preserve punch. Peak output is -34 dBFS.
+Historical gunfire tuning (now disabled): the recorded burst played at 88% pitch (about two semitones lower), with stronger 70–240 Hz impacts, reduced upper crack and lighter compression to preserve punch. Peak output is -34 dBFS.
 
-Sustained fire loops an uninterrupted run of recorded rounds, trimmed before the next shot with matched tail endpoints. No burst-end silence or whole-loop fade; it continues until firing stops.
+Historical sustained-fire implementation (now disabled) looped an uninterrupted run of recorded rounds, trimmed before the next shot with matched tail endpoints. No burst-end silence or whole-loop fade; it continues until firing stops.
 
 ### First encounter sound effects
 
@@ -416,7 +416,7 @@ DHH jump/landing/slide/dash, hurt/death/respawn, and timed boss explosions/final
 Simulation events in `src/omacontra/stages/reaper/combat.py` drive sound once per action. Impacts are throttled;
 invulnerability does not repeatedly play hurt sounds. These hooks apply only to level 1.
 
-`src/omacontra/audio/reaper_audio.py` mixes at most six voices into the existing machine-gun SDL stream.
+`src/omacontra/audio/reaper_audio.py` mixes at most six voices into the shared SDL effects stream.
 Important damage/destruction cues take priority over incidental sounds. Individual
 asset peaks range from -43 to -28 dBFS; playback adds 5 dB to these effects only,
 with a -20 dBFS combined ceiling. Pause, hidden
@@ -441,7 +441,7 @@ Gunfire and encounter effects each received a further 3 dB volume increase.
 ### Quattro Run sound effects
 
 Stage two has a separate bank of 22 mechanical effects, mixed through the same
-SDL device as continuous gunfire. Boost and truck ram use short acceleration
+SDL effects device. Boost and truck ram use short acceleration
 sounds; takeoff/landing use suspension thumps. Mine release, mortar launch,
 rocket fans, drone shots and the robot cannon have distinct cues. Each volley
 plays once; hit sounds are throttled, and off-screen impacts/spawns are silent.
@@ -466,7 +466,7 @@ called by both stage sound builders. Kenney's CC0 Sci-Fi Sounds supplies distinc
 crunch/low-frequency explosions, electrical shots, energy collapse and thruster
 rushes; the CC0 Free Firearm Sound Library supplies recorded Model 12 reports
 for the mortar/cannon. Every revised event has three alternating takes. Raven
-and robot-head destruction have separate sounds; the player's gun loop is retained.
+and robot-head destruction have separate sounds; the player's gun loop is now disabled.
 Local source masters and licenses are in `assets/audio/sources/`.
 
 `src/omacontra/stages/highway/chase_environment.py` adds independent drifting cloud wisps, sunset reflection ripples,
@@ -494,7 +494,7 @@ sun pixel to remain identical to the original painting.
 
 ### Tidebreaker sound and scenery
 
-Level three now uses a dedicated 29-event sound bank: recorded water surges and crashes, cargo movement, distinct guardian weapons, jet movement, impact/death cues, and survivor power-ups. Events share the bounded SDL mixer with the continuous machine gun; pause and scene changes discard queued tails. Rebuild with `python tools/build_tide_sounds.py`. Source credits are in `assets/audio/sources/README.md`.
+Level three now uses a dedicated 29-event sound bank: recorded water surges and crashes, cargo movement, distinct guardian weapons, jet movement, impact/death cues, and survivor power-ups. Events share the bounded SDL effects mixer; pause and scene changes discard queued tails. Rebuild with `python tools/build_tide_sounds.py`. Source credits are in `assets/audio/sources/README.md`.
 
 The harbor has animated water, chimney smoke, light reflections, edge spray and deck-anchored rain splashes. Motion uses simulation time and small cached textures. The wave dissolves directly in front of the guardians while DHH remains playable on the same deck; no recenter, transition card, or entrance slide. The second overstock trolley releases in wave two. The two carts exchange momentum on contact and retain separate readable hitboxes.
 
@@ -543,7 +543,7 @@ cutscenes and the continue countdown. Restart/title/quit ask for confirmation;
 R requests restart instead of silently discarding the fight. Native window close
 still exits normally. Held menu keys must be released before gameplay accepts them.
 
-Options provide separate Music, Effects and Gunfire levels (0–150% of the existing
+Options provide separate Music and Effects levels (0–150% of the existing
 mix; arrows adjust by 5%). Preferences and personal-best times are atomically
 saved to `$XDG_CONFIG_HOME/omacontra/profile.json` (default `~/.config/omacontra/`).
 Corrupt/missing preferences fall back to defaults; save failures show in the menu.
@@ -559,7 +559,8 @@ Quit**. Play again starts level one; boss selection is explicitly practice.
 Results show active combat time across attempts, lives lost, continues, restarts,
 and no-hit stages. Normal and unlimited-lives personal bests are separate. Practice
 runs never replace campaign records. Accepted damage is counted even with unlimited
-lives. Music and art credits, including the locally documented sound-source authors,
+lives: Lives Lost records each hit that would have consumed a life, while medals
+and health stay intact. Hits blocked by invincibility do not count. Music and art credits, including the locally documented sound-source authors,
 are available from pause and results.
 
 Movement polish adds landing compression, a short reversal brace, contact shadows,
@@ -585,3 +586,16 @@ deck tilts. Narrow mist gusts climb the dragon arena's distant cliffs. The orbit
 satellite slowly changes attitude and catches sunlight on its panels, only in
 phase one. These details use simulation time, fixed small draw counts and existing
 cached mist art; pausing freezes them and they never create collision objects.
+
+### Final arcade audio pass
+
+Player machine-gun audio is silent. All remaining effects receive a 10% gain
+increase; soundtrack volume is unchanged. Older gun recordings and tuning notes
+are retained as asset history, not active playback behavior.
+
+New action cues distinguish double jumps in the Reaper, harbor and dragon fights,
+signal Quattro boost and space thruster readiness, accompany the guardians’
+reveal, and build during the dragon’s final charge. Readiness cues play once when
+a used ability recovers; they do not repeat while ready.
+Rebuild these additions with `python tools/build_arcade_details.py`. The full
+background music playlist repeats indefinitely after its final track.

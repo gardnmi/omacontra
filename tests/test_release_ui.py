@@ -100,8 +100,8 @@ class ReleaseTests(unittest.TestCase):
     def test_options_apply_and_save_each_audio_bus(self):
         a=self.app();a.frontend.open('options');a.frontend.key('left')
         self.assertEqual(a.frontend.profile.settings['music'],95);a.music.set_volume.assert_called_with(80.75)
-        a.frontend.key('down');a.frontend.key('left');self.assertEqual(a.weapon_audio.effects.gain,.95)
-        a.frontend.key('down');a.frontend.key('left');self.assertEqual(a.weapon_audio.gun_gain,.95)
+        a.frontend.key('down');a.frontend.key('left');self.assertAlmostEqual(a.weapon_audio.effects.gain,.95*1.1)
+        a.frontend.key('down');self.assertEqual(a.frontend.rows()[a.frontend.selection],'Back')
         self.assertEqual(Profile(a.frontend.profile.path).settings,a.frontend.profile.settings)
     def test_records_separate_practice_unlimited_and_arcade(self):
         a=self.app();f=a.frontend;f.record.elapsed=123.;f.record.cleared={1,2,3,4};a.level=5;a.f.state='won'
@@ -117,7 +117,30 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(a.frontend.record.losses,1);self.assertEqual(a.frontend.record.hits[1],1)
         a.continue_encounter();self.assertEqual(a.frontend.record.continues,1)
         a.f.invuln=0;a.f.unlimited_lives=True;hp=a.f.hp;a.f.hurt();a.frontend.observe(.02,a.f,hp,0,True)
-        self.assertEqual(a.frontend.record.losses,1);self.assertEqual(a.frontend.record.hits[1],2)
+        self.assertEqual(a.frontend.record.losses,2);self.assertEqual(a.frontend.record.hits[1],2)
+        self.assertEqual(a.f.hp,hp)
+    def test_unlimited_losses_count_once_per_accepted_hit_across_all_stages(self):
+        from omacontra.stages.highway.chase import Chase
+        from omacontra.stages.harbor.tidebreaker import Tidebreaker
+        from omacontra.stages.dragon.foundry import Foundry
+        from omacontra.stages.space.finale import Finale
+        a=self.app()
+        for level,cls in enumerate((Fight,Chase,Tidebreaker,Foundry,Finale),1):
+            with self.subTest(level=level):
+                a.level=level;a.f=cls();a.f.state='play';a.f.unlimited_lives=True
+                hp=a.f.hp;a.f.invuln=0
+                a.f.hurt()
+                a.frontend.observe(.02,a.f,hp,0,True)
+                self.assertEqual(a.frontend.record.losses,level)
+                self.assertEqual(a.f.hp,hp)
+                # A second collision during recovery and a quiet tick add nothing.
+                hits=a.f.damage_taken;a.f.hurt()
+                a.frontend.observe(.02,a.f,hp,hits,True)
+                a.frontend.observe(.02,a.f,hp,hits,True)
+                self.assertEqual(a.frontend.record.losses,level)
+                self.assertEqual(a.frontend.record.hits[level],1)
+        self.assertTrue(a.frontend.record.unlimited)
+
     def test_play_again_starts_first_boss(self):
         a=self.app(5);a.frontend.record.cleared=set(range(1,6));a.frontend.open('results');a.frontend.key('return')
         self.assertEqual(a.level,1);self.assertEqual(a.f.state,'play');self.assertFalse(a.frontend.record.cleared)
@@ -128,10 +151,10 @@ class ReleaseTests(unittest.TestCase):
             for i in range(3):a.frontend.credits_page=i;a.frontend.draw(c)
         a.frontend.page=None;a.frontend.award=2
         for t in (0,.5,1,2,2.9):a.frontend.award_age=t;a.frontend.draw(c)
-    def test_muted_effects_and_gun_have_independent_gain(self):
+    def test_muted_effects_stay_silent(self):
         e=ReaperEffects();e.gain=0;e.voices=[['test',0,array.array('h',[1000]*4)]]
         original=array.array('h',[100]*4).tobytes();self.assertEqual(e.mix(original),original)
-        a=self.app();a.weapon_audio.set_volumes(0,1);self.assertEqual(a.weapon_audio.gun_gain,1)
+        a=self.app();a.weapon_audio.set_volumes(0)
         self.assertTrue(all(b.gain==0 for b in a.weapon_audio.banks.values()))
     def test_award_does_not_duplicate_or_mutate_health(self):
         a=self.app();hp=a.f.hp;a.f.state='won'

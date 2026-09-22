@@ -155,6 +155,7 @@ class Finale:
         self.emission=max(0,self.emission-dt)
         if self.phase>=2:self.screensaver_age+=dt
         self.phase_age+=dt;self.invuln=max(0,self.invuln-dt);self.boss_flash=max(0,self.boss_flash-dt)
+        if 0<self.dash_cooldown<=dt:self.sound('thruster_ready')
         self.dash_cooldown=max(0,self.dash_cooldown-dt);self.dash_time=max(0,self.dash_time-dt)
         norm=max(1,math.hypot(move,vertical));vx=move/norm;vy=vertical/norm
         if (slide_pressed or slide and not self.was_slide) and self.dash_cooldown<=0:

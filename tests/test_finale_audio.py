@@ -40,7 +40,7 @@ class FinaleAudioTests(unittest.TestCase):
 
     def test_bank_loads_all_variants_and_routes_to_shared_device(self):
         bank=FinaleEffects()
-        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),14)
+        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),15)
         for path in paths:
             for _ in range(3):bank.trigger(path.stem);bank.mix(bytes(1764))
         self.assertFalse(bank.failed)

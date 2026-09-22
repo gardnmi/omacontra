@@ -73,3 +73,13 @@ retain long tails; weapon launches have their own distinct source families.
 - **Short wind sound**, remaxim: https://opengameart.org/content/short-wind-sound — CC0, https://creativecommons.org/publicdomain/zero/1.0/ . Original stored at `storm/wind.wav`.
 - **Thunder**, Jerimee: https://opengameart.org/content/thunder — CC BY 3.0, https://creativecommons.org/licenses/by/3.0/ . Created using René Nyffenegger's cSound instrument. Original stored at `storm/thunder.ogg`.
 - Modifications: excerpts, resampling, low-pass filtering, soft fades and attenuation by `tools/build_wyrm_sounds.py`. Runtime bank is `audio/wyrm/`; it replaces the rejected synthetic `audio/foundry/` bank. No implication of endorsement by the source authors.
+
+## Final arcade detail cues
+
+Player machine-gun playback is disabled; the gun sources and historical recipes
+above remain for provenance. `tools/build_arcade_details.py` adds double-jump,
+guardian-arrival and dragon-charge cues from the Kenney CC0 forceField,
+thrusterFire and laserLarge sources credited above. Boost-ready and thruster-ready
+cues are original soft two-note sine synthesis. Other effects gain 10%; music
+volume is unchanged. Run this builder after the individual bank builders to
+reproduce these additional cues.

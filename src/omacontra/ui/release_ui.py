@@ -5,9 +5,10 @@ from pathlib import Path
 import math
 import cairo
 from omacontra.rendering.health_medals import medal
+from omacontra.audio.weapon_audio import SFX_BOOST
 
 NAMES=('THE REAPER','QUATTRO RUN','TIDEBREAKER','THE MIST GATE','BLACK MOON')
-DEFAULTS={'music':100,'effects':100,'gunfire':100}
+DEFAULTS={'music':100,'effects':100}
 
 class Profile:
     def __init__(self,path=None):
@@ -36,7 +37,9 @@ class RunRecord:
         self.hits={};self.cleared=set();self.unlimited=False
     def observe(self,level,dt,hits,losses,active,unlimited):
         if active:self.elapsed+=dt
-        self.losses+=max(0,losses);self.hits[level]=self.hits.get(level,0)+max(0,hits)
+        # Unlimited lives preserve HP, but accepted damage still counts as a loss.
+        self.losses+=max(0,hits if unlimited else losses)
+        self.hits[level]=self.hits.get(level,0)+max(0,hits)
         self.unlimited|=unlimited
     @property
     def category(self):
@@ -59,8 +62,8 @@ class Frontend:
     def apply_audio(self):
         s=self.profile.settings
         for music in (self.app.music,self.app.game_music):music.set_volume(85*s['music']/100)
-        self.app.unlock_sound.set_volume(85*s['effects']/100)
-        self.app.weapon_audio.set_volumes(s['effects']/100,s['gunfire']/100)
+        self.app.unlock_sound.set_volume(85*SFX_BOOST*s['effects']/100)
+        self.app.weapon_audio.set_volumes(s['effects']/100)
     def open(self,page='pause'):
         self.page=page;self.selection=0;self.app.paused=True
         if self.app.intro:self.app.intro.paused=True
@@ -108,7 +111,7 @@ class Frontend:
         rows=self.rows()
         if key in ('up','w'):self.selection=(self.selection-1)%len(rows)
         elif key in ('down','s'):self.selection=(self.selection+1)%len(rows)
-        elif key in ('left','right','a','d') and self.page=='options' and self.selection<3:
+        elif key in ('left','right','a','d') and self.page=='options' and self.selection<len(DEFAULTS):
             name=tuple(DEFAULTS)[self.selection];v=self.profile.settings[name]
             self.profile.settings[name]=max(0,min(150,v+(5 if key in ('right','d') else -5)))
             self.apply_audio();self.profile.save()
@@ -219,7 +222,7 @@ class Frontend:
         elif self.page=='confirm':label(c,260,168,'This will '+{'quit':'close the game.','title':'leave the current encounter.','restart':'restart the current encounter.'}.get(self.pending,'leave this run.'),18);y=260
         for i,row in enumerate(self.rows()):
             label(c,270,y+i*43,('> ' if i==self.selection else '  ')+row,22,(.72,.9,.5) if i==self.selection else (.78,.79,.73))
-            if self.page=='options' and i<3:
+            if self.page=='options' and i<len(DEFAULTS):
                 value=self.profile.settings[tuple(DEFAULTS)[i]]
                 c.set_source_rgb(.14,.19,.15);c.rectangle(675,y+i*43-15,270,10);c.fill()
                 c.set_source_rgb(.65,.83,.47);c.rectangle(675,y+i*43-15,270*value/150,10);c.fill()

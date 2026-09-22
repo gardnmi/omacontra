@@ -294,6 +294,7 @@ class Foundry(Fight):
             if self.state=='rescue':
                 old_age=self.rescue_age
                 self.rescue_age=min(RESCUE_END,self.rescue_age+dt);self.clock+=dt
+                if old_age<1.25<=self.rescue_age:self.sound('ultimate_charge')
                 if old_age<EXPLOSION<=self.rescue_age:self.sound("rescue_blast")
                 if self.lava_age is not None:self.lava_age+=dt
                 u=min(1,self.rescue_age/1.2);u=u*u*(3-2*u)

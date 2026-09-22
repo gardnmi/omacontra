@@ -92,7 +92,7 @@ class ReaperAudioTests(unittest.TestCase):
         self.assertFalse(m.voices)
 
     def test_all_assets_are_soft_valid_pcm(self):
-        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),21)
+        paths=list(AUDIO.glob('*.wav'));self.assertEqual(len(paths),22)
         for p in paths:
             with wave.open(str(p)) as w:
                 self.assertEqual((w.getframerate(),w.getnchannels(),w.getsampwidth()),(44100,1,2))

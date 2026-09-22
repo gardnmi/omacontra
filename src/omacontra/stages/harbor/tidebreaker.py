@@ -101,6 +101,7 @@ class Tidebreaker(GuardianCombat,Fight):
     def step(self,dt,**controls):
         dt=min(.04,max(0,dt))
         old_clock=self.clock;old_tilt=self.tilt_clock
+        if self.state=='play' and 0<self.wave_reveal<=dt:self.sound('guardian_arrival')
         self.wave_reveal=max(0,self.wave_reveal-dt)
         if self.state=='reveal':self.step_reveal(dt);return
         if self.stage and self.state=='play' and any(a.hp>0 and a.enraged and a.rage_age<2.8 for a in self.guardians):
