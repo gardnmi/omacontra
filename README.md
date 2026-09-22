@@ -1,5 +1,7 @@
 # OMACONTRA
 
+![Omacontra retro box cover: back, spine, and front, featuring DHH, Tobi, the dragon and scenes from the game](docs/images/omacontra-box-cover.png)
+
 A Contra-inspired **boss-only** fullscreen game. Five encounters bring wallpaper worlds to life: the Reaper, Quattro Run, Tidebreaker, the Mist Gate, and Black Moon. DHH runs, jumps, ducks,
 and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit firing stream.
 
