@@ -13,7 +13,7 @@ JOURNEY_TRACK=ASSETS/'audio/wine-cellar-off-duty-mercenary.mp3'
 FINALE_TRACK=ASSETS/'audio/quattro-run-omarchy-oligarchy.mp3'
 GAME_TRACKS=(JOURNEY_TRACK,
              TRACK.parent/'contra.mp3',TRACK.parent/'the-descent.mp3',
-             TRACK.parent/'boss-battle-protocol.mp3')
+             TRACK.parent/'boss-battle-protocol.mp3',TRACK.parent/'arcade-armageddon.mp3')
 
 def shuffled_tracks():
     return tuple(random.sample(GAME_TRACKS,len(GAME_TRACKS)))

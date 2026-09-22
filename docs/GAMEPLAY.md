@@ -390,6 +390,7 @@ After Start, the wine-rack demonstration starts a looping playlist, shuffled onc
 2. Contra
 3. The Descent
 4. Boss Battle Protocol
+5. Arcade Armageddon
 
 Each song plays to completion. The playlist continues across scenes, level changes, victory, death and retries. Pause or hiding the workspace pauses playback; closing the game stops it. Direct launches of levels 1–4 also start the playlist. Black Moon replaces it with Omarchy Oligarchy from the rocket boarding cutscene onward. The pre-Start opening theme and Start explosion remain separate. Quattro (Let’s Go, Nerds) is archived and no longer plays. Track sources and order are registered in `assets/audio/library.json`; all MP3s are local.
 
@@ -619,7 +620,7 @@ bounded mixer while combat stays paused; hidden windows clear the cues. Final
 level music continues across the results menus. Rebuild the sounds using
 `python tools/build_menu_sounds.py`.
 
-The regular four-song playlist gets a fresh random order for each new campaign
+The regular five-song playlist gets a fresh random order for each new campaign
 or practice run, including Play again. Stage transitions, deaths, continues and
 encounter restarts keep the current song and order. Songs play in full and the
 shuffled list loops. Omarchy Oligarchy stays outside the shuffle, starting at
@@ -655,7 +656,7 @@ contact throttling are unchanged.
 ### Soundtrack player
 
 Music player is available from Choose your run, Pause and Mission complete.
-Select any of the six current soundtrack songs and press Enter (or click) to
+Select any of the seven current soundtrack songs and press Enter (or click) to
 play; selecting the same song toggles pause. Left/right plays the previous/next
 song. Stop silences the player; Back restores the parent menu and its music.
 Selected tracks loop. Previewing pauses the existing music player, preserving
@@ -663,4 +664,4 @@ its position, and never changes the campaign shuffle or reserved finale theme.
 The music volume setting also controls previews; hidden windows pause playback.
 
 The opening theme is exclusive to the opening/title screen and the menu music
-player. It is excluded from the four-song gameplay shuffle.
+player. It is excluded from the five-song gameplay shuffle.

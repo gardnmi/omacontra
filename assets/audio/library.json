@@ -58,7 +58,8 @@
       "wine_cellar_journey",
       "contra",
       "the_descent",
-      "boss_battle_protocol"
+      "boss_battle_protocol",
+      "arcade_armageddon"
     ],
     "starts": "Wine-rack demonstration after Start, or direct launch of levels 1\u20134",
     "continues_through": [
@@ -483,5 +484,12 @@
     "source": "Kenney Impact/Sci-Fi Sounds (CC0), ezwa CC0 water recordings and original synthesis; tools/build_bullet_impacts.py",
     "usage": "Per-bullet material impacts with three takes; approved Reaper damage sounds retained, other stages use weighted bass/crunch/wet/energy presets. Continuous laser contacts remain rate-limited.",
     "reaper_revision": "Eye and exposed-body damage: CC0 Kenney crunch/low-frequency textures plus original bass pulse; Contra and Blazing Chrome audiovisual references documented in sources/README.md"
+  },
+  "arcade_armageddon": {
+    "title": "Arcade Armageddon",
+    "file": "arcade-armageddon.mp3",
+    "source": "User-provided arcade-armageddon [usesuno.com].mp3",
+    "usage": "Shuffled continuous gameplay playlist and menu music player",
+    "duration_seconds": 219.792
   }
 }
