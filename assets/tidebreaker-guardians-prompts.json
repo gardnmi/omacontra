@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-20",
+  "assets": [
+    {
+      "file": "tidebreaker-guardians.png",
+      "prompt": "Use case: stylized-concept. Production sprite atlas for OMACONTRA, high-quality detailed Contra arcade pixel art. Convert the TWO supplied character references into two playable boss designs, preserve recognizability. 1536x1024 PNG, TRUE transparent background, 3 columns x 2 rows, each cell 512x512, all sprites fully inside their cell with 30px transparent gutter. NO lettering, no background, no desktop bar. TOP ROW is the FIRST reference character: huge black shaggy spiked coat, faceless dark pointed hood, bold aged cream skeletal graphic on chest, crimson accents, chunky handgun; left-facing three-quarter stance. Three poses: (1) idle hunched full body, gun lowered; (2) handgun arm extended firing LEFT, full body braced; (3) low charging stance lunging LEFT, coat trailing right. BOTTOM ROW is the SECOND reference: skeletal astronaut inside olive sand-colored bulky old pressure suit, domed helmet showing skull, many hoses and huge chest regulator, big boots, chunky pistol. Three poses: (1) grounded left-facing idle; (2) hovering with feet tucked slightly, aiming pistol LEFT; (3) crouched hard landing, one fist near ground, hoses swinging. Cohesive proportions within each row. Rich layered metal shading, dark outlines and strong silhouettes, mechanically convincing anatomy, menacing but no gore. No text, logos, numbers, UI, ground, shadows underneath, or random effects. All six separate isolated sprites on true transparent pixels.",
+      "references": [
+        "user attachment Q3E0Aw (black-coated character)",
+        "user attachment Zgu0XV (skeletal astronaut)"
+      ]
+    },
+    {
+      "file": "tidebreaker-worlds.png",
+      "prompt": "Use case: stylized-concept. Production TWO-BACKGROUND atlas for OMACONTRA multi-stage ocean boss level. 1536x1536 PNG, exactly TWO full-width panoramic scenes stacked, each 1536x768. Detailed Contra arcade pixel art, finely shaded industrial machinery, crisp pixels, not a sketch. No characters, text, UI, logos. TOP HALF: newly exposed Japanese-inspired industrial dockyard beyond an ocean barrier, sunset parchment-cream sky with huge vermilion red sun, black heavy cranes, rust-red gantry, distant oil tanks and pagoda roof silhouettes, wet black metal mooring platforms receding into right background. Palette aged cream, rust vermilion, charcoal matching first supplied character's poster. BOTTOM HALF: same dockyard transformed into orbital launch facility, huge pale moon in background, black starfield and drifting dust, derelict giant orbital vessel docked on right, olive-beige industrial pressure doors and cables, muted teal powerlights, skull-emblem-free detailed machinery. Palette desaturated olive, bone, navy. In BOTH images playable foreground will be rendered separately at bottom by code: leave no nearby pillars obstructing left two-thirds of scene, horizon at about two-thirds height, dark water or dark recess across bottom 15 percent, no floor obstructing action or perspective tilted in foreground. Both compositions 2:1 landscape, enough negative space for readable small player and large boss on right. Translate illustrated wallpaper aesthetics to richly detailed pixel-art environment matching reference 3. Keep upper background soft in contrast, darker behind playable characters.",
+      "references": [
+        "user attachments Q3E0Aw and Zgu0XV",
+        "tidebreaker-arena.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+build/
+dist/
+*.egg-info/
+review/
+output/
+*.mp4
+*.webm
+*.mkv
+*.log
+.DS_Store

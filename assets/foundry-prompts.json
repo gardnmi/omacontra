@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-20",
+  "assets": [
+    {
+      "file": "foundry-arena.png",
+      "reference": "ristretto/backgrounds/3-industrial-moon.jpg (installed local wallpaper)",
+      "direction": "Detailed arcade pixel-art industrial skyline, orange moon left, slender tower right, dark iron horizontal foundry platform. No characters or UI. Ground runtime aligned to y630."
+    },
+    {
+      "file": "foundry-warden.png",
+      "direction": "Three transparent poses of the same left-facing giant dark iron walking furnace: neutral, raised hammer, desperate supercharged open furnace. Orange chest core, bronze pistons, cannon forearm, armored legs. No skulls or scythe. Second generation requested separated columns; runtime silhouette clips keep neighboring sprites out of crops."
+    },
+    {
+      "file": "foundry-rescue.png",
+      "reference": "quattro-car.png",
+      "direction": "Transparent rescue atlas: right-facing ivory/red Audi Quattro with Tobi driving, and Tobi black racing-suit airborne, landing, standing poses. Detailed consistent pixel-art, no scenery. Runtime uses measured explicit crops."
+    }
+  ],
+  "story": "Fictional game sequence: Tobi rescues DHH by crashing the Quattro into the Furnace Warden; both heroes survive."
+}

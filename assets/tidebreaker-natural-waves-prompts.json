@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-20",
+  "file": "tidebreaker-natural-waves.png",
+  "reference": "tidebreaker-attacks.png",
+  "direction": "Replace creature-like foam claws and connecting arms with natural ocean waves. Transparent 1536x1024 atlas, three columns by two rows: incoming swell, rearing breaker, collapse; hollow barrel rising, curling, breaking. Side view, leftward motion, grounded bases, dark navy/teal/ivory detailed pixel art. No hands, fingers, arms, tentacles, text, labels or scenery.",
+  "runtime": "Cropped sprite frames crossfade while anchored to local deck height; no detached descending claw. Original generated alpha retained."
+}

@@ -1,0 +1,35 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-20",
+  "assets": [
+    {
+      "file": "tidebreaker-arena.png",
+      "prompt": "Use case: stylized-concept. Asset type: production game environment atlas for OMACONTRA Tidebreaker. Create a 1536x1024 image. Detailed hand-crafted 16/32-bit Contra arcade pixel art, crisp pixel clusters and rich shading matching the gritty high-quality reference but ocean blue and aged cream palette. Exact atlas layout: TOP 1536x768 is a side-on ocean battle environment WITHOUT any playable floor or people or UI: enormous living Great Wave inspired by Hokusai curls from RIGHT toward the center, claw-like cream foam fingers, dark navy water, a visible swirling circular dark turquoise heart/eye centered at (1210,410) as the boss weak point. The LEFT half is relatively open smoky blue sky with distant mountains and industrial harbor silhouettes on horizon. Torrential atmospheric storm, menacing massive wave, sea along bottom, dramatic silver lighting. BOTTOM 1536x256 is a separate straight horizontal steel ferry deck asset, side elevation: top walkable edge is a continuous perfectly level horizontal line at y=780, wet riveted gunmetal plating, mooring ropes, mechanical hull pipes below, gold hazard markings, no railing sticking above the walkable edge, no characters. Hard separator between two regions. No text, no HUD, no cartoon outlines, no blurry painting. Main boss wave must read as a terrifying force of water, not a humanoid monster. The bottom strip will be cropped out and drawn separately; no scenery below it.",
+      "references": [
+        "reaper-arena.png"
+      ]
+    },
+    {
+      "file": "journey-cinema.png",
+      "prompt": "Use case: illustration-story. Production pixel-art cinematic atlas for OMACONTRA. Make 1536x1024 PNG with THREE equal full-width horizontal story panels stacked, each 1536x~341. No borders or text. All richly shaded detailed Contra arcade pixel art like references. Two characters consistent in each panel: DHH muscular long brown hair and short beard black sleeveless shirt with white skull insignia olive combat pants; Tobi bald man dark black racing suit with orange piping. TOP PANEL: medium wide shot in wine cellar, Tobi on left proudly gestures to homemade server mounted among wine bottles in rack center, DHH on right skeptically looks at it. Warm overhead bulbs, cool cyan fan lights in server, expensive wood wine shelving mixed with exposed computer wiring, grounded realistic pixel art. MIDDLE PANEL: same cellar, server rack has erupted into a brilliant cyan rectangular portal, DHH and Tobi pulled off their feet toward it in separate streams of luminous data, dramatic foreshortening but readable full upper bodies, electrical arcs, wine bottles silhouetted, sense of violent sudden motion. BOTTOM PANEL: blue-hour industrial harbor at ocean edge, white red Audi Quattro parked left behind Tobi, DHH standing center-right holding machine gun pointed down, both facing each other as they decide to split up, steel gangway leading right toward a rugged small unmanned cargo ferry, distant huge dark sea and factory lights, moody navy teal amber palette. Compose faces and main action within middle 60 percent vertical height of each strip so suitable for cinematic letterboxing. No speech bubbles, no words, no UI, no blank white, no painted blur. References provide visual style and character driver car appearance, not exact layouts.",
+      "references": [
+        "intro-cellar.png",
+        "quattro-car.png"
+      ]
+    },
+    {
+      "file": "tidebreaker-attacks.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent sprite atlas for the Tidebreaker ocean boss, matching the attached detailed arcade pixel art. Generate 1536x1024 with TRUE transparent background, exactly SIX separate water attack sprites arranged on an evenly spaced 3-column 2-row grid, each cell 512x512. No ground, no sky, no text or guides. Each isolated sprite centered in its cell with generous transparent margins. Top left: low rolling navy ocean surge shaped like a muscular curling breaker crashing to the LEFT, wide horizontal shape, aged cream foamy rim, rich dark blue shading and tiny spray. Top middle: overhead elongated horizontal claw of water sweeping left, elongated foam fingers underneath, dark navy volume, wide horizontal shape. Top right: giant vertical claw/finger of navy water dropping DOWN with three jagged foamy talons, tall thin silhouette. Bottom row: corresponding SECOND ANIMATION FRAME for each sprite above, water advanced slightly with different foam splash positions, same dimensions and orientation, coherent shape. All six finely detailed crisp hand-shaded retro arcade pixel clusters, high contrast silver/cream foam and teal/navy interior, powerful heavy sculpted water and spray, no blur, no cartoon vector gradients. Completely isolated on genuine transparent pixels.",
+      "references": [
+        "tidebreaker-arena.png"
+      ]
+    },
+    {
+      "file": "tidebreaker-calm.png",
+      "prompt": "Use case: precise-object-edit. Edit this 1536x1024 game environment atlas for the Tidebreaker victory state. Preserve the bottom steel deck strip y810..1024 EXACTLY unchanged, preserve the left harbor skyline, mountains, horizontal sea horizon and all overall framing. Remove ONLY the enormous curling boss wave and its eye from the right side. In its place continue the distant industrial harbor across the bay: cranes, factory buildings and amber lights, distant mountains and receding storm clouds, calm rolling dark blue ocean in front. Keep horizon height matching left. Storm is clearing with soft silver light through clouds, subdued navy/cream pixel art identical to original detail and crispness. No characters, text or UI, no giant wave anywhere, no blank areas. This is the same location seconds after the boss wave collapsed.",
+      "references": [
+        "tidebreaker-arena.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "references": [
+    "user shuttle wallpaper /tmp/codex-clipboard-7hpsi3.png",
+    "user astronaut and jellyfish wallpaper /tmp/codex-clipboard-jq4ZcJ.png",
+    "nord/backgrounds/0-black-moon.jpg"
+  ],
+  "atlas": "Six isolated detailed Contra-style pixel-art subjects: empty black astronaut, luminous jellyfish, DHH spacesuit, overhead shuttle, yellow Lamborghini with Tobi driving, falling DHH. Second tool pass removed all background with transparent alpha.",
+  "background": "Premium pixel-art Mediterranean coastline, expansive turquoise sky, side-on empty highway in bottom quarter, no people or vehicles.",
+  "date": "2026-09-20",
+  "polish": {
+    "tool": "built-in image_gen",
+    "assets": {
+      "finale-guardian.png": "Faithfully adapt supplied astronaut/jellyfish wallpaper: three charcoal astronaut hand poses and three delicate rainbow jellyfish bell poses, six-cell alpha atlas.",
+      "finale-orbit.png": "Pixel art adaptation of Nord black moon: detailed icy dust rings and muted blue-gray nebula, restrained mountain horizon.",
+      "finale-atlas.png": "Replace Lamborghini driver only with established Tobi: bald, short beard, sunglasses, black race suit and red straps. Follow-up removes all background halos with transparent alpha."
+    }
+  },
+  "boarding_walk": {
+    "asset": "dhh-space-walk.png",
+    "tool": "built-in image_gen",
+    "prompt": "Six-cell spacesuit sprite sheet matching DHH: idle, four right-facing walking poses, boarding reach. White graphite suit and clear visor, rifle lowered. Follow-up: remove all background halos with alpha zero, preserve exact frames."
+  },
+  "portal_reach": {
+    "asset": "dhh-portal-reach.png",
+    "tool": "built-in image_gen",
+    "prompt": "DHH white graphite spacesuit with clear visor; face looks at camera, foreground hand reaching toward camera, foreshortened body and feet recede behind him feet first; no gun, isolated transparent pixel-art cinematic pose."
+  },
+  "rear_player": {
+    "asset": "dhh-space-rear.png",
+    "tool": "built-in imagegen",
+    "reference": "finale-atlas.png",
+    "prompt": "One isolated rear-facing white spacesuit player sprite, back of helmet and life-support pack visible, rifle pointing up, matching detailed pixel-art reference; transparent background."
+  },
+  "spacewalk_revision": {
+    "tool": "built-in imagegen",
+    "assets": [
+      "finale-earth.png",
+      "finale-catch-car.png"
+    ],
+    "earth_prompt": "Premium arcade pixel art orbital Earth below, partly illuminated blue globe and cloud systems, black outer space with sparse stars; reference clipboard-FaX44g; no land foreground, moon, rings, characters, ships or UI.",
+    "catch_prompt": "Two aligned transparent Lamborghini convertible frames facing right: Tobi driving alone, then DHH landed in passenger seat bracing on door. Same wheelbase, perspective and driver; reference finale-atlas.png. Pixel art, no scenery.",
+    "extraction_prompt": "Preserve both cars and characters in place; remove ambient halos and black backdrop to transparent alpha; no shadows outside silhouettes."
+  },
+  "dimensional_finale": {
+    "tool": "built-in imagegen",
+    "assets": {
+      "finale-vortex.png": "Transparent black hole with thick turbulent gold and violet plasma accretion disc, lensed luminous arch, opaque black core and pixel-art texture; reference clipboard-jHezzE.png.",
+      "finale-catch-close.png": "Low front three-quarter yellow Lamborghini, Tobi stoic at wheel and shocked DHH bracing after landing; transparent pixel-art sprite; reference finale-catch-car.png.",
+      "finale-coastal-highway.png": "Empty Pacific coastal highway rear chase-camera background, central vanishing point, ocean right, palms and city left, no cars UI or lane markings; reference clipboard-0tkdoD.png.",
+      "finale-car-rear.png": "Rear-view yellow convertible, backs of Tobi in left seat and DHH right, transparent pixel-art sprite; reference finale-catch-car.png."
+    },
+    "reused_asset": "omarchy-wordmark.png copied from experiments/platform-lab/assets/omarchy.png"
+  },
+  "plasma_burst": {
+    "tool": "built-in imagegen",
+    "asset": "finale-plasma-burst.png",
+    "prompt": "Six sequential centered 512x512 frames on a 1536x1024 transparent sprite sheet: spherical white-hot cyan/gold/violet plasma expands into volumetric turbulent lobes, then fragments and implodes. Premium detailed pixel art, no flat bottom, ground, mushroom cloud, vector rings or spokes."
+  },
+  "continuity_fixes": {
+    "tool": "built-in image_gen",
+    "assets": {
+      "finale-catch-car-v2.png": {
+        "references": [
+          "finale-catch-car.png",
+          "foundry-rescue.png"
+        ],
+        "prompt": "Change only the driver head in both cars to established Tobi: slender oval bald head, short close-cropped beard, narrow black sunglasses and lean face. Preserve head position, car geometry, DHH, two-frame layout and transparent alpha."
+      },
+      "foundry-rescue-empty.png": {
+        "reference": "foundry-rescue.png",
+        "prompt": "Remove all people from the top Quattro cockpit, including side window and windshield faces and hands. Replace with empty dark seats, steering wheel and tinted glass. Preserve exact car geometry, 1536x1024 canvas, alpha, and three standalone Tobi sprites."
+      }
+    }
+  }
+}

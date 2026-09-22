@@ -1,0 +1,5 @@
+# Guardian enrage
+
+Built-in imagegen output: `guardian-enrage.png`. Native alpha retained. Rendered behind the guardian, expanded during the 1.25-second reaction and reduced afterward, with pulsing scale and alternating orientation. Armor tint and backpack exhaust complement it.
+
+Prompt: One high-quality pixel-art game VFX sprite on genuinely transparent alpha background. Tall oval corona of violent red-orange electrical plasma, molten sparks and fragmented hot metal embers, framing an EMPTY TRANSPARENT CENTER for a humanoid boss sprite. Energy concentrated around perimeter and bottom, thin branching lightning wisps curving upward, white-hot gold highlights, deep crimson outer flames. Rich detailed arcade pixel-art matching gritty illustrated 16-bit boss graphics. Vertical silhouette about 2:3 width:height. No character, no scenery, no lettering, no solid filled center, no black background, no floor, no circles made of simple lines. Entire effect contained with transparent margin. Used as an armor-overload enrage burst behind a character.

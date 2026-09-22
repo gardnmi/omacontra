@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Run directly from this checkout, from any working directory."""
+import os
+from pathlib import Path
+import sys
+
+os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve().with_name('main.py')), *sys.argv[1:]])

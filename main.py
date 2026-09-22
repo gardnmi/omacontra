@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""OMACONTRA — fullscreen wallpaper boss rush."""
+import argparse
+from pathlib import Path
+import subprocess
+import sys
+
+from story import Intro, COVER_AT
+from art import Renderer, W, H
+
+
+def render_preview(path):
+    import cairo
+    path=Path(path)
+    path.parent.mkdir(parents=True,exist_ok=True)
+    renderer=Renderer()
+    intro=Intro()
+    frames=round((COVER_AT+4)*30)
+    process=subprocess.Popen([
+        'ffmpeg','-nostdin','-n','-v','error','-f','rawvideo','-pixel_format','bgra',
+        '-video_size',f'{W}x{H}','-framerate','30','-i','pipe:0','-an',
+        '-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p',
+        '-movflags','+faststart',str(path)],stdin=subprocess.PIPE)
+    try:
+        for frame in range(frames):
+            surface=cairo.ImageSurface(cairo.FORMAT_ARGB32,W,H)
+            renderer.draw(cairo.Context(surface),intro,W,H)
+            surface.flush()
+            process.stdin.write(surface.get_data())
+            intro.step(1/30)
+    finally:
+        process.stdin.close()
+        code=process.wait()
+    if code:
+        raise RuntimeError(f'ffmpeg exited with {code}')
+    print(f'Rendered {frames/30:.1f}s: {path}')
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--render-preview',metavar='FILE.mp4',help='Render without a desktop; requires ffmpeg, refuses overwrite')
+    parser.add_argument("--level",type=int,choices=(1,2,3,4,5),default=1,help="Start at Reaper (1), Quattro (2), Tidebreaker (3), Foundry (4), or Black Moon (5)")
+    parser.add_argument("--guardians",action="store_true",help="Start directly at the Tidebreaker guardian duo; R retries the duo")
+    parser.add_argument("--boss",action="store_true",help="Skip the opening cinematic")
+    parser.add_argument("--wallpaper",help="Local reaper wallpaper PNG")
+    parser.add_argument("--smoke-test",action="store_true",help="Open the fullscreen game and close after six seconds")
+    from cutscene_review import SCENES
+    parser.add_argument('--cutscene',nargs='?',const='ending',choices=SCENES,help='Open the cutscene review gallery (default: ending)')
+    parser.add_argument('--at',type=float,default=0,help='Start cutscene review at this many seconds')
+    args=parser.parse_args()
+    if args.cutscene:
+        from cutscene_review import launch
+        launch(args.cutscene,args.at)
+    elif args.render_preview:render_preview(args.render_preview)
+    else:
+        from boss_app import launch as launch_boss
+        launch_boss(args.wallpaper,args.smoke_test,intro=not (args.boss or args.smoke_test or args.level>1),level=args.level,guardians=args.guardians)

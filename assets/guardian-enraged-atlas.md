@@ -1,0 +1,5 @@
+# Enraged guardian atlas
+
+Asset: `tidebreaker-guardians-enraged.png`. Built-in imagegen edit of `tidebreaker-guardians.png`, preserving the six frame positions and native alpha. Replaces the old surrounding enrage corona in gameplay.
+
+Prompt: Edit this existing six-pose game sprite atlas into ENRAGED variants. Preserve exact 1536x1024 dimensions, six poses in their exact locations, scale, silhouettes, weapons and faces. Keep the same detailed pixel-art style. Black-coated masked villain top row: smoldering scarlet cracks integrated into mask, glowing red eye slit, red-hot seams along black armor and weapon barrel, scorched coat edges with small attached embers. Astronaut bottom row: intense crimson glow INSIDE helmet around skull eyes, heated orange-red armor seams and backpack reactor vents, scorched metal and overheated gun barrel. Both must look dangerously overheated with retained material detail, NOT a uniform red tint. NO surrounding halo, no ring, no extra objects, no large flames obscuring bodies. True transparent background, including between limbs. Keep pose and alignment exact for drop-in gameplay replacement.

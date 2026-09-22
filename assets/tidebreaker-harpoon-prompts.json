@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-20",
+  "asset": "tidebreaker-harpoon.png",
+  "reference": "tidebreaker-arena.png",
+  "direction": "Isolated deck-mounted harpoon launcher, genuine transparent RGBA, detailed dark navy steel and rusty bronze pixel art matching ship deck. Side view aiming up-right 30 degrees, bolted mounting feet, mechanical brackets, cable spool and coiled rope, ratchet wheel, piston, recoil spring, loaded pointed harpoon, two crusted amber locks, teal lamp. Full object, no scenery, text or UI. 1536x1024.",
+  "runtime": "Original alpha retained. Crop (40,40,1480,910), scaled to 230x154, rotated with deck. Lock targets and outgoing cable transformed using matching prop coordinates."
+}

@@ -1,0 +1,9 @@
+{
+  "tool": "builtin imagegen",
+  "asset": "quattro-rally-cinema.png",
+  "references": [
+    "user-provided Quattro rally wallpaper",
+    "quattro-car.png"
+  ],
+  "prompt": "Create a production pixel-art game asset atlas, 1536x1024. Reference1 is the exact composition and camera angle desired: Audi Quattro leaping over a dirt rally crest, front-left three-quarter low camera, magenta orange sunset, large yellow sun at right. Reference2 supplies the game's detailed 16-bit pixel-art style and Tobi driver. Top half (1536x512): wide cinematic sunset dirt rally landscape from reference1 WITHOUT ANY CAR, beautiful magenta mountain coast, big sun on right, dirt crest bottom, small quattro rally sign bottom right, no highway or guardrail. Bottom half (1536x512): on genuinely transparent background, one isolated airborne white red Audi Quattro, front-left three-quarter low camera exactly like reference1, showing undercarriage with all wheels hanging and nose lifted. Fit whole car with margins into bottom half, centered. Driver Tobi in sunglasses visible behind windshield, long-haired muscular DHH in black skull shirt seated in rear side window, gun lowered. Preserve racing livery number1, Audi grille, rally headlights, proportionate detailed wheels. Crisp richly detailed pixel art matching reference2; no smooth painting. Keep top landscape and bottom car separate with no overlap, no text captions or interface. This atlas is used to animate the car independently over the background."
+}

@@ -1,0 +1,6 @@
+{
+  "tool": "builtin imagegen",
+  "reference": "dhh-weapon.png",
+  "output": "quattro-bazooka.png",
+  "prompt": "Isolated right-facing olive drab bazooka with iron sights, orange warning stripe and scratched cream metal edges. Detailed crisp 16-bit Contra pixel art matching dhh-weapon.png. No hands, people or background; transparent PNG."
+}

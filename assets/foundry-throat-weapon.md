@@ -1,0 +1,7 @@
+# Throat emitter and detached jaw rifle
+
+Asset: `foundry-throat-weapon.png`. Built-in imagegen generation, native transparent alpha. Left sprite is embedded in the Warden's mouth; right sprite is the detached pickup and held weapon. The break-off animation blends between the matching views.
+
+## Prompt
+
+Detailed pixel-art sprite atlas, 1536x1024 transparent background. TWO related sprites for a molten black iron demonic robot boss. LEFT HALF: front-facing compact demonic THROAT EMITTER, circular furnace aperture surrounded by jagged black iron teeth and orange molten seams, bright small electric ivory-blue center, integrated mechanical organic throat, no gun handle visible in this frontal view. Center at x384 y512, contained in x100..650 y240..780. RIGHT HALF: the same throat emitter RIPPED OUT into a small usable alien rifle, SIDE VIEW pointing RIGHT, its round aperture now a tapered tooth-lined barrel, elongated black iron upper jaw forms gun body, hooked lower jaw forms a trigger grip beneath, exposed orange molten tendons, ivory-blue energy core. Center at x1152 y512, contained x820..1500 y270..760. Coherent matching material and identity between the two sprites. Crisp richly shaded pixel artwork for a Contra-inspired action game, intricate highlights and worn edges, volcanic black red-orange palette with pale blue-white energy. Genuinely transparent background, no opaque glow backdrop, no labels, no lettering, no frame or ground. Two separate silhouettes with generous transparent padding.

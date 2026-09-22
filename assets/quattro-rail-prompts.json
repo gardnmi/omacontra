@@ -1,0 +1,19 @@
+{
+  "generator": "Built-in image_gen",
+  "assets": [
+    {
+      "asset": "quattro-coast.png",
+      "prompt": "Edit this game background preserving the exact image dimensions, pixel art quality, sunset sky, sun, ocean, mountains and composition. REMOVE the entire horizontal steel guardrail and all fence posts and reflectors. Reconstruct the natural coastline behind where the rail was. Keep the road at exactly the same height, but REMOVE all painted lane dashes and road markings. Make the asphalt a dark even unmarked texture. No new vehicles objects people or UI. This will be the stationary distant scenery layer, with a separate moving guardrail and lane markings added by software.",
+      "references": [
+        "quattro-road.png"
+      ]
+    },
+    {
+      "asset": "quattro-guardrail.png",
+      "prompt": "Create a game scenery sprite: one straight horizontal metal highway guardrail, side-on view. Match the highly detailed 16-bit pixel art, charcoal steel, silver edge highlights and tiny orange reflectors in the reference. Isolated on REAL TRANSPARENT background: all areas above, below and between posts are transparent; no terrain, sky, vegetation, road, shadows or scenery. Beam perfectly horizontal across full width, exactly constant height, with four evenly spaced steel support posts reaching below it. Rectangular landscape canvas 1536x256. Keep entire rail inside image, with generous transparent margins top/bottom but beam extending exactly to left and right edges at the same height for horizontal repetition. Structural rivets, weathered textured steel. Crisp premium pixel art.",
+      "references": [
+        "quattro-road.png"
+      ]
+    }
+  ]
+}

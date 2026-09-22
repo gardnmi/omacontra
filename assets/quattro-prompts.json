@@ -1,0 +1,35 @@
+{
+  "generator": "Built-in image_gen",
+  "assets": [
+    {
+      "asset": "quattro-road.png",
+      "prompt": "Wide 16:9 side-scrolling arcade game background, detailed hand-painted 16-bit pixel art with crisp pixel clusters, same premium dark intricate Contra arcade craftsmanship as the industrial reaper arena reference, but a synthwave coastal rally highway at sunset. Reference sunset image gives magenta orange purple palette, yellow setting sun on right, layered distant purple mountains and ocean. Empty flat horizontal asphalt highway across bottom 20 percent, gravel verge guardrail, detailed road surface. Horizon around middle. NO cars, people, UI, letters, obstacles or logos. Camera side-on, road flat left to right. Environment asset for moving vehicle boss fight. Keep dark road and foreground to make bright projectiles readable.",
+      "references": [
+        "/tmp/codex-clipboard-SCcnmo.png",
+        "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/reaper-arena.png"
+      ]
+    },
+    {
+      "asset": "quattro-car.png",
+      "prompt": "Single isolated Audi Sport Quattro rally car, detailed 16-bit pixel art sprite matching elaborate Contra arcade sprite craftsmanship. Reference image for white boxy 1980s Quattro rally livery, headlights, four rings, number 1, chunky tires. Side profile with slight front three-quarter perspective, FRONT of car points LEFT, REAR at RIGHT. Entire vehicle fully visible, no crop. Small bald Tobi driver in black race suit visible at front window on left; rear passenger window OPEN dark and EMPTY on right for separate DHH gunner sprite. No passenger, no weapons. Magenta orange sunset rim lighting with cream metal and purple shadows. Real transparent background, no floor/shadow/background. Landscape canvas tightly framing car with margins.",
+      "references": [
+        "/tmp/codex-clipboard-SCcnmo.png",
+        "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/reaper-sprites.png"
+      ]
+    },
+    {
+      "asset": "quattro-enemies.png",
+      "prompt": "Production pixel-art sprite sheet with exactly TWO isolated assets on transparent background. Detailed intricate 16-bit Contra arcade quality matching reference industrial reaper sprites, metallic armor, orange amber lights, purple sunset shadows, no skull theme. Canvas1536x1024. TOP two thirds: huge armored six-wheel autonomous containment truck side profile facing LEFT, front cab at LEFT, heavy rectangular trailer to RIGHT, menacing armored grille, one visible central glowing orange circular engine core, roof turret, deployable low front ram blade, six big chunky wheels. Entire truck within x60..1476 y60..650. BOTTOM center: ONE flying military drone with twin ducted rotors and central amber eye, within x530..1010 y730..950. Clear large transparent gap between truck and drone. No background, text, ground, effects or labels. Designed as game cutouts.",
+      "references": [
+        "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/reaper-sprites.png"
+      ]
+    },
+    {
+      "asset": "quattro-munitions.png",
+      "prompt": "Create a 1024x1024 transparent-background game sprite atlas containing exactly TWO isolated objects matching this reference's intricate hand-painted 16-bit arcade pixel art, dark gunmetal panels, cream metal edges and amber orange lights. Upper half: ONE side-on circular anti-tire spiked steel roller, circular wheel-like armored hub with large thick triangular metal spikes around its circumference, amber center, industrial machinery not fantasy, fits inside x250..774 y40..470. Lower half: ONE horizontal military rocket pointing LEFT with cream and graphite cylindrical body, yellow-black warning band, four angular tail fins at RIGHT, orange exhaust nozzle but NO flame. Fits x100..924 y620..900. No background, labels, skulls, scythes, magic or extra objects. Real transparent background and ample clear space between objects.",
+      "references": [
+        "quattro-enemies.png"
+      ]
+    }
+  ]
+}

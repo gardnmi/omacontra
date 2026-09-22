@@ -1,0 +1,5 @@
+{
+  "tool": "builtin imagegen",
+  "asset": "quattro-explosion.png",
+  "prompt": "Create a horizontal six-frame sprite sheet of a powerful industrial truck fuel explosion for a detailed 16-bit Contra-style pixel art game. True transparent background. Canvas 1536x1024, layout exactly 3 columns by 2 rows, equal 512x512 cells, one isolated frame centered per cell with generous transparent margins, no overlaps. Reading left to right then next row: 1 tight white-hot ignition; 2 expanding irregular orange fireball; 3 huge rolling yellow-orange fire with red edges; 4 dark billowing smoke mixed with orange flame; 5 dense charcoal smoke with falling embers; 6 dissipating smoke. Consistent center bottom alignment. Volumetric chunky pixel-art flame lobes, convincing explosive force, rich detailed shading, no star shapes, no radial spikes, no background, no vehicles, no text. High quality arcade explosion animation, distinct sequential frames."
+}

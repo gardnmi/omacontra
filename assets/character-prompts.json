@@ -1,0 +1,70 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "reference/canonical-characters.png",
+  "entries": [
+    {
+      "asset": "finale-catch-car-canonical.png",
+      "edit_target": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-c37365ca-e313-4107-84fd-b531aaf69975.png",
+      "prompt": "Background replacement only. Preserve every car and character detail of image1. Replace ALL background and haze/glow outside car/people with UNIFORM SOLID PURE MAGENTA #FF00FF. No gradients, shadows, halo or noise on magenta. Including gaps between heads, around shoulders, below wheels. Keep exact 1536x1024 canvas positions and two rows. This is chroma-key game art. Characters already correct. No transparency requested: perfectly flat magenta background.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-851828ad-2d9c-42b9-ac86-563c2df3cbd5.png"
+    },
+    {
+      "asset": "dhh-body-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/dhh-body.png",
+      "prompt": "Match canonical reference image2 EXACTLY: Tobi is bald CLEAN SHAVEN, blue eyes NO sunglasses, lean smiling face, dark BLUE racing suit with lime piping and sponsor patches. DHH is muscular, shoulder-length center-parted brown hair, short salt-and-pepper beard, blue eyes, black cream skull sleeveless shirt. Detailed crisp pixel art, no cartoon redesign. Edit ONLY faces/hair of all eight DHH body sprites in image1 to match image2 DHH. Keep each original head silhouette and exact size/position as closely as possible, adding the canonical beard and face features. Preserve original bodies, all poses, absent forearms, shirts, legs, canvas1536x1024, frame locations, original flat magenta background. No added weapons or extra limbs.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-7fd562ec-da6d-4bf9-8762-e8e4ea2170eb.png"
+    },
+    {
+      "asset": "foundry-rescue-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/foundry-rescue.png",
+      "prompt": "Match canonical reference image2 EXACTLY: Tobi is bald CLEAN SHAVEN, blue eyes NO sunglasses, lean smiling face, dark BLUE racing suit with lime piping and sponsor patches. DHH is muscular, shoulder-length center-parted brown hair, short salt-and-pepper beard, blue eyes, black cream skull sleeveless shirt. Detailed crisp pixel art, no cartoon redesign. Edit all Tobi appearances in image1: top Quattro windows and three standalone bottom poses. Change face/suit ONLY, keep poses and sprite locations, car unchanged. Replace ALL outside background/glow with SOLID PURE MAGENTA #FF00FF for chroma-key. NO brown halo. Keep exact1536x1024 layout. Top car contains one driver seen through glass; bottom three Tobi sprites, no added characters.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-72f6452e-11fa-40f5-a961-92b287268d44.png"
+    },
+    {
+      "asset": "quattro-car-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/quattro-car.png",
+      "prompt": "Use reference image2 as immutable character identities: Tobi is bald CLEAN SHAVEN, blue eyes NO sunglasses, lean smiling face, dark BLUE racing suit with lime piping and sponsor patches. DHH is muscular with shoulder-length center-parted brown hair, short salt-and-pepper beard, blue eyes, black cream skull sleeveless shirt. Detailed crisp pixel art. Edit ONLY Tobi driver head/suit visible through windshield in image1 to match reference. Preserve exact car position, size, geometry, pink sunset highlights, ALL wheels and transparent background unchanged. Keep1536x1024. Empty rear passenger window must remain empty. No beard or glasses on driver.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-2d07a28e-c8bc-4585-9252-55cc2fd68c32.png"
+    },
+    {
+      "asset": "journey-cinema-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/journey-cinema.png",
+      "prompt": "Use reference image2 as immutable character identities: Tobi is bald CLEAN SHAVEN, blue eyes NO sunglasses, lean smiling face, dark BLUE racing suit with lime piping and sponsor patches. DHH is muscular with shoulder-length center-parted brown hair, short salt-and-pepper beard, blue eyes, black cream skull sleeveless shirt. Detailed crisp pixel art. Edit characters in ALL THREE horizontal cinematic panels of image1: Tobi left, DHH right in cellar, portal, harbor. Keep original poses/expression appropriate to action. Tobi clean shaven no sunglasses blue suit everywhere; DHH canonical beard/hair. Preserve all background scenes, framing, panel dividers at346 and685,1536x1024, vehicle, lighting and pixel art.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-282c8b1f-e57e-471c-8dc8-f03f6339aa9b.png"
+    },
+    {
+      "asset": "quattro-rally-cinema-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/quattro-rally-cinema.png",
+      "prompt": "Use reference image2 as immutable character identities: Tobi is bald CLEAN SHAVEN, blue eyes NO sunglasses, lean smiling face, dark BLUE racing suit with lime piping and sponsor patches. DHH is muscular with shoulder-length center-parted brown hair, short salt-and-pepper beard, blue eyes, black cream skull sleeveless shirt. Detailed crisp pixel art. Edit ONLY the two people inside the BOTTOM car of image1: driver Tobi and passenger DHH. Remove sunglasses from both, canonical hair and beard only on DHH, Tobi blue racing suit. Preserve all car/window geometry, sprite coordinates, transparent background, whole top landscape panel and1536x1024canvas unchanged. No new glow.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-aaf4ed22-ddad-4667-9c9f-090d0e7cc6f6.png"
+    },
+    {
+      "asset": "finale-people-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/finale-atlas.png",
+      "prompt": "Edit ONLY human characters in image1 sprite atlas to match image2 canonical title characters. Bottom-right falling DHH: shoulder-length center-parted brown hair, short salt-pepper beard, blue eyes strong brow same face as DHH on right image2, frightened expression appropriate to falling. Preserve pose, skull sleevelessshirt, green trousers. Top-right astronaut: same DHH face through visor, preserve suit and rifle. Small car bottom-middle Tobi: bald CLEAN SHAVEN no sunglasses blue racing suit lime trim, like leftman image2. Preserve exact1536x1024 cell positions and all noncharacter pixels. No change spaceship jellyfish or black astronaut. Keep transparent background.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-6efd2278-3fb1-4a4d-9bcc-1dfd3e590811.png"
+    },
+    {
+      "asset": "finale-car-rear-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/finale-car-rear.png",
+      "prompt": "Edit image1 rear car sprite: ONLY Tobi driver on LEFT changes black/red outfit into navy BLUE racing suit with limegreen seams/piping matching canonical Tobi LEFT of image2. DHH on RIGHT hair should be shoulder-length brown loose waves like reference not curly ringlets, skulltanktop remains black. Preserve exact car and seating geometry, perspective, positions and1254squarecanvas with transparent background. No faces added, this is strictly rear view.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-b3677028-9a00-4785-b059-a062f5b05331.png"
+    },
+    {
+      "asset": "dhh-space-walk-canonical.png",
+      "edit_target": "/home/gardnmi/Projects/hyprsplitter/experiments/boss-rush/assets/dhh-space-walk.png",
+      "prompt": "Identity correction ONLY of faces visible inside all SIX white spacesuit helmets in image1. Match DHH on RIGHT of image2: blue eyes, strong straight brow, shoulder-length brown centerpartedhair tucked inside helmet, short salt-and-pepper beard. Keep serious expression, original face size and angle. Preserve EXACT original poses, six512pixel cells,1536x1024canvas, suits, rifles, arms, boots, all sprite boundaries and transparency. No other changes.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-8d642185-33a3-4462-ba2d-0d0bb319fa91.png"
+    },
+    {
+      "asset": "foundry-rescue-canonical.png",
+      "prompt": "Precise small correction to image1. Top car FRONT WINDSHIELD still has an old bearded face wearing sunglasses. REMOVE that face and replace with empty tinted windshield glass and dark seat. Keep the clean-shaven driver visible ONLY in side window. Absolutely preserve all three blue-suit standalone sprites and all car geometry and exact 1536x1024 canvas. Transparent background preserved. No other changes.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-9e880d1b-975a-406b-880c-167047900f7f.png"
+    },
+    {
+      "asset": "dhh-portal-reach-canonical.png",
+      "prompt": "Change ONLY face within helmet in image1 to canonical DHH in image2 RIGHT man: blue eyes, same angular face and nose, short salt-and-pepper beard, brown center-parted hair inside helmet. Keep fearful openmouth expression appropriate to being sucked feetfirst into portal. Preserve exact1254x1254 canvas, foreshortened hand, body and white spacesuit, pose, transparency and silhouette. No other changes, no background, no glow.",
+      "generated_path": "/home/gardnmi/.codex/generated_images/01a0ac06-8d7e-7963-a591-85d4b2d8beb5/exec-0945a3e1-0350-49b0-ada0-cbf3c531feec.png"
+    }
+  ]
+}
