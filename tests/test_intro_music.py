@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock,patch
-from omacontra.audio.intro_music import IntroMusic, TRACK, START_SOUND, GAME_TRACKS, FINALE_TRACK
+from omacontra.audio.intro_music import IntroMusic, TRACK, START_SOUND, GAME_TRACKS, FINALE_TRACK, shuffled_tracks
 
 class IntroMusicTests(unittest.TestCase):
     def test_only_starts_for_visible_opening_and_stops_after_start(self):
@@ -44,7 +44,7 @@ class IntroMusicTests(unittest.TestCase):
             self.assertEqual(args[args.index('--')+1:],[str(p) for p in GAME_TRACKS])
             self.assertEqual([p.name for p in GAME_TRACKS],[
                 'wine-cellar-off-duty-mercenary.mp3',
-                'contra.mp3','the-descent.mp3','omacontra-opening-theme.mp3'])
+                'contra.mp3','the-descent.mp3','omacontra-opening-theme.mp3','boss-battle-protocol.mp3'])
             for _ in range(10):music.update(True)
             launch.assert_called_once();music.stop()
 
@@ -109,6 +109,16 @@ class IntroMusicTests(unittest.TestCase):
         app.game_music.update.assert_called_with(True,True)
         app.visible=True;app.f.state='play';app.frontend.page='pause';app.tick()
         app.game_music.update.assert_called_with(True,True)
+
+    def test_shuffle_contains_every_regular_song_and_excludes_finale(self):
+        for _ in range(5):
+            tracks=shuffled_tracks()
+            self.assertCountEqual(tracks,GAME_TRACKS)
+            self.assertEqual(len(tracks),len(set(tracks)))
+            self.assertNotIn(FINALE_TRACK,tracks)
+        with patch('omacontra.audio.intro_music.random.sample',return_value=list(reversed(GAME_TRACKS))) as shuffle:
+            self.assertEqual(shuffled_tracks(),tuple(reversed(GAME_TRACKS)))
+            shuffle.assert_called_once_with(GAME_TRACKS,len(GAME_TRACKS))
 
     def test_missing_player_does_not_break_game_or_retry_every_tick(self):
         with patch('omacontra.audio.intro_music.subprocess.Popen',side_effect=FileNotFoundError),patch('builtins.print'):

@@ -89,6 +89,8 @@ class Frontend:
         if self.app.intro:self.app.intro.paused=False
         self.app.keyboard.clear();self.app.shooting=False;self.app.slide_requested=False
     def new_run(self,level=1,practice=False,hardcore=False):
+        from omacontra.audio.intro_music import shuffled_tracks
+        self.app.run_playlist=shuffled_tracks();self.app.game_music.stop()
         self.record=RunRecord(level,practice,hardcore);self.result_saved=False;self.award=None
     def rows(self):
         if self.page=='mode':return ['Standard','Hardcore','Back']
@@ -116,7 +118,7 @@ class Frontend:
                 if guardians and not a.f.stage:
                     a.f.advance_guardian();a.journey_cinema=None
         elif action=='title':
-            self.resume();a.return_to_title();self.new_run()
+            self.resume();a.return_to_title()
         elif action=='quit':a.close()
         elif action=='again':
             self.resume();self.new_run(hardcore=self.record.hardcore);a.guardian_practice=False;a.level=1;a.intro=None;a.reset_encounter()

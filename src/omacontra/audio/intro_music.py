@@ -1,6 +1,7 @@
 """Opening audio and continuous gameplay playlist using private mpv IPC."""
 from omacontra.resources import ASSETS
 import json
+import random
 import socket
 import subprocess
 
@@ -11,7 +12,11 @@ TRACK=ASSETS/'audio/omacontra-opening-theme.mp3'
 JOURNEY_TRACK=ASSETS/'audio/wine-cellar-off-duty-mercenary.mp3'
 FINALE_TRACK=ASSETS/'audio/quattro-run-omarchy-oligarchy.mp3'
 GAME_TRACKS=(JOURNEY_TRACK,
-             TRACK.parent/'contra.mp3',TRACK.parent/'the-descent.mp3',TRACK)
+             TRACK.parent/'contra.mp3',TRACK.parent/'the-descent.mp3',TRACK,
+             TRACK.parent/'boss-battle-protocol.mp3')
+
+def shuffled_tracks():
+    return tuple(random.sample(GAME_TRACKS,len(GAME_TRACKS)))
 
 class IntroMusic:
     def __init__(self,extra_args=(),track=TRACK,playlist=None):

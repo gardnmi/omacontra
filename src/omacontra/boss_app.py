@@ -14,7 +14,7 @@ from omacontra.campaign_progress import prepare_encounter
 from omacontra.ui.story import Intro
 from omacontra.ui.art import Renderer
 from omacontra.audio.weapon_audio import WeaponAudio, SFX_BOOST
-from omacontra.audio.intro_music import IntroMusic, GAME_TRACKS, FINALE_TRACK, UNLOCK_SOUND
+from omacontra.audio.intro_music import IntroMusic, GAME_TRACKS, FINALE_TRACK, UNLOCK_SOUND, shuffled_tracks
 from omacontra.rendering.frame_buffer import FrameBuffer
 from omacontra.ui.release_ui import Frontend
 
@@ -24,7 +24,8 @@ class BossApp:
         self.unlimited_lives=False
         self.guardian_practice=guardians
         if guardians:level=3;intro=False
-        self.music=IntroMusic();self.game_music=IntroMusic(playlist=GAME_TRACKS)
+        self.run_playlist=shuffled_tracks()
+        self.music=IntroMusic();self.game_music=IntroMusic(playlist=self.run_playlist)
         self.unlock_sound=IntroMusic(track=UNLOCK_SOUND,extra_args=('--loop-file=no',))
         self.closed=False;self.window=None;self.rules=[];self.previous=None;self.sources=[]
         self.h=Hyprland();self.f=self.prepare_encounter(Fight(),1);self.renderer=BattleRenderer(wallpaper)
@@ -176,7 +177,7 @@ class BossApp:
         if getattr(self,'game_music',None):
             # Results menus freeze gameplay, but the finale soundtrack continues.
             results_music=bool(menu and self.level==5 and self.f.state=='won' and front.result_saved)
-            self.game_music.select_playlist((FINALE_TRACK,) if self.level==5 and self.intro is None else GAME_TRACKS)
+            self.game_music.select_playlist((FINALE_TRACK,) if self.level==5 and self.intro is None else getattr(self,'run_playlist',GAME_TRACKS))
             self.game_music.update(self.intro is None or self.intro.journey,
                                    not self.placed or not self.visible or
                                    (self.intro.paused if self.intro else self.paused and not results_music))

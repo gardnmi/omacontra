@@ -186,6 +186,18 @@ class ReleaseTests(unittest.TestCase):
         audio.set_volumes(0);audio.menu_effects.trigger('confirm')
         self.assertEqual(audio.menu_effects.mix(bytes(1764)),bytes(1764))
 
+    def test_new_runs_shuffle_but_continue_and_restart_preserve_music_order(self):
+        from omacontra.audio.intro_music import GAME_TRACKS
+        a=self.app();f=a.frontend
+        first=tuple(reversed(GAME_TRACKS));second=GAME_TRACKS[1:]+GAME_TRACKS[:1]
+        with patch('omacontra.audio.intro_music.shuffled_tracks',side_effect=[first,second]) as shuffle:
+            f.new_run();self.assertEqual(a.run_playlist,first)
+            a.game_music.stop.assert_called_once()
+            a.continue_encounter();f.activate('restart')
+            self.assertEqual(a.run_playlist,first);self.assertEqual(shuffle.call_count,1)
+            f.activate('again');self.assertEqual(a.run_playlist,second)
+            self.assertEqual(shuffle.call_count,2)
+
     def test_award_does_not_duplicate_or_mutate_health(self):
         a=self.app();hp=a.f.hp;a.f.state='won'
         for _ in range(10):a.frontend.observe(.02,a.f,hp,0,False)

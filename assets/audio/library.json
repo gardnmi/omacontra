@@ -58,7 +58,8 @@
       "wine_cellar_journey",
       "contra",
       "the_descent",
-      "opening_theme"
+      "opening_theme",
+      "boss_battle_protocol"
     ],
     "starts": "Wine-rack demonstration after Start, or direct launch of levels 1–4",
     "continues_through": [
@@ -68,7 +69,8 @@
       "death",
       "retry"
     ],
-    "ends": "Replaced by Omarchy Oligarchy at final-level departure"
+    "ends": "Replaced by Omarchy Oligarchy at final-level departure",
+    "shuffle": "Fresh random order for each new run; preserved across levels, deaths and continues; repeats after the last track"
   },
   "unlimited_lives_unlock": {
     "title": "Unlimited Lives Unlock",
@@ -469,5 +471,12 @@
     ],
     "source": "Original synthesis; tools/build_menu_sounds.py",
     "usage": "Soft menu navigation and completion cues; follows Effects volume"
+  },
+  "boss_battle_protocol": {
+    "title": "Boss Battle Protocol",
+    "file": "boss-battle-protocol.mp3",
+    "source": "User-provided boss-battle-protocol [usesuno.com].mp3",
+    "usage": "Shuffled gameplay playlist",
+    "duration_seconds": 245.952
   }
 }

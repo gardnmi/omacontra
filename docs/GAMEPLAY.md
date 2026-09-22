@@ -384,12 +384,13 @@ Start confirmation blinks the cover prompt for 2.4 seconds and replaces the them
 
 ### Continuous gameplay soundtrack
 
-After Start, the wine-rack demonstration starts one looping playlist:
+After Start, the wine-rack demonstration starts a looping playlist, shuffled once for each new run:
 
 1. Off Duty Mercenary
 2. Contra
 3. The Descent
 4. Omacontra Opening Theme
+5. Boss Battle Protocol
 
 Each song plays to completion. The playlist continues across scenes, level changes, victory, death and retries. Pause or hiding the workspace pauses playback; closing the game stops it. Direct launches of levels 1–4 also start the playlist. Black Moon replaces it with Omarchy Oligarchy from the rocket boarding cutscene onward. The pre-Start opening theme and Start explosion remain separate. Quattro (Let’s Go, Nerds) is archived and no longer plays. Track sources and order are registered in `assets/audio/library.json`; all MP3s are local.
 
@@ -618,3 +619,9 @@ adjustment and mission completion. Menu audio uses the Effects setting and a
 bounded mixer while combat stays paused; hidden windows clear the cues. Final
 level music continues across the results menus. Rebuild the sounds using
 `python tools/build_menu_sounds.py`.
+
+The regular five-song playlist gets a fresh random order for each new campaign
+or practice run, including Play again. Stage transitions, deaths, continues and
+encounter restarts keep the current song and order. Songs play in full and the
+shuffled list loops. Omarchy Oligarchy stays outside the shuffle, starting at
+rocket boarding and continuing through the final battle and results.
