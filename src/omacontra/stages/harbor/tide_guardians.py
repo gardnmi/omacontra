@@ -137,7 +137,7 @@ class GuardianCombat:
         if not candidates:return False
         a=min(candidates,key=lambda p:p[0])[1]
         self.burst(bx,by,'cream',3)
-        if a.hp>damage:self.sound('guardian_hit' if a.kind==1 else 'suit_hit',.16)
+        if a.hp>damage:self.sound('guardian_hit' if a.kind==1 else 'suit_hit')
         a.hp=max(0,a.hp-damage);a.flash=.09
         if a.hp<=0:
             self.sound('coat_death' if a.kind==1 else 'orbit_death')

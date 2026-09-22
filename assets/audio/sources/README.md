@@ -100,3 +100,13 @@ short noise transients and damped resonances, with three takes per material.
 Water uses the previously credited ezwa CC0 water_splash-01/02/03 recordings.
 No firearm samples or long metal-impact recordings are used for these impacts.
 Run this builder last to preserve the material palette after rebuilding stages.
+
+## Revised rapid metal bullet impacts
+
+Armor, vehicle panels and mechanical parts now use short excerpts of Kenney’s
+**Impact Sounds 1.0** (CC0), replacing the synthetic resonances above. Source:
+https://kenney.nl/assets/impact-sounds . Original license and selected heavy,
+medium and light takes (000, 002, 004) are in `kenney-impact/`. The builder removes
+hollow midrange resonance, softens treble and uses a 60–75 ms dry envelope.
+Metal samples peak at -39 dBFS before the shared effects gain. Each actual bullet
+collision produces a cue; only continuous laser contact retains a cooldown.

@@ -3,6 +3,7 @@ import array
 import math
 import random
 import wave
+import subprocess
 from sound_palette import ROOT,RATE,decode
 # Bank/event names preserve existing combat routing and destruction sounds.
 EVENTS={
@@ -24,7 +25,25 @@ MATERIALS={
  'crystal':(.18,(2140,3410,4670),.041,.25),
  'gel':(.16,(260,480),.035,.45),
 }
+def recorded_metal(material,take):
+ kind,speed,duration={'heavy':('heavy',1.12,.075),'panel':('medium',1.25,.068),'mechanical':('light',1.40,.060)}[material]
+ source=ROOT/'sources/kenney-impact'/f'impactMetal_{kind}_{(0,2,4)[take]:03}.ogg'
+ # Suppress the hollow container resonance; retain the recorded sharp transient.
+ raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(source),'-af',
+     'highpass=f=140,equalizer=f=650:t=q:w=0.8:g=-9,lowpass=f=4800',
+     '-ac','1','-ar',str(RATE),'-f','f32le','-'])
+ src=array.array('f',raw);peak=max(map(abs,src))
+ start=max(0,next(i for i,v in enumerate(src) if abs(v)>peak*.045)-22)
+ values=[]
+ for i in range(round(duration*RATE)):
+  pos=start+i*speed;j=int(pos)
+  v=src[j]*(1-pos+j)+src[j+1]*(pos-j) if j+1<len(src) else 0
+  # Fast dry decay ends before the next round lands; no bell-like sustain.
+  values.append(v*math.exp(-i/RATE/ .019))
+ return values
+
 def make(material,take):
+ if material in ('heavy','panel','mechanical'):return recorded_metal(material,take)
  if material=='water':
   src=decode(ROOT/'sources/water/ezwa-water_splash'/f'water_splash-{take+1:02}.flac')
   peak=max(map(abs,src));start=next(i for i,v in enumerate(src) if abs(v)>peak*.04)
@@ -52,7 +71,7 @@ def main():
    for take in range(3):
     values=make(material,take);count=len(values)
     values=[v*min(1,i/90,(count-1-i)/400) for i,v in enumerate(values)]
-    db=-36 if material in ('heavy','panel','bone','shell','water') else -37
+    db=-39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
     gain=32767*10**(db/20)/(max(map(abs,values)) or 1)
     path=out/f'{name}.wav' if take==0 else out/'variants'/f'{name}-{take}.wav'
     with wave.open(str(path),'wb') as f:

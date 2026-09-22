@@ -7,12 +7,12 @@ from omacontra.audio.tide_audio import TideEffects, AUDIO
 from omacontra.audio.weapon_audio import WeaponAudio
 
 class TideAudioTests(unittest.TestCase):
-    def test_surge_is_one_event_and_damage_is_throttled(self):
+    def test_surge_is_one_event_and_each_bullet_collision_has_an_impact(self):
         f=Tidebreaker();f.spawn_wave('surge')
         self.assertEqual(f.sfx_events,['surge'])
         x,y=f.core
         for _ in range(10):f.hit_target(x-10,y,x+10,y,1)
-        self.assertEqual(f.sfx_events.count('water_hit'),1)
+        self.assertEqual(f.sfx_events.count('water_hit'),10)
 
     def test_guardian_fire_death_and_survivor_have_distinct_cues(self):
         f=Tidebreaker();f.advance_guardian()

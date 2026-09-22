@@ -216,7 +216,7 @@ class Foundry(Fight):
     def hit_target(self,ax,ay,bx,by,damage):
         if self.state!='play':return False
         if self.mount_hp>0 and segment_hit(ax,ay,bx,by,*self.mount_target,36):
-            self.sound("core_hit",.15)
+            self.sound("core_hit")
             self.mount_flash=.12;self.burst(bx,by,'gold',4)
             if self.mount_exposed:
                 self.mount_hp=max(0,self.mount_hp-damage)
@@ -226,7 +226,7 @@ class Foundry(Fight):
         # active, body and legs must not eat bullets aimed through it.
         if self.mount_hp>0:return False
         if not segment_box(ax,ay,bx,by,(self.boss_x-80,310,self.boss_x+125,630)):return False
-        self.sound('scale_hit',.18)
+        self.sound('scale_hit')
         self.armor_flash=.09;self.burst(bx,by,'cream',3)
         return True
 

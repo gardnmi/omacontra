@@ -176,7 +176,7 @@ class Fight:
         _,role,x,y=min(hits)
         self.last_hit=(x,y)
         if role=='boss':
-            self.sound('armor' if self.shielded else 'impact',.14)
+            self.sound('armor' if self.shielded else 'impact')
             self.burst(x,y,'cream' if self.shielded else 'gold',9)
             if not self.shielded:
                 self.boss_hp=max(0,self.boss_hp-damage);self.boss_flash=.08
@@ -188,7 +188,7 @@ class Fight:
                     self.notice='CORE RUPTURE';self.notice_time=999
                     self.burst(x,y,'gold',65)
         else:
-            if self.nodes[role]>damage:self.sound('raven_hit' if role=='raven' else 'eye_hit',.14)
+            if self.nodes[role]>damage:self.sound('raven_hit' if role=='raven' else 'eye_hit')
             self.nodes[role]=max(0,self.nodes[role]-damage);self.node_flash[role]=.1;self.burst(x,y,'gold',9)
             if self.nodes[role]<=0:
                 self.sound('raven_break' if role=='raven' else 'eye_break')

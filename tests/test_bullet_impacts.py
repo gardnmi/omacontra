@@ -19,9 +19,9 @@ class BulletImpactTests(unittest.TestCase):
         x,y=f.body
         f.hit_target(x-1,y,x+1,y,1);self.assertIn('armor',f.sfx_events)
         for _ in range(20):f.hit_target(x-1,y,x+1,y,1)
-        self.assertEqual(f.sfx_events.count('armor'),1)
+        self.assertEqual(f.sfx_events.count('armor'),21)
         f.clock+=.2;f.hit_target(x-1,y,x+1,y,1)
-        self.assertEqual(f.sfx_events.count('armor'),2)
+        self.assertEqual(f.sfx_events.count('armor'),22)
 
     def test_guardian_suit_and_shell_and_dragon_core_have_material_feedback(self):
         f=Tidebreaker();f.advance_guardian()
@@ -32,6 +32,11 @@ class BulletImpactTests(unittest.TestCase):
         f.hit_target(x-1,y,x+1,y,1);self.assertIn('core_hit',f.sfx_events)
         f.mount_hp=0;x=f.boss_x
         f.hit_target(x-1,400,x+1,400,1);self.assertIn('scale_hit',f.sfx_events)
+
+    def test_metal_tails_finish_before_the_next_round(self):
+        for bank,name in [('reaper','armor'),('reaper','eye_hit'),('chase','impact'),('chase','drone_hit'),('tide','suit_hit')]:
+            with wave.open(str(ASSETS/'audio'/bank/f'{name}.wav')) as f:
+                self.assertLess(f.getnframes()/f.getframerate(),.08)
 
     def test_material_takes_are_distinct_quiet_and_end_cleanly(self):
         banks={'reaper':['armor','impact','eye_hit','raven_hit'],

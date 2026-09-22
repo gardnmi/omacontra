@@ -65,7 +65,7 @@ class Tidebreaker(GuardianCombat,Fight):
         if self.stage:return self.hit_guardians(ax,ay,bx,by,damage)
         cx,cy=self.core
         if not segment_hit(ax,ay,bx,by,cx,cy,57):return False
-        self.sound('water_hit',.18)
+        self.sound('water_hit')
         self.burst(bx,by,'cream',3)
         self.boss_hp=max(0,self.boss_hp-damage);self.core_flash=.09
         if self.boss_hp<=0:self.begin_reveal()

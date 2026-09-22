@@ -633,6 +633,11 @@ body, its mechanical eye and raven, truck panels, drones, the robot heart,
 water, the guardians’ suit/shell, dragon scales/throat crystal and space
 energy nodes/jellyfish. The acquired laser also gives throttled contact feedback.
 Each material has three alternating takes, short tails and restrained levels.
-Impact cooldowns remain 0.14–0.30 seconds; destruction cues keep priority in the
+Every bullet collision triggers a cue; continuous laser contact is limited to
+once per 0.30 seconds. Destruction cues keep priority in the
 six-voice mixer. Damage, aiming and collision geometry are unchanged.
 Rebuild with `python tools/build_bullet_impacts.py` after other stage builders.
+
+Metal hits use recorded heavy/light metal and panel transients, with hollow
+resonances reduced and tails shortened to 60–75 ms. They follow the actual
+bullet pattern instead of suppressing alternate impacts.

@@ -481,7 +481,7 @@
   },
   "bullet_impacts": {
     "title": "Material-specific Bullet Impacts",
-    "source": "Original synthesis and existing ezwa CC0 water splash recordings; tools/build_bullet_impacts.py",
-    "usage": "Throttled per-material collision feedback across all five stages; three alternate takes per target type"
+    "source": "Kenney Impact Sounds (CC0) for metal; original synthesis for other solid materials; ezwa CC0 water splash recordings; tools/build_bullet_impacts.py",
+    "usage": "One cue per actual bullet collision; short dry metal transients with three alternate takes. Continuous laser contacts remain rate-limited."
   }
 }
