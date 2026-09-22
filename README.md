@@ -16,22 +16,22 @@ creates an **Omacontra** entry in the apps menu and an executable named
 Open a terminal in Omarchy and run:
 
 ```sh
-omarchy pkg add git github-cli python python-gobject python-cairo gtk3 mpv sdl2-compat
+omarchy pkg add git python python-gobject python-cairo gtk3 mpv sdl2-compat
 ```
 
 Omarchy installs any missing packages and may ask for your password.
 
 ### 2. Download and install the game
 
-This repository is private, so sign in with a GitHub account that has access.
-Skip `gh auth login` if you are already signed in.
+Clone the repository and run the installer:
 
 ```sh
-gh auth login
-gh repo clone gardnmi/omacontra
+git clone https://github.com/gardnmi/omacontra.git
 cd omacontra
 ./install.py
 ```
+
+> Before the public release, cloning requires a GitHub account with repository access.
 
 Run the game installer as your normal user. It creates:
 
