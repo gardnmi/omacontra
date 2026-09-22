@@ -173,14 +173,16 @@ class BossApp:
         active=not self.paused and not self.intro and not menu and self.f.state=='play' and not any(getattr(self,n,None) for n in ('chase_cinema','journey_cinema','foundry_intro'))
         if front:self.music.set_volume(85*(SFX_BOOST if self.music.start_effect else 1)*front.profile.settings['effects' if self.music.start_effect else 'music']/100)
         choosing_run=bool(menu and front.page=='mode')
+        browsing_music=bool(menu and front.page=='music')
+        if browsing_music:front.jukebox.update(self.placed and self.visible,85*front.profile.settings['music']/100)
         self.music.update(bool(self.intro and not self.intro.journey),
-                          not self.placed or not self.visible or bool(self.intro and self.intro.paused and not choosing_run))
+                          browsing_music or not self.placed or not self.visible or bool(self.intro and self.intro.paused and not choosing_run))
         if getattr(self,'game_music',None):
             # Results menus freeze gameplay, but the finale soundtrack continues.
             results_music=bool(menu and self.level==5 and self.f.state=='won' and front.result_saved)
             self.game_music.select_playlist((FINALE_TRACK,) if self.level==5 and self.intro is None else getattr(self,'run_playlist',GAME_TRACKS))
             self.game_music.update(self.intro is None or self.intro.journey,
-                                   not self.placed or not self.visible or
+                                   browsing_music or not self.placed or not self.visible or
                                    (self.intro.paused if self.intro else self.paused and not results_music))
         if getattr(self,'unlock_sound',None):
             ringing=bool(self.intro and self.intro.unlock_age is not None and self.intro.unlock_age<2.05 and self.intro.start_age is None)
@@ -392,6 +394,7 @@ class BossApp:
         if getattr(self,'weapon_audio',None):self.weapon_audio.close()
         if getattr(self,'music',None):self.music.stop()
         if getattr(self,'game_music',None):self.game_music.stop()
+        if getattr(self,'frontend',None):self.frontend.jukebox.stop()
         if getattr(self,'unlock_sound',None):self.unlock_sound.stop()
         for source in self.sources:
             if GLib.MainContext.default().find_source_by_id(source):GLib.source_remove(source)

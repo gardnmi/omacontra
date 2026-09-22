@@ -61,7 +61,7 @@
       "opening_theme",
       "boss_battle_protocol"
     ],
-    "starts": "Wine-rack demonstration after Start, or direct launch of levels 1–4",
+    "starts": "Wine-rack demonstration after Start, or direct launch of levels 1\u20134",
     "continues_through": [
       "cutscenes",
       "level transitions",
@@ -481,8 +481,8 @@
   },
   "bullet_impacts": {
     "title": "Material-specific Bullet Impacts",
-    "source": "Kenney Impact Sounds (CC0) for metal; original synthesis for other solid materials; ezwa CC0 water splash recordings; tools/build_bullet_impacts.py",
-    "usage": "One cue per actual bullet collision; short dry metal transients with three alternate takes. Continuous laser contacts remain rate-limited.",
+    "source": "Kenney Impact/Sci-Fi Sounds (CC0), ezwa CC0 water recordings and original synthesis; tools/build_bullet_impacts.py",
+    "usage": "Per-bullet material impacts with three takes; approved Reaper damage sounds retained, other stages use weighted bass/crunch/wet/energy presets. Continuous laser contacts remain rate-limited.",
     "reaper_revision": "Eye and exposed-body damage: CC0 Kenney crunch/low-frequency textures plus original bass pulse; Contra and Blazing Chrome audiovisual references documented in sources/README.md"
   }
 }

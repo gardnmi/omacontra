@@ -27,6 +27,34 @@ class ReleaseTests(unittest.TestCase):
         return a
     def tick(self,a,dt=.02):
         with patch('omacontra.boss_app.time.monotonic',return_value=a.last+dt),patch.object(a.weapon_audio,'open',return_value=False):a.tick()
+    def test_music_player_transport_and_parent_menu_restore(self):
+        from omacontra.ui.story import Intro
+        a=self.app();a.intro=Intro();front=a.frontend
+        player=front.jukebox;player.audio=Mock()
+        front.open('mode');front.selection=front.rows().index('Music player');front.key('return')
+        self.assertEqual(front.page,'music');self.assertEqual(front.parent,'mode')
+        self.assertEqual(len(player.tracks),6)
+        self.assertNotIn('reaper-quattro-lets-go-nerds.mp3',[t['file'] for t in player.tracks])
+        front.key('return');self.tick(a)
+        self.assertEqual(player.index,0);self.assertFalse(player.paused)
+        player.audio.update.assert_called_with(True,False)
+        a.music.update.assert_called_with(True,True)
+        front.key('return');self.tick(a);player.audio.update.assert_called_with(True,True)
+        front.key('right');self.assertEqual(player.index,1);self.assertFalse(player.paused)
+        a.visible=False;self.tick(a);player.audio.update.assert_called_with(True,True)
+        front.key('escape');self.assertEqual(front.page,'mode');self.assertIsNone(player.index)
+        a.visible=True;self.tick(a);a.music.update.assert_called_with(True,False)
+        a.game_music.stop.assert_not_called()
+
+    def test_music_player_from_results_pauses_finale_and_restores_it(self):
+        a=self.app(5);a.f.state='won';f=a.frontend;f.result_saved=True
+        f.open('results');f.selection=f.rows().index('Music player');f.key('return')
+        f.jukebox.audio=Mock();f.key('return');self.tick(a)
+        a.game_music.update.assert_called_with(True,True)
+        f.selection=len(f.jukebox.tracks);f.key('return');self.assertIsNone(f.jukebox.index)
+        f.key('escape');self.assertEqual(f.page,'results');self.tick(a)
+        a.game_music.update.assert_called_with(True,False)
+
     def test_title_selects_hardcore_and_disables_cheat(self):
         from omacontra.boss_app import Gdk
         from omacontra.ui.story import Intro

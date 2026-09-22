@@ -128,3 +128,14 @@ Reference research (not included in shipped assets):
 The local Blazing Chrome recording supplied earlier contains video only.
 The trailer’s mixed soundtrack was retrieved for reference; it is not an
 isolated hit sample. Reference downloads remain outside the repository.
+
+## Other-stage weighted damage impacts
+
+The highway, harbor, dragon and space bullet/laser contact cues now use the
+`weighted_impact` presets in `tools/build_bullet_impacts.py`, extending the
+approved Reaper bass/crunch direction. Kenney CC0 crunch, low-frequency
+explosion and force-field textures plus the credited ezwa water recordings
+are layered with original descending low pulses. Each target has a separate
+preset and three takes. Envelopes run 80–115 ms at -35 dBFS peak before the
+shared effects gain. These replace the previous thin clicks and ringing
+resonances in those four stages; Reaper assets are unchanged.

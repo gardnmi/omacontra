@@ -36,7 +36,7 @@ class BulletImpactTests(unittest.TestCase):
     def test_metal_tails_finish_before_the_next_round(self):
         for bank,name in [('reaper','armor'),('reaper','eye_hit'),('chase','impact'),('chase','drone_hit'),('tide','suit_hit')]:
             with wave.open(str(ASSETS/'audio'/bank/f'{name}.wav')) as f:
-                self.assertLessEqual(f.getnframes()/f.getframerate(),.10 if name=='eye_hit' else .08)
+                self.assertLessEqual(f.getnframes()/f.getframerate(),.10 if name in ('eye_hit','suit_hit') else .08)
 
     def test_reaper_damage_has_body_beyond_the_initial_click(self):
         for name in ('eye_hit','impact'):
@@ -52,6 +52,24 @@ class BulletImpactTests(unittest.TestCase):
         hp=f.boss_hp;f.hit_target(x-1,y,x+1,y,1)
         self.assertIn('impact',f.sfx_events);self.assertNotIn('armor',f.sfx_events)
         self.assertLess(f.boss_hp,hp)
+
+    def test_other_stages_retain_weight_and_distinct_target_textures(self):
+        banks={'chase':['armor','impact','heart_hit','drone_hit'],
+               'tide':['guardian_hit','suit_hit','water_hit'],
+               'wyrm':['core_hit','scale_hit','laser_hit'],
+               'finale':['laser_hit','node_hit']}
+        unique=set()
+        for bank,names in banks.items():
+            for name in names:
+                for take in range(3):
+                    path=ASSETS/'audio'/bank/(f'{name}.wav' if take==0 else f'variants/{name}-{take}.wav')
+                    with wave.open(str(path)) as f:
+                        rate=f.getframerate();raw=f.readframes(f.getnframes());pcm=array.array('h',raw)
+                    self.assertNotIn(raw,unique);unique.add(raw)
+                    energy=sum(v*v for v in pcm)
+                    self.assertGreater(sum(v*v for v in pcm[int(.025*rate):]),energy*.20)
+                    self.assertGreater((energy/len(pcm))**.5,max(map(abs,pcm))*.35)
+                    self.assertLessEqual(len(pcm)/rate,.116)
 
     def test_material_takes_are_distinct_quiet_and_end_cleanly(self):
         banks={'reaper':['armor','impact','eye_hit','raven_hit'],

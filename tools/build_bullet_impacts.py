@@ -8,10 +8,10 @@ from sound_palette import ROOT,RATE,decode,source
 # Bank/event names preserve existing combat routing and destruction sounds.
 EVENTS={
  'reaper':{'armor':'heavy','impact':'reaper_body','eye_hit':'reaper_eye','raven_hit':'soft'},
- 'chase':{'armor':'heavy','impact':'panel','heart_hit':'energy','drone_hit':'mechanical'},
- 'tide':{'guardian_hit':'shell','suit_hit':'heavy','water_hit':'water'},
- 'wyrm':{'core_hit':'crystal','scale_hit':'shell','laser_hit':'energy'},
- 'finale':{'laser_hit':'gel','node_hit':'crystal'},
+ 'chase':{'armor':'vehicle_armor','impact':'vehicle_panel','heart_hit':'robot_heart','drone_hit':'drone'},
+ 'tide':{'guardian_hit':'guardian_shell','suit_hit':'guardian_suit','water_hit':'wave'},
+ 'wyrm':{'core_hit':'dragon_core','scale_hit':'dragon_scale','laser_hit':'dragon_laser'},
+ 'finale':{'laser_hit':'jellyfish','node_hit':'space_node'},
 }
 # Duration, resonant partials, decay seconds, noise texture weight.
 MATERIALS={
@@ -66,7 +66,46 @@ def reaper_damage(material,take):
   values.append(v*attack*tail)
  return values
 
+# Duration, texture, playback speed, pulse pitch, texture/body mix, low-pass,
+# take offset. Each target gets its own weight and texture, with no ringing tail.
+WEIGHTED={
+ 'vehicle_armor':(.080,'crunch',1.12,170,.65,.65,.29,1),
+ 'vehicle_panel':(.080,'crunch',.72,125,.52,.72,.24,3),
+ 'robot_heart':(.095,'field',1.65,205,.50,.62,.33,2),
+ 'drone':(.080,'crunch',1.75,225,.72,.55,.36,4),
+ 'guardian_shell':(.100,'crunch',.94,150,.62,.65,.25,2),
+ 'guardian_suit':(.100,'crunch',.65,110,.47,.80,.20,4),
+ 'wave':(.115,'water',1.5,115,.85,.50,.30,0),
+ 'dragon_core':(.100,'crunch',1.95,250,.72,.54,.38,3),
+ 'dragon_scale':(.100,'crunch',.76,130,.67,.72,.26,1),
+ 'dragon_laser':(.110,'field',1.12,175,.65,.64,.29,4),
+ 'jellyfish':(.115,'water',.75,95,.65,.72,.19,2),
+ 'space_node':(.100,'field',2.1,265,.65,.56,.36,1),
+}
+
+def weighted_impact(material,take):
+ duration,kind,speed,pitch,texture_gain,bass_gain,cutoff,offset=WEIGHTED[material]
+ speed*=(.97,1.,1.04)[take];pitch*=(.96,1.,1.05)[take]
+ if kind=='water':
+  raw=decode(ROOT/'sources/water/ezwa-water_splash'/f'water_splash-{take+1:02}.flac')
+  peak=max(map(abs,raw));start=next(i for i,v in enumerate(raw) if abs(v)>peak*.04)
+  texture=[v/peak for v in raw[start:]]
+ else:texture=source(kind,take+offset)
+ bass=source('low',take+offset)
+ values=[];low=lp=phase=0.
+ for i in range(round(duration*RATE)):
+  t=i/RATE
+  phase+=math.tau*(pitch*math.exp(-t*13)+50)/RATE
+  v=texture[min(len(texture)-1,round(i*speed))]*texture_gain
+  v+=bass[min(len(bass)-1,round(i*.8))]*bass_gain+math.sin(phase)*.35
+  low+=.045*(v-low)
+  lp+=cutoff*(v*.6+low*.9-lp)
+  tail=max(0,1-max(0,t-.028)/(duration-.028))**1.25
+  values.append(math.tanh(lp*4)*min(1,t/.0015)*tail)
+ return values
+
 def make(material,take):
+ if material in WEIGHTED:return weighted_impact(material,take)
  if material in ('reaper_body','reaper_eye'):return reaper_damage(material,take)
  if material in ('heavy','panel','mechanical'):return recorded_metal(material,take)
  if material=='water':
@@ -96,7 +135,7 @@ def main():
    for take in range(3):
     values=make(material,take);count=len(values)
     values=[v*min(1,i/90,(count-1-i)/400) for i,v in enumerate(values)]
-    db=-34 if material=='reaper_body' else -35 if material=='reaper_eye' else -39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
+    db=-35 if material in WEIGHTED else -34 if material=='reaper_body' else -35 if material=='reaper_eye' else -39 if material in ('heavy','panel','mechanical') else -36 if material in ('heavy','panel','bone','shell','water') else -37
     gain=32767*10**(db/20)/(max(map(abs,values)) or 1)
     path=out/f'{name}.wav' if take==0 else out/'variants'/f'{name}-{take}.wav'
     with wave.open(str(path),'wb') as f:

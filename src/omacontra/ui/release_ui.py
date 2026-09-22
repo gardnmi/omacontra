@@ -7,6 +7,7 @@ import time
 import cairo
 from omacontra.rendering.health_medals import medal
 from omacontra.audio.weapon_audio import SFX_BOOST
+from omacontra.audio.jukebox import Jukebox
 
 NAMES=('THE REAPER','QUATTRO RUN','TIDEBREAKER','THE MIST GATE','BLACK MOON')
 DEFAULTS={'music':100,'effects':100}
@@ -58,6 +59,7 @@ class Frontend:
     def __init__(self,app,profile=None):
         self.app=app;self.profile=profile or Profile();self.page=None;self.selection=0;self.parent='pause';self.pending=None
         self.record=RunRecord(app.level,getattr(app,'guardian_practice',False));self.award=None;self.award_age=0.;self.result_saved=False
+        self.jukebox=Jukebox()
         self.credits_page=0;self.apply_audio()
         self.opened_at=time.monotonic();self.last_menu_sound=0.;self.menu_positions={}
         self.blocked=set();self.finish_age=99.;self.last_state=app.f.state
@@ -74,6 +76,7 @@ class Frontend:
 
     def open(self,page='pause'):
         previous=self.page
+        if previous=='music' and page!='music':self.jukebox.stop()
         if previous:self.menu_positions[previous]=self.selection
         self.page=page;self.selection=0 if page=='confirm' else self.menu_positions.get(page,0)
         self.selection=min(self.selection,len(self.rows())-1)
@@ -84,6 +87,7 @@ class Frontend:
         if page=='results' and previous is None:self.cue('complete')
         elif previous is None:self.cue('open')
     def resume(self):
+        self.jukebox.stop()
         self.blocked=set(self.app.keys)
         self.page=None;self.app.paused=False
         if self.app.intro:self.app.intro.paused=False
@@ -93,10 +97,11 @@ class Frontend:
         self.app.run_playlist=shuffled_tracks();self.app.game_music.stop()
         self.record=RunRecord(level,practice,hardcore);self.result_saved=False;self.award=None
     def rows(self):
-        if self.page=='mode':return ['Standard','Hardcore','Back']
-        if self.page=='pause':return ['Resume','Controls','Options']+([] if self.record.hardcore else ['Restart encounter'])+['Return to title','Credits','Quit']
+        if self.page=='mode':return ['Standard','Hardcore','Music player','Back']
+        if self.page=='music':return [t['title'] for t in self.jukebox.tracks]+['Stop','Back']
+        if self.page=='pause':return ['Resume','Controls','Options']+([] if self.record.hardcore else ['Restart encounter'])+['Return to title','Music player','Credits','Quit']
         if self.page=='options':return [f'{k.upper():8}  {v:3}%' for k,v in self.profile.settings.items()]+['Back']
-        if self.page=='results':return ['Play again','Boss select','Return to title','Credits','Quit']
+        if self.page=='results':return ['Play again','Boss select','Return to title','Music player','Credits','Quit']
         if self.page=='bosses':return list(NAMES)+['Back']
         if self.page=='confirm':return ['Cancel','Confirm']
         return ['Back']
@@ -155,6 +160,8 @@ class Frontend:
         rows=self.rows()
         if key in ('up','w'):self.selection=(self.selection-1)%len(rows)
         elif key in ('down','s'):self.selection=(self.selection+1)%len(rows)
+        elif key in ('left','right') and self.page=='music':
+            self.jukebox.skip(1 if key=='right' else -1);self.selection=self.jukebox.index
         elif key in ('left','right','a','d') and self.page=='options' and self.selection<len(DEFAULTS):
             name=tuple(DEFAULTS)[self.selection];v=self.profile.settings[name]
             self.profile.settings[name]=max(0,min(150,v+(5 if key in ('right','d') else -5)))
@@ -166,7 +173,13 @@ class Frontend:
             else:self.open(self.parent)
         elif key in ('return','space'):
             choice=rows[self.selection]
-            if self.page=='mode':
+            if choice=='Music player' and self.page in ('mode','pause','results'):
+                self.parent=self.page;self.open('music')
+            elif self.page=='music':
+                if self.selection<len(self.jukebox.tracks):self.jukebox.play(self.selection)
+                elif choice=='Stop':self.jukebox.stop()
+                else:self.open(self.parent)
+            elif self.page=='mode':
                 if choice=='Back':self.resume()
                 else:
                     a=self.app;hardcore=choice=='Hardcore'

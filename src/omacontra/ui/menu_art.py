@@ -10,7 +10,7 @@ CREAM=(.89,.88,.76);GREEN=(.68,.85,.52);MUTED=(.48,.57,.51);AMBER=(.92,.57,.29)
 NAMES=('THE REAPER','QUATTRO RUN','TIDEBREAKER','THE MIST GATE','BLACK MOON')
 ART=('reaper-arena.png','quattro-coast.png','tidebreaker-arena.png','wyrm-mist-arena.png','finale-earth.png')
 DESCRIPTIONS=('A haunted wallpaper. A very real fight.','Tobi drives. DHH handles the firepower.','Ride out the storm. Face the guardians.','Circle the dragon. Claim its weapon.','Stay tethered. Finish what you started.')
-TITLES={'mode':'CHOOSE YOUR RUN','pause':'TAKE A BREATHER','options':'TUNE THE MIX','controls':'KNOW YOUR MOVES','results':'MISSION COMPLETE','bosses':'CHOOSE YOUR BATTLE','credits':'BEHIND THE GAME','confirm':'ONE MORE THING'}
+TITLES={'music':'SOUNDTRACK PLAYER','mode':'CHOOSE YOUR RUN','pause':'TAKE A BREATHER','options':'TUNE THE MIX','controls':'KNOW YOUR MOVES','results':'MISSION COMPLETE','bosses':'CHOOSE YOUR BATTLE','credits':'BEHIND THE GAME','confirm':'ONE MORE THING'}
 
 def text(c,x,y,value,size=20,color=CREAM,width=None):
     c.select_font_face('monospace',cairo.FONT_SLANT_NORMAL,cairo.FONT_WEIGHT_BOLD)
@@ -43,6 +43,7 @@ def frame(c,x,y,w,h):
 
 def row_boxes(f):
     if f.page=='results':x,y,w,h,gap=80,342,450,44,9
+    elif f.page=='music':x,y,w,h,gap=80,193,545,44,9
     elif f.page in ('controls','credits'):x,y,w,h,gap=80,581,250,42,9
     elif f.page=='confirm':x,y,w,h,gap=80,300,450,52,12
     elif f.page=='options':x,y,w,h,gap=80,228,510,70,20
@@ -98,13 +99,14 @@ def draw(c,f):
         mode='HARDCORE / NO CONTINUES' if f.record.hardcore else 'STANDARD / CONTINUES ENABLED'
         text(c,644,556,'PRACTICE / SEPARATE RECORDS' if f.page=='bosses' else mode,14,GREEN)
         text(c,644,583,'Your run is paused.' if f.page=='pause' else 'Jump straight into an encounter.',15,MUTED)
+    elif f.page=='music':music_player(c,f,t)
     elif f.page=='mode':
         image(c,'omacontra-cover-v2.png',896,195,285,380)
         hardcore=f.selection==1
         color=AMBER if hardcore else GREEN
-        text(c,80,430,'ONE RUN. NO SECOND CHANCES.' if hardcore else 'GET BACK IN THE FIGHT.',22,color,width=755)
+        text(c,80,463,'ONE RUN. NO SECOND CHANCES.' if hardcore else 'GET BACK IN THE FIGHT.',22,color,width=755)
         lines=(['No continues. No encounter restarts.','Unlimited lives are disabled.','Your best time gets its own record.'] if hardcore else ['A 10-second countdown gives you another shot.','Lives carry forward between stages.','Clear a stage to earn an extra ribbon.'])
-        for i,line in enumerate(lines):text(c,80,474+i*34,line,17,MUTED,width=755)
+        for i,line in enumerate(lines):text(c,80,502+i*34,line,17,MUTED,width=755)
     elif f.page=='options':
         text(c,654,248,'LET THE SOUNDTRACK LEAD.',23,GREEN,width=520)
         for i,line in enumerate(('MUSIC','The full soundtrack and final-level theme.','','EFFECTS','Combat, movement and menu feedback.')):
@@ -158,3 +160,20 @@ def credits(c,f):
     for i,line in enumerate(lines):text(c,80,247+i*37,line,17,width=1090)
     text(c,80,563,f'LEFT / RIGHT OR SPACE: PAGE {f.credits_page+1} OF 3',13,MUTED)
     for i in range(3):box(c,1080+i*36,551,24,5,(*(GREEN if i==f.credits_page else MUTED),1))
+
+
+def music_player(c,f,t):
+    player=f.jukebox
+    image(c,'omacontra-cover-v2.png',810,184,270,360)
+    playing=player.index is not None
+    track=player.tracks[player.index if playing else min(f.selection,len(player.tracks)-1)]
+    status='AUDIO UNAVAILABLE' if player.audio.failed else 'PAUSED' if player.paused and playing else 'NOW PLAYING' if playing else 'SELECT A TRACK'
+    text(c,665,570,status,14,GREEN)
+    text(c,665,598,track['title'],20,width=530)
+    seconds=int(track['duration_seconds'])
+    text(c,665,623,f"{seconds//60}:{seconds%60:02d}  /  {track.get('artist','OMACONTRA SOUNDTRACK')}",12,MUTED,width=530)
+    # A transport indicator, not a simulated audio spectrum.
+    if playing:
+        for n in range(3):
+            box(c,1160+n*10,555,5,9,(*GREEN,.9 if player.paused else .4+.5*(1+math.sin(t*4-n))*.5))
+    text(c,80,632,'ENTER: PLAY / PAUSE    LEFT / RIGHT: PREV / NEXT',12,MUTED)

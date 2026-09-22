@@ -646,3 +646,19 @@ The Reaper’s eye and exposed body now have dedicated compact bass/crunch
 impacts, with a fuller 30–55 ms body instead of a click that decays immediately.
 The eye is tighter; the exposed Reaper hits lower. Other target sounds and the
 one-impact-per-bullet timing remain unchanged.
+
+The remaining stages now use dedicated weighted impact presets: vehicle armor,
+panels, drone and heart; guardian shell/suit and water; dragon core/scales/laser;
+and jellyfish tissue/energy nodes. Short bass bodies support distinct crunchy,
+energy or wet textures without metallic ringing. Per-bullet timing and laser
+contact throttling are unchanged.
+
+### Soundtrack player
+
+Music player is available from Choose your run, Pause and Mission complete.
+Select any of the six current soundtrack songs and press Enter (or click) to
+play; selecting the same song toggles pause. Left/right plays the previous/next
+song. Stop silences the player; Back restores the parent menu and its music.
+Selected tracks loop. Previewing pauses the existing music player, preserving
+its position, and never changes the campaign shuffle or reserved finale theme.
+The music volume setting also controls previews; hidden windows pause playback.
