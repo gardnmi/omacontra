@@ -5,40 +5,85 @@
 A Contra-inspired **boss-only** fullscreen game. Five encounters bring wallpaper worlds to life: the Reaper, Quattro Run, Tidebreaker, the Mist Gate, and Black Moon. DHH runs, jumps, ducks,
 and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit firing stream.
 
-## Install and play
+## Install on Omarchy
 
-Standalone Linux/Hyprland game. It no longer needs the Hyprsplitter checkout or an
-installed Omarchy theme; the game art, soundtrack, and screensaver frames ship here.
-The current window host targets the Hyprland Lua API used by this Omarchy system.
-Other compositors and older Hyprland builds are not yet supported.
+Install Omacontra as a standalone app on your Omarchy desktop. The installer
+creates an **Omacontra** entry in the apps menu and an executable named
+`omacontra`. All artwork, music, and screensaver animations are included.
 
-Runtime dependencies: Python 3.11+, PyGObject with GTK 3 and Cairo integration,
-PyCairo, mpv, and SDL2. On Omarchy/Arch:
+### 1. Install the required packages
+
+Open a terminal in Omarchy and run:
 
 ```sh
-sudo pacman -S --needed python python-gobject python-cairo gtk3 mpv sdl2-compat
+omarchy pkg add git github-cli python python-gobject python-cairo gtk3 mpv sdl2-compat
 ```
 
-Clone using an account with access to this private repository, then install:
+Omarchy installs any missing packages and may ask for your password.
+
+### 2. Download and install the game
+
+This repository is private, so sign in with a GitHub account that has access.
+Skip `gh auth login` if you are already signed in.
 
 ```sh
-git clone https://github.com/gardnmi/omacontra.git
+gh auth login
+gh repo clone gardnmi/omacontra
 cd omacontra
-python install.py --check
-python install.py
+./install.py
+```
+
+Run the game installer as your normal user. It creates:
+
+| Installed item | Location |
+| --- | --- |
+| Executable launcher | `~/.local/bin/omacontra` |
+| Game and assets | `~/.local/share/omacontra/` |
+| Apps-menu entry | `~/.local/share/applications/omacontra.desktop` |
+
+### 3. Play
+
+Open the **Omarchy apps menu**, search for **Omacontra**, and launch it.
+You can also start the executable from any terminal:
+
+```sh
 omacontra
 ```
 
-The installer copies runtime code and assets to `~/.local/share/omacontra`, adds
-`~/.local/bin/omacontra`, and creates an **Omacontra** application-menu entry.
-If `~/.local/bin` is not on PATH, use that full launcher path. Installation does
-not require root and does not modify the desktop's configuration. Re-run the
-installer after pulling updates. `python install.py --uninstall` removes the app
-but preserves settings and personal bests in `~/.config/omacontra/profile.json`
-(or the corresponding XDG_CONFIG_HOME location). An alternate prefix is supported
-with `--prefix /path/to/prefix` for both installation and removal.
+If your shell cannot find the command, run `~/.local/bin/omacontra` directly.
+The installed game runs independently of the downloaded repository.
 
-Run directly from the checkout:
+### Update
+
+From your downloaded `omacontra` repository:
+
+```sh
+git pull --ff-only
+./install.py
+```
+
+Updates preserve your settings and personal bests.
+
+### Uninstall
+
+From that same repository:
+
+```sh
+./install.py --uninstall
+```
+
+This removes the executable, game files, and apps-menu entry. Settings and records
+remain in `~/.config/omacontra/profile.json` (or your `XDG_CONFIG_HOME` location).
+
+### Troubleshooting
+
+Run `./install.py --check` to check the required dependencies. Launch the game
+inside your Omarchy desktop session. The current window host uses Hyprland's Lua
+API; older Hyprland builds and other compositors are not supported yet.
+
+## Development
+
+To run directly from the source checkout without installing:
 
 ```sh
 ./omacontra
@@ -46,7 +91,7 @@ Run directly from the checkout:
 ./omacontra --level 4
 ```
 
-## Development
+Run the test suite and fullscreen launch check:
 
 ```sh
 python tools/test.py
