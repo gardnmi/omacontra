@@ -141,12 +141,14 @@ def launch(name='ending',at=0):
         updating=True;slider.set_range(0,review.duration);updating=False;refresh()
     def scrub(widget):
         if not updating:review.playing=False;review.seek(widget.get_value());refresh()
+    from omacontra.rendering.frame_buffer import FrameBuffer
+    frame=FrameBuffer(1280,720)
     def draw(widget,c):
         w=widget.get_allocated_width();h=widget.get_allocated_height()
         c.set_source_rgb(0,0,0);c.paint();scale=min(w/1280,h/720)
         if scale<=0:return
         c.save();c.translate((w-1280*scale)/2,(h-720*scale)/2);c.scale(scale,scale)
-        review.draw(c);c.restore()
+        frame.draw(c,review.draw);c.restore()
     def key(_,event):
         name=Gdk.keyval_name(event.keyval).lower()
         if name=='escape':window.destroy()

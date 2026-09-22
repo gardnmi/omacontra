@@ -262,32 +262,32 @@ class BossApp:
         return (width-W*scale)/2,(height-H*scale)/2,scale
 
     def draw(self,area,c):
-        if getattr(self,'frontend',None) and self.frontend.page:
-            c.set_source_rgb(0,0,0);c.paint()
-        else:
-            c.save();self.draw_scene(area,c);c.restore()
-        if getattr(self,'frontend',None):
-            ox,oy,scale=self.viewport();c.save();c.translate(ox,oy);c.scale(scale,scale)
-            self.frontend.draw(c);c.restore()
+        # Compose gameplay, cinematics and UI at one fixed resolution. Only
+        # this final presentation scales to the display (including HiDPI).
+        c.set_source_rgb(0,0,0);c.paint()
+        ox,oy,scale=self.viewport()
+        if scale<=0:return
+        if not getattr(self,'frame',None):self.frame=FrameBuffer(W,H)
+        def render(scene):
+            front=getattr(self,'frontend',None)
+            if not (front and front.page):
+                scene.save();self.draw_scene(area,scene);scene.restore()
+            if front:front.draw(scene)
+        c.save();c.translate(ox,oy);c.scale(scale,scale)
+        self.frame.draw(c,render)
+        c.restore()
 
     def draw_scene(self,area,c):
-        width,height=area.get_allocated_width(),area.get_allocated_height()
-        c.set_source_rgb(0,0,0);c.paint()
+        # Native 1280x720 coordinates; display transforms belong in draw().
         if getattr(self,'continue_screen',None):
-            ox,oy,scale=self.viewport();c.translate(ox,oy);c.scale(scale,scale)
-            if not getattr(self,'continue_frame',None):self.continue_frame=FrameBuffer(W,H)
-            self.continue_frame.draw(c,lambda scene:self.continue_renderer.draw(scene,self.continue_screen))
+            self.continue_renderer.draw(c,self.continue_screen)
             return
-        if self.intro:self.intro_renderer.draw(c,self.intro,width,height);return
-        ox,oy,scale=self.viewport();c.translate(ox,oy);c.scale(scale,scale);c.rectangle(0,0,W,H);c.clip()
+        if self.intro:self.intro_renderer.draw(c,self.intro,W,H);return
         if self.level==5:
             self.finale_renderer.draw(c,self.f,self.paused);return
         if self.level==4:
-            if not getattr(self,'foundry_frame',None):self.foundry_frame=FrameBuffer(W,H)
-            def render(scene):
-                if self.foundry_intro:self.foundry_intro.draw(scene,self.foundry_renderer,self.f)
-                else:self.foundry_renderer.draw(scene,self.f,self.paused)
-            self.foundry_frame.draw(c,render)
+            if self.foundry_intro:self.foundry_intro.draw(c,self.foundry_renderer,self.f)
+            else:self.foundry_renderer.draw(c,self.f,self.paused)
             return
         if self.level==3:
             if self.journey_cinema:self.journey_cinema.draw(c,self.tide_renderer,self.f)

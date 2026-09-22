@@ -703,3 +703,11 @@ hits per second while the beam connects. The rejected static loop is removed.
 
 The Descent remains available for manual playback in the soundtrack player,
 but is excluded from the gameplay shuffle.
+
+### Default 720p rendering
+
+All gameplay, menus, cinematics and continue screens compose at 1280×720,
+then scale to the display with aspect-preserving black bars. This is the
+default with no setting required. Mouse aim and menu clicks remain aligned
+on ultrawide, 16:10 and HiDPI displays. Graphics and simulation content are
+unchanged; a single reusable buffer replaces the prior stage-specific paths.

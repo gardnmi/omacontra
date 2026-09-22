@@ -9,7 +9,9 @@ and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit
 
 Install Omacontra as a standalone app on your Omarchy desktop. The installer
 creates an **Omacontra** entry in the apps menu and an executable named
-`omacontra`. All artwork, music, and screensaver animations are included.
+`omacontra`. All artwork, music, and screensaver animations are included. The game renders
+at 720p internally by default and scales to your display, keeping detailed
+scene rendering independent of monitor resolution.
 
 ### 1. Install the required packages
 

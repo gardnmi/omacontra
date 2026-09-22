@@ -52,3 +52,18 @@ The package move is covered by the full gameplay/audio/rendering suite and insta
 tests (fresh install, upgrade, alternate paths, launch, uninstall, ownership guards).
 Fixed frames from all five stages are also compared before and after the move to
 catch visual changes caused by import or asset-path mistakes.
+
+## Fixed internal rendering resolution
+
+`BossApp.draw` owns one reusable 1280×720 RGB24 `FrameBuffer`. Its callback
+renders the active scene and frontend overlays in native coordinates, then
+presents the completed image through the existing letterboxed viewport with
+nearest-neighbor scaling. This applies to every stage, intro/title, transition,
+continue screen and menu. `draw_scene` must not apply display scaling or create
+a second stage-specific framebuffer. Scene transforms are restored before UI
+overlays. The cutscene review gallery also uses a native frame buffer.
+
+Window size and HiDPI scale affect only final presentation; aiming and menu
+pointers still use the inverse viewport transform. Larger displays still have
+presentation/compositor costs, but scene composition stays at 720p. This does
+not cap simulation detail or establish minimum hardware requirements.
