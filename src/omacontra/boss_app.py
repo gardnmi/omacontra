@@ -172,8 +172,9 @@ class BossApp:
         old_f=self.f;old_hp=self.f.hp;old_hits=getattr(self.f,'damage_taken',0)
         active=not self.paused and not self.intro and not menu and self.f.state=='play' and not any(getattr(self,n,None) for n in ('chase_cinema','journey_cinema','foundry_intro'))
         if front:self.music.set_volume(85*(SFX_BOOST if self.music.start_effect else 1)*front.profile.settings['effects' if self.music.start_effect else 'music']/100)
+        choosing_run=bool(menu and front.page=='mode')
         self.music.update(bool(self.intro and not self.intro.journey),
-                          not self.placed or not self.visible or bool(self.intro and self.intro.paused))
+                          not self.placed or not self.visible or bool(self.intro and self.intro.paused and not choosing_run))
         if getattr(self,'game_music',None):
             # Results menus freeze gameplay, but the finale soundtrack continues.
             results_music=bool(menu and self.level==5 and self.f.state=='won' and front.result_saved)

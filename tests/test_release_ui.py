@@ -41,6 +41,21 @@ class ReleaseTests(unittest.TestCase):
         self.assertIsNotNone(a.intro.start_age);a.music.play_start.assert_called_once()
         self.assertFalse(a.paused or a.intro.paused)
 
+    def test_run_selection_keeps_title_music_and_hidden_window_still_pauses(self):
+        from omacontra.ui.story import Intro
+        a=self.app();a.intro=Intro();a.intro.index=len(a.intro.beats)-1
+        a.frontend.open('mode');age=a.intro.age
+        self.tick(a);a.music.update.assert_called_with(True,False)
+        self.assertEqual(a.intro.age,age)
+        a.frontend.key('down');self.tick(a)
+        a.music.update.assert_called_with(True,False)
+        a.visible=False;self.tick(a);a.music.update.assert_called_with(True,True)
+        a.visible=True;a.frontend.key('escape');self.tick(a)
+        a.music.update.assert_called_with(True,False)
+        a.frontend.open('pause');self.tick(a)
+        a.music.update.assert_called_with(True,True)
+        a.music.restart.assert_not_called();a.music.stop.assert_not_called()
+
     def test_mode_back_and_standard_start(self):
         from omacontra.ui.story import Intro
         a=self.app();a.intro=Intro();a.intro.index=len(a.intro.beats)-1
