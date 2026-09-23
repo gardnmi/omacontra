@@ -30,7 +30,7 @@ def draw(c,f):
     for variant,cargo in enumerate(f.cargos):
         c.save()
         if f.stage:c.push_group()
-        draw_cart(c,f,cargo,variant)
+        draw_cart(c,f,cargo,variant%len(CARTS))
         if f.stage:
             c.pop_group_to_source();c.paint_with_alpha(min(1,f.wave_reveal/2.4))
         c.restore()

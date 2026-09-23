@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import math
 from omacontra.stages.reaper.combat import Fight, segment_hit
 from omacontra.stages.harbor.tide_guardians import GuardianCombat
-from omacontra.stages.harbor.tide_cargo import Cargo, step_pair
+from omacontra.stages.harbor.tide_cargo import Cargo, step_cargos
 
 @dataclass
 class TideHazard:
@@ -33,7 +33,7 @@ class Tidebreaker(GuardianCombat,Fight):
         self.tilt_clock=0.;self.deck_slope=0.;self.combo_index=0
         self.combo_wait=.8;self.combo_active=False;self.combo_failed=False;self.combo_damage=False
         self.cargo=Cargo()
-        self.cargos=[self.cargo,Cargo(x=1110.,release_phase=2)]
+        self.cargos=[self.cargo,Cargo(x=1110.,release_phase=2),Cargo(x=150.,release_phase=3)]
         self.roll_rate=.68
         self.ocean_rage=0.
         self.init_guardians()
@@ -129,7 +129,7 @@ class Tidebreaker(GuardianCombat,Fight):
             self.guardian_step(dt);return
         if int((old_clock-.45)/9)!=int((self.clock-.45)/9) and self.clock>.45:self.sound('thunder',8.)
         if int(old_tilt/math.pi)!=int(self.tilt_clock/math.pi):self.sound('deck_creak',3.)
-        step_pair(self,dt)
+        step_cargos(self,dt)
         for hazard in self.hazards:
             old_x=hazard.x;old_age=hazard.age;hazard.age+=dt
             if hazard.kind=='claw' and old_age<.18<=hazard.age:self.sound('water_crash')

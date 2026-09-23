@@ -60,12 +60,45 @@ class CargoTests(unittest.TestCase):
         self.assertEqual(f.cargo.x,old)
 
     def test_second_crate_releases_in_wave_two_and_pair_does_not_overlap(self):
-        from omacontra.stages.harbor.tide_cargo import step_pair
-        f=Tidebreaker();a,b=f.cargos
-        self.assertEqual(len(f.cargos),2)
+        from omacontra.stages.harbor.tide_cargo import step_cargos
+        f=Tidebreaker();a,b=f.cargos[:2]
+        self.assertEqual(len(f.cargos),3)
         b.age=10;b.step(f,.02);self.assertFalse(b.released)
         f.wave_phase=2;b.step(f,.02);self.assertTrue(b.released)
         a.released=True;a.x=600;b.x=695;a.vx=200;b.vx=-150
-        step_pair(f,.02)
+        step_cargos(f,.02)
         self.assertGreaterEqual(b.x-a.x,100)
         self.assertLess(a.vx,0);self.assertGreater(b.vx,0)
+
+    def test_third_crate_waits_until_final_wave_phase(self):
+        f=Tidebreaker();c=f.cargos[2];c.age=10
+        for phase in (1,2):
+            f.wave_phase=phase;c.step(f,.02);self.assertFalse(c.released)
+        f.wave_phase=3;f.deck_slope=.08;c.step(f,.02)
+        self.assertTrue(c.released);self.assertGreater(c.vx,0)
+
+    def test_three_crates_stay_separate_at_both_deck_edges(self):
+        from omacontra.stages.harbor.tide_cargo import step_cargos
+        for edge in (48,1232):
+            f=Tidebreaker();f.wave_phase=3
+            for c in f.cargos:c.released=True;c.x=edge
+            for _ in range(100):
+                f.deck_slope=-.1 if edge==48 else .1
+                step_cargos(f,.02)
+                carts=sorted(f.cargos,key=lambda c:c.x)
+                self.assertGreaterEqual(carts[0].x,48)
+                self.assertLessEqual(carts[-1].x,1232)
+                for a,b in zip(carts,carts[1:]):self.assertGreaterEqual(b.x-a.x,100)
+
+    def test_unreleased_crates_do_not_block_active_cart(self):
+        from omacontra.stages.harbor.tide_cargo import step_cargos
+        f=Tidebreaker();f.cargo.released=True;f.cargo.x=150;f.cargo.vx=200
+        step_cargos(f,.02)
+        self.assertGreater(f.cargo.x,150);self.assertLess(f.cargo.x,160)
+
+    def test_three_crates_render(self):
+        import cairo
+        from omacontra.stages.harbor.tide_cargo_art import draw
+        f=Tidebreaker()
+        surface=cairo.ImageSurface(cairo.FORMAT_ARGB32,1280,720)
+        draw(cairo.Context(surface),f)

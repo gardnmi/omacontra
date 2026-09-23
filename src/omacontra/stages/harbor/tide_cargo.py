@@ -46,15 +46,21 @@ class Cargo:
             if f.hp<before and f.wave_phase==3:f.combo_failed=True
 
 
-def step_pair(f,dt):
+def step_cargos(f,dt):
     for cargo in f.cargos:cargo.step(f,dt)
-    a,b=sorted(f.cargos,key=lambda cargo:cargo.x)
-    if not (a.released and b.released) or b.x-a.x>=100:return
-    # Solid trolleys bump and exchange momentum rather than merging into an
-    # unreadable hitbox. A double jump can still clear a close pair.
-    middle=max(98,min(1182,(a.x+b.x)/2))
-    a.x=middle-50;b.x=middle+50
-    if a.vx>b.vx:
-        a.vx,b.vx=b.vx*.8,a.vx*.8
-        a.impact=b.impact=.25
-        f.sound('cargo_bump',.3)
+    carts=sorted((cargo for cargo in f.cargos if cargo.released),key=lambda cargo:cargo.x)
+    # Only released trolleys collide. Resolve every neighbor, including a chain
+    # pressed against either deck edge, without introducing interior stops.
+    for a,b in zip(carts,carts[1:]):
+        if b.x-a.x>=100:continue
+        middle=(a.x+b.x)/2
+        a.x=middle-50;b.x=middle+50
+        if a.vx>b.vx:
+            a.vx,b.vx=b.vx*.8,a.vx*.8
+            a.impact=b.impact=.25
+            f.sound('cargo_bump',.3)
+    if not carts:return
+    carts[0].x=max(carts[0].bounds[0],carts[0].x)
+    for a,b in zip(carts,carts[1:]):b.x=max(b.x,a.x+100)
+    carts[-1].x=min(carts[-1].bounds[1],carts[-1].x)
+    for a,b in reversed(list(zip(carts,carts[1:]))):a.x=min(a.x,b.x-100)
