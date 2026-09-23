@@ -104,3 +104,38 @@ transparency cleanup are recorded in `assets/finale-prompts.json`.
 `dhh-portal-reach.png` is a built-in-generated, transparent cinematic pose for
 the feet-first portal pull, matching the established spacesuit. Its prompt is
 recorded in `assets/finale-prompts.json`.
+
+## Lean release cleanup
+
+The following unused artwork was removed from the current tree (52.6 MiB total).
+It remains in Git history; this does not change the provenance recorded above.
+Current artwork and required original transparency masks are listed in
+`release-assets.txt`. No active artwork was resized or recompressed.
+
+- `assets/cover-v1.png`
+- `assets/omacontra-cover.png`
+- `assets/dhh-sprites.png`
+- `assets/dhh-body.png`
+- `assets/quattro-road.png`
+- `assets/tidebreaker-attacks.png`
+- `assets/tidebreaker-calm.png`
+- `assets/tidebreaker-harpoon.png`
+- `assets/foundry-arena.png`
+- `assets/foundry-warden.png`
+- `assets/foundry-inferno.png`
+- `assets/finale-orbit.png`
+- `assets/dhh-space-rear.png`
+- `assets/finale-catch-car.png`
+- `assets/finale-catch-close.png`
+- `assets/finale-catch-car-v2.png`
+- `assets/guardian-enrage.png`
+- `assets/foundry-inferno-front.png`
+- `assets/foundry-launch-backdrop.png`
+- `assets/reaper-projectiles-v2.png`
+- `assets/reaper-ravens-v2.png`
+- `assets/foundry-dragon.png`
+- `assets/wyrm-storm-wisp.png`
+- `assets/wyrm-eye-comet.png`
+- `assets/dhh-run-carry.png`
+- `assets/dhh-run-carry-v2.png`
+- `assets/reference/canonical-characters.png`

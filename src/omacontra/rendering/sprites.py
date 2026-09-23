@@ -9,8 +9,8 @@ from omacontra.rendering.character_assets import CHARACTER_ASSETS, ALPHA_MATTES
 @lru_cache(maxsize=16)
 def atlas(name):
     source=cairo.ImageSurface.create_from_png(str(ASSETS/CHARACTER_ASSETS.get(name,name)))
-    if name in {'dhh-run-carry-v3.png','dhh-run-carry-v2.png','dhh-run-carry.png','dhh-run-legs.png','wyrm-storm-ordnance.png','wyrm-eye-comet.png','dhh-weapon-v2.png'}:return source
-    if name in {'wyrm-storm-wisp.png','wyrm-head.png','wyrm-mist-arena.png','wyrm-stone-platform.png','foundry-dragon.png','reaper-energy-wave.png','foundry-launch-backdrop.png','shuttle-launch-gantry.png','finale-last-dive-cinema.png','dhh-space-laser.png','shuttle-boarding-hatch.png','foundry-throat-weapon.png','foundry-inferno-front.png','tidebreaker-guardians-enraged.png','guardian-enrage.png','guardian-meteor.png','dhh-modular-body.png','guardian-relay-plasma.png','highway-heart-robot-v1.png','industrial-props-v1.png','combat-effects-v1.png','hostile-projectiles-v1.png','furnace-streams-v1.png'}:
+    if name in {'dhh-run-carry-v3.png','dhh-run-legs.png','wyrm-storm-ordnance.png','dhh-weapon-v2.png'}:return source
+    if name in {'wyrm-head.png','wyrm-mist-arena.png','wyrm-stone-platform.png','reaper-energy-wave.png','shuttle-launch-gantry.png','finale-last-dive-cinema.png','dhh-space-laser.png','shuttle-boarding-hatch.png','foundry-throat-weapon.png','tidebreaker-guardians-enraged.png','guardian-meteor.png','dhh-modular-body.png','guardian-relay-plasma.png','highway-heart-robot-v1.png','industrial-props-v1.png','combat-effects-v1.png','hostile-projectiles-v1.png','furnace-streams-v1.png'}:
         return source  # True alpha; violet projectiles must never be chroma-keyed.
     if name in ALPHA_MATTES:
         # Identity edits retain the original sprite silhouette. Reuse its alpha
@@ -19,7 +19,7 @@ def atlas(name):
         clipped=cairo.ImageSurface(cairo.FORMAT_ARGB32,source.get_width(),source.get_height())
         context=cairo.Context(clipped);context.set_source_surface(source)
         context.mask_surface(matte,0,0);source=clipped
-    if name in {'finale-people-canonical.png','foundry-rescue-empty.png','finale-catch-car-v2.png','finale-plasma-burst.png','omarchy-wordmark.png','finale-vortex.png','finale-catch-close.png','finale-coastal-highway.png','finale-car-rear.png','finale-earth.png','finale-catch-car.png','dhh-space-rear.png','dhh-portal-reach.png','dhh-space-walk.png','finale-orbit.png','finale-guardian.png','finale-homecoming.png','finale-atlas.png','foundry-inferno.png','foundry-arena.png','foundry-warden.png','foundry-rescue.png','tidebreaker-guardians.png','tidebreaker-worlds.png','tidebreaker-arena.png','tidebreaker-calm.png','tidebreaker-attacks.png','tidebreaker-natural-waves.png','tidebreaker-harpoon.png','journey-cinema.png'}:return source
+    if name in {'finale-people-canonical.png','foundry-rescue-empty.png','finale-plasma-burst.png','omarchy-wordmark.png','finale-vortex.png','finale-coastal-highway.png','finale-car-rear.png','finale-earth.png','dhh-portal-reach.png','dhh-space-walk.png','finale-guardian.png','finale-homecoming.png','finale-atlas.png','foundry-rescue.png','tidebreaker-guardians.png','tidebreaker-worlds.png','tidebreaker-arena.png','tidebreaker-natural-waves.png','journey-cinema.png'}:return source
     if name in {'quattro-car.png','quattro-enemies.png','quattro-munitions.png','quattro-guardrail.png','quattro-bazooka.png','quattro-rally-cinema.png','quattro-explosion.png'}:return source
     # Decode the sheet into ARGB. Magenta is the atlas's reserved transparency key.
     surface=cairo.ImageSurface(cairo.FORMAT_ARGB32,source.get_width(),source.get_height())

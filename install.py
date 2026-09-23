@@ -8,6 +8,7 @@ import shutil
 import sys
 import tempfile
 from ctypes.util import find_library
+from release_assets import stage_game
 
 ROOT = Path(__file__).resolve().parent
 MARKER = '.omacontra-install'
@@ -54,11 +55,7 @@ def install(prefix):
     with tempfile.TemporaryDirectory(prefix='.omacontra-', dir=target.parent) as temp:
         staged = Path(temp)/'game'
         staged.mkdir()
-        shutil.copy2(ROOT/'main.py', staged/'main.py')
-        shutil.copytree(ROOT/'src', staged/'src', ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
-        shutil.copytree(ROOT/'assets', staged/'assets')
-        shutil.copytree(ROOT/'THIRD_PARTY', staged/'THIRD_PARTY')
-        shutil.copy2(ROOT/'README.md', staged/'README.md')
+        stage_game(ROOT, staged)
         (staged/MARKER).write_text('Managed by Omacontra\n')
         backup = Path(temp)/'previous'
         if target.exists():
@@ -104,7 +101,7 @@ def main():
             uninstall(args.prefix.expanduser().resolve())
         else:
             install(args.prefix.expanduser().resolve())
-    except (OSError, RuntimeError) as error:
+    except (OSError, RuntimeError, ValueError) as error:
         parser.exit(1, f'{error}\n')
 
 

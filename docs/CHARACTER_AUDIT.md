@@ -1,5 +1,9 @@
 # Character consistency audit — 2026-09-20
 
+> Historical audit: retired artwork, including the standalone character reference,
+> was removed during release cleanup. Earlier revisions remain in Git history.
+> `release-assets.txt` is the current shipped inventory; transparency masks remain.
+
 ## Canonical reference
 
 `assets/reference/canonical-characters.png` is the user-supplied title-screen reference. The title-screen cover itself is unchanged.

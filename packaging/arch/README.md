@@ -5,27 +5,32 @@ and desktop entry. Distribute the built package directly through GitHub Releases
 **No AUR listing is needed or planned.**
 The source repository is currently private; builders need repository access.
 
-The initial package is a pre-release snapshot, `0.1.0.r24.g40e9992`, pinned to
-commit `40e99926b147aea0575d5f0d0c58d78a411baa2c`. The game source and both integration
-files have SHA-256 checksums. Uncommitted changes and later commits are not
-silently included. The package includes the fullscreen/tiling and 720p changes.
+The lean download is built with `python tools/build_release.py`. The builder and
+per-user installer share `release_assets.py` and `release-assets.txt` with this
+package, so all three ship the same audited artwork, sound banks, and credits.
+Original sound recordings and build intermediates remain development-only;
+retired artwork has been removed from the current repository tree. All active
+music, artwork, sound effects, and screensaver animation frames are unchanged.
 
 ## Build and install now
 
 From a checkout with access to the game's GitHub repository:
 
 ```sh
-omarchy pkg add base-devel git
-mkdir -p build/arch
-cp packaging/arch/{PKGBUILD,omacontra.sh,omacontra.desktop} build/arch/
-cd build/arch
+omarchy pkg add base-devel python
+python tools/build_release.py
+mkdir -p build/arch-lean
+cp packaging/arch/{PKGBUILD,omacontra.sh,omacontra.desktop} build/arch-lean/
+cp dist/omacontra-runtime.tar.gz build/arch-lean/
+cd build/arch-lean
 makepkg --syncdeps
 sudo pacman -U ./omacontra-*.pkg.tar.zst
 ```
 
 Run `makepkg` as your normal user. Dependency installation and `pacman -U` may
-request your password. The build downloads the pinned source, including assets;
-it installs no development tools into the game itself. Later builds in the same
+request your password. The build uses the locally prepared runtime archive; after publication it can
+also download that same archive from GitHub Releases. Its checksum must match
+the recipe. It installs no development tools into the game itself. Later builds in the same
 directory can use `makepkg --syncdeps --cleanbuild --force`.
 
 The resulting `.pkg.tar.zst` is a normal Arch package. A release can distribute
@@ -83,24 +88,26 @@ After installing, run `/usr/bin/omacontra --help` from an unrelated directory an
 
 ## Updating and publishing direct downloads
 
-1. Choose a reviewed game commit or release tag. Update `_commit` and `pkgver` in
-   `PKGBUILD`; reset `pkgrel=1` for a new upstream version. Increment `pkgrel` when
-   only the package recipe changes.
-2. Run `makepkg --geninteg` in this directory and replace `sha256sums` with its
-   output. Regenerate `.SRCINFO` with `makepkg --printsrcinfo > .SRCINFO`.
-3. Build and test the package, then attach the `.pkg.tar.zst` and its SHA-256
-   checksum file to a GitHub Release. Players install it with `sudo pacman -U`
-   and launch **Omacontra**. No AUR account or package submission is involved.
-4. Keep the root `install.sh` snapshot in sync: update its commit and checksum
-   using the exact GitHub API tarball URL in that script. Test both installation
-   and replacement of an existing install. The direct installer uses the
-   per-user layout; the native package uses `/usr`. These are alternative methods.
-5. Make the repository/release public when ready. The existing
-   `THIRD_PARTY/README.md` says no project-wide license has been assigned.
-   `LicenseRef-Unknown` reports that status without assigning a new license;
-   finalize distribution terms and preserve asset/music attribution for release.
+1. Run `python tools/build_release.py` from the project root. This creates
+   `dist/omacontra-runtime.tar.gz` and its `.sha256` file. The archive includes the
+   local installer and its inventory, not tests, build tools, or unused assets.
+2. Set a new release tag in `_release` (PKGBUILD) and `release` (root `install.sh`).
+   Update the archive checksum in both files from the builder's output. Keep the
+   matching script beside the archive when sharing a private test download.
+3. Update `pkgver`/`pkgrel`; regenerate `.SRCINFO` with
+   `makepkg --printsrcinfo > .SRCINFO`. Build and test the package from the local
+   archive as above. Copy the resulting `.pkg.tar.zst` to `dist/`.
+4. Attach the runtime archive, its checksum, matching `install.sh`, native package,
+   and package checksum to the selected GitHub Release when ready. Do not
+   substitute GitHub's automatic full-source archive: that includes development
+   data. No AUR listing or submission is needed.
+5. Make the release public before advertising the online installer command.
+   Preserve the project's existing licensing and asset/music attribution.
 
-A downloaded local package does not receive package-manager updates from GitHub
-automatically. Download and install a newer release with `pacman -U` to update.
-The per-user direct installer updates when the player re-runs it. Both preserve
-the same settings and records.
+The current recipe targets `v0.1.0-lean.1`; it has not been published. For private
+other-PC tests, transfer the native package directly, or transfer the runtime
+archive plus `install.sh` and run `bash install.sh --archive ./omacontra-runtime.tar.gz`.
+
+Downloaded local packages do not receive package-manager updates from GitHub
+automatically. Install newer packages with `pacman -U`; per-user installations
+update by re-running the matching direct installer. Both preserve player records.

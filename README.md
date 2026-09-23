@@ -13,7 +13,7 @@ creates an **Omacontra** entry in the apps menu and an executable named
 at 720p internally by default and scales to your display, keeping detailed
 scene rendering independent of monitor resolution.
 
-### Quick install (when the repository is public)
+### Quick install (when the GitHub release is public)
 
 Run this in your Omarchy terminal:
 
@@ -21,17 +21,32 @@ Run this in your Omarchy terminal:
 curl -fsSL https://raw.githubusercontent.com/gardnmi/omacontra/main/install.sh | bash
 ```
 
-No Git checkout or AUR package is needed. The installer downloads a verified game
-snapshot, installs missing system dependencies (asking for your password if
+No Git checkout or AUR package is needed. The installer downloads a verified runtime
+release, installs missing system dependencies (asking for your password if
 needed), and creates the **Omacontra** app-menu entry and `omacontra` executable.
 Run it as your normal user, without `sudo`. Re-run the command to update to the
-snapshot selected by the installer; settings and personal bests are preserved.
+release selected by the installer; settings and personal bests are preserved.
 
-**The repository is currently private**, so this unauthenticated command is not
-yet available to the public. Authorized testers can use the source installation
+**The repository is currently private and the runtime release is not published**,
+so this unauthenticated command is not yet available to the public. Authorized testers can use the source installation
 below. A downloadable Arch package is also prepared; see
 [direct package builds and releases](packaging/arch/README.md). It can be hosted
 on GitHub Releases and installed directly, without AUR.
+
+### Testing a private release on another PC
+
+Copy `dist/omacontra-runtime.tar.gz` and `install.sh` from the development PC to
+the other PC, then run this from their download folder:
+
+```sh
+bash install.sh --archive ./omacontra-runtime.tar.gz
+omacontra
+```
+
+The archive is a generated release download, not a file included in a Git clone.
+Build it on the development PC with `python tools/build_release.py`. Use the
+matching `install.sh` from that release so its checksum matches. Alternatively,
+copy the generated `.pkg.tar.zst` and install it with `sudo pacman -U`.
 
 ### Install from source
 
@@ -142,7 +157,7 @@ or music.
 - `docs/`: architecture, gameplay notes, audits, and the preserved original opening.
 
 All runtime asset locations come from `src/omacontra/resources.py`. The installer
-ships the runtime package and assets; development tools and tests stay in the repo.
+ships the runtime package and the assets listed in `release-assets.txt`; development tools and tests stay in the repo.
 `main.py` and `./omacontra` remain supported launchers.
 
 See [architecture](docs/ARCHITECTURE.md), [gameplay/design notes](docs/GAMEPLAY.md),

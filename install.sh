@@ -34,16 +34,16 @@ main() {
     work=$(mktemp -d -t omacontra-install.XXXXXXXX)
     # Expand the trusted mktemp path now; cleanup also runs on failed downloads.
     trap "rm -rf -- '$work'" EXIT
-    local commit=40e99926b147aea0575d5f0d0c58d78a411baa2c
-    local checksum=a9c1868251401d3a500d258863246aade21f812bcf0b824b419355a3588693d6
+    local release=v0.1.0-lean.1
+    local checksum=7ac9564df0e1c93a85db225a0b137e02c5fae15d477b30345a3e7f6e1f803409
     if [[ -n $archive ]]; then
         cp -- "$archive" "$work/game.tar.gz"
     else
         command -v curl >/dev/null || { echo 'Install curl first.' >&2; return 1; }
-        echo 'Downloading Omacontra (approximately 274 MB)...'
+        echo 'Downloading the Omacontra runtime...'
         if ! curl --fail --location --show-error --retry 3 --proto '=https' --tlsv1.2 \
-            "https://api.github.com/repos/gardnmi/omacontra/tarball/$commit" -o "$work/game.tar.gz"; then
-            echo 'Download failed. The repository must be public for this installer; authorized testers can use --archive FILE.' >&2
+            "https://github.com/gardnmi/omacontra/releases/download/$release/omacontra-runtime.tar.gz" -o "$work/game.tar.gz"; then
+            echo 'Download failed. The selected GitHub release must be published and public; testers can use --archive FILE with the runtime download.' >&2
             return 1
         fi
     fi

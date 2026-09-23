@@ -24,6 +24,8 @@ class InstallTests(unittest.TestCase):
             (source / 'README.md').write_text('Test installation')
             (source / 'assets').mkdir()
             (source / 'assets/sentinel').write_text('asset')
+            (source / 'release-assets.txt').write_text('sentinel\n')
+            (source / 'assets/unused-original.wav').write_bytes(b'development only')
             (source / 'THIRD_PARTY').mkdir()
             (source / 'test_unused.py').write_text('must not ship')
             prefix = root / 'install with spaces'
@@ -33,6 +35,7 @@ class InstallTests(unittest.TestCase):
                 self.assertFalse((target / 'test_unused.py').exists())
                 self.assertFalse(list(target.rglob('__pycache__')))
                 self.assertTrue((target / 'assets/sentinel').exists())
+                self.assertFalse((target / 'assets/unused-original.wav').exists())
                 env = dict(os.environ)
                 env.pop('PYTHONPATH', None)
                 result = subprocess.run([str(launcher), '--help'], cwd=root, env=env, capture_output=True, text=True)

@@ -1,5 +1,9 @@
 # Visual asset quality pass
 
+> Historical audit: retired artwork, including the standalone character reference,
+> was removed during release cleanup. Earlier revisions remain in Git history.
+> `release-assets.txt` is the current shipped inventory; transparency masks remain.
+
 Reviewed all 56 existing PNG sheets, the canonical character reference, the five
 encounter renderers, and all ten cinematic sequences. The principal quality gaps
 were procedural props and effects drawn on top of the detailed illustrations.

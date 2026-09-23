@@ -1,6 +1,6 @@
-"""Canonical character assets, matched to assets/reference/canonical-characters.png.
+"""Canonical character assets, matched to the original title-screen reference.
 
-Versioned files preserve the previous artwork for review. Route shared source
+Retired reference artwork remains in Git history. Route shared source
 names here so gameplay and cinematic users cannot silently select old models.
 """
 CHARACTER_ASSETS = {
