@@ -286,6 +286,8 @@ class Foundry(Fight):
         aim=math.atan2(ty-sy,tx-sx)
         count=3 if heavy else 5
         spacing=.50 if heavy else (.40 if self.forge_round%2 else .46)
+        # The opening laser orbit needs wider lanes to cross between platforms.
+        if not heavy and not self.laser:spacing+=.18
         for i in range(count):
             a=aim+(i-(count-1)/2)*spacing
             speed=260 if heavy else 245

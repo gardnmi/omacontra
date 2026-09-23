@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.1.0-rc.2
+
+- Wider gaps between the dragon’s first-phase eye fireballs make platform crossings
+  more forgiving. Projectile speed, volley size, laser rotation, and second-phase
+  attacks retain their existing tuning.
+
 ## 0.1.0-rc.1
 
 First release candidate for Omacontra on Omarchy / Hyprland.

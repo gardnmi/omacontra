@@ -386,3 +386,24 @@ class FoundryTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+class OpeningSpreadTests(unittest.TestCase):
+    def test_opening_eye_spread_has_more_clearance_without_changing_later_volley(self):
+        for round_number in (1,2):
+            volleys=[]
+            for laser in (False,True):
+                f=Foundry();f.laser=laser;f.forge_round=round_number
+                f.locked_target=(400,500);f.emit('wisps',0);volleys.append(f.bolts)
+            opening,later=volleys
+            self.assertEqual(len(opening),5)
+            for a,b in zip(opening,later):
+                self.assertAlmostEqual(math.hypot(a.vx,a.vy),math.hypot(b.vx,b.vy))
+                self.assertEqual(a.radius,b.radius)
+            def gap(bolts):
+                a,b=bolts[:2]
+                return math.hypot(a.vx-b.vx,a.vy-b.vy)*200/245-a.radius-b.radius
+            self.assertGreater(gap(opening),gap(later)+30)
+            expected=.40 if round_number%2 else .46
+            a,b=later[:2]
+            self.assertAlmostEqual(math.hypot(a.vx-b.vx,a.vy-b.vy)/245,2*math.sin(expected/2))
