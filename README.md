@@ -62,13 +62,17 @@ Omarchy installs any missing packages and may ask for your password.
 
 ### 2. Download and install the game
 
-Clone the repository and run the installer:
+Download only the latest revision and run the installer:
 
 ```sh
-git clone https://github.com/gardnmi/omacontra.git
+git clone --depth 1 --single-branch https://github.com/gardnmi/omacontra.git
 cd omacontra
 ./install.py
 ```
+
+`--depth 1` skips old Git history, including retired artwork and original music
+files. Normal updates with `git pull --ff-only` still work. The source checkout
+includes development assets; the packaged download is smaller.
 
 > Before the public release, cloning requires a GitHub account with repository access.
 
