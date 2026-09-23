@@ -157,3 +157,10 @@ Original MP3 sources and their attribution remain recoverable in Git history;
 local comparison originals also remain under ignored `review/music-originals/`.
 Runtime music changed from 30.86 MiB to 15.57 MiB. All song roles and playlist
 behavior are unchanged; `assets/audio/library.json` retains original sources.
+
+## Weathered harbor cargo
+
+Replaced the open bright `tide-overstock-cart.png` shop-display crate with a
+reinforced weathered wood trolley and a dented steel bin. Both are compact
+transparent generated sprites; prompts and provenance are in
+`assets/tide-dock-cargo-source.md`. The older image remains in Git history.

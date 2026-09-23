@@ -385,7 +385,9 @@ screensaver/rings.ttframes
 shuttle-boarding-hatch.png
 shuttle-launch-gantry.png
 tide-overstock-cart.md
-tide-overstock-cart.png
+tide-dock-steel.png
+tide-dock-wood.png
+tide-dock-cargo-source.md
 tidebreaker-arena.png
 tidebreaker-guardians-enraged.png
 tidebreaker-guardians-prompts.json

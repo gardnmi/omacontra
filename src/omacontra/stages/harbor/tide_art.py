@@ -13,7 +13,7 @@ from omacontra.stages.reaper.battle_art import BattleRenderer, label, glow, colo
 
 class TideRenderer:
     def __init__(self):
-        tide_cargo_art.crate_stamp()
+        tide_cargo_art.crate_stamp(0);tide_cargo_art.crate_stamp(1)
         self.hero_renderer=BattleRenderer()
         self.environment=TideEnvironment()
         self.ocean_source=cairo.ImageSurface(cairo.FORMAT_ARGB32,1280,630)

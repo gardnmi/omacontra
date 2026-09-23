@@ -34,8 +34,8 @@ main() {
     work=$(mktemp -d -t omacontra-install.XXXXXXXX)
     # Expand the trusted mktemp path now; cleanup also runs on failed downloads.
     trap "rm -rf -- '$work'" EXIT
-    local release=v0.1.0-lean.4
-    local checksum=85981f2d68e97251656510ba8c561a7a2b9eadaabe23536c755a9afdcaf58295
+    local release=v0.1.0-lean.5
+    local checksum=5a24590a12996a96577ce9713a7977328037660178ff2961f19563b8bf2514bb
     if [[ -n $archive ]]; then
         cp -- "$archive" "$work/game.tar.gz"
     else
