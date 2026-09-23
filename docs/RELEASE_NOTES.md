@@ -1,5 +1,19 @@
 # Release notes
 
+## 1.0.0
+
+First public release for Omarchy / Hyprland.
+
+- Five boss encounters with story cinematics, Standard and Hardcore modes.
+- Persistent results, stage medals, personal bests, and a soundtrack player.
+- Keyboard and mouse controls; 720p internal rendering scaled to your display.
+- Standalone installer and Arch package, with no AUR requirement.
+- Includes the final guardian boundaries, wider dragon fireball spread, and
+  corrected spaceship boarding hatch from release-candidate testing.
+
+See [support and known limitations](SUPPORT.md) and the
+[asset credits and terms](../THIRD_PARTY/ASSET_RIGHTS.md).
+
 ## 0.1.0-rc.3
 
 - Move the spaceship hatch below the cockpit glass and align the elevator stop,
