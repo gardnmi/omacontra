@@ -281,4 +281,21 @@ class TideTests(unittest.TestCase):
                 cinema.age=age;cinema.draw(cairo.Context(s),r,f)
         self.assertEqual(f.clock,0)
 
+    def test_guardian_kill_clears_enemy_shots_before_they_hit(self):
+        from omacontra.stages.reaper.combat import Bullet
+        f=Tidebreaker(1);f.advance_guardian();f.invuln=0;f.wave_reveal=0;f.hp=1
+        for a in f.guardians:a.timer=99
+        a=f.guardians[0];a.hp=1;cx,cy=a.core(f.floor);px,py=f.player_center
+        f.shots=[Bullet(cx-10,cy,800,0),Bullet(px+5,py,-10,0,True,2.8,kind='heavy_slug')]
+        f.step(.016)
+        self.assertEqual(a.hp,0);self.assertEqual(f.hp,1)
+
+    def test_unlimited_lives_hits_still_count_for_hazards_and_combo(self):
+        for unlimited in (False,True):
+            with self.subTest(unlimited=unlimited):
+                f=Tidebreaker(1);f.unlimited_lives=unlimited;f.wave_phase=3;f.invuln=0
+                f.hazards=[TideHazard('surge',f.x+3)];f.step(.01)
+                self.assertEqual(f.damage_taken,1)
+                self.assertTrue(f.combo_failed);self.assertTrue(f.hazards[0].hit)
+
 if __name__=='__main__':unittest.main()

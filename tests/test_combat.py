@@ -403,4 +403,12 @@ class CombatTests(unittest.TestCase):
             for role in ('eye','raven'):renderer.weak_point(c,f,role)
             renderer.objects(c,f,(300,100));renderer.hud(c,f)
 
+    def test_fire_rate_does_not_depend_on_frame_rate(self):
+        rates=[]
+        for dt in (.004,1/60,.04):
+            f=Fight();f.invuln=999;f.machine_shots=0
+            for _ in range(round(4/dt)):f.invuln=999;f.step(dt,shoot=True,aim=(900,300))
+            rates.append(f.machine_shots/4)
+        self.assertLess(max(rates)-min(rates),.5,rates)
+
 if __name__=='__main__':unittest.main()

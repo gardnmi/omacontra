@@ -22,12 +22,12 @@ def step(f,a,dt):
         x0,y0=relay_position(f,a,old);x,y=relay_position(f,a,a.age)
         l,t,r,b=f.player_hitbox
         if not a.hit and segment_box(x0,y0,x,y,(l-20,t-16,r+20,b+16)):
-            hp=f.hp;f.hurt();a.hit=f.hp<hp
+            hp=getattr(f,'damage_taken',0);f.hurt();a.hit=getattr(f,'damage_taken',0)>hp
         if (a.linked or a.enraged) and old<1.8<=a.age:f.sound('relay')
         if (a.linked or a.enraged) and a.age>=1.8:
             x0=900-max(0,old-1.8)*420;x=900-(a.age-1.8)*420
             if not a.high_hit and segment_box(x0,f.floor-80,x,f.floor-80,(l-22,t-10,r+22,b+10)):
-                hp=f.hp;f.hurt();a.high_hit=f.hp<hp
+                hp=getattr(f,'damage_taken',0);f.hurt();a.high_hit=getattr(f,'damage_taken',0)>hp
     else:
         for i,x in enumerate(a.star_lanes):
             delay=.65+i*.48
@@ -38,8 +38,8 @@ def step(f,a,dt):
             y0=180+max(0,before)*440;y=180+now*440
             l,t,r,b=f.player_hitbox
             if segment_box(x,y0,x,y,(l-12,t-16,r+12,b+16)):
-                hp=f.hp;f.hurt()
-                if f.hp<hp:a.star_hits.add(i)
+                hp=getattr(f,'damage_taken',0);f.hurt()
+                if getattr(f,'damage_taken',0)>hp:a.star_hits.add(i)
             if y>f.floor+25:a.star_hits.add(i)
     if a.age>=(4.4 if a.linked or a.enraged else 3.):
         a.attack=None;a.exposed=1.7 if a.enraged else 3.6 if a.linked else 2.4;a.timer=0 if a.enraged else .6

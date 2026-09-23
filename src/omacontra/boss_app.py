@@ -84,7 +84,7 @@ class BossApp:
         elif self.level==3:self.start_tide()
         elif self.level==4:self.start_foundry()
         else:self.f=self.prepare_encounter(Fight(),1)
-        self.slide_requested=False;self.paused=False;self.shooting=False;self.keyboard.clear()
+        self.slide_requested=False;self.paused=False;self.shooting=False;self.keyboard.consume()
 
     def start_finale(self):
         from omacontra.stages.space.finale import Finale
@@ -112,7 +112,7 @@ class BossApp:
         self.intro_renderer.arrival_renderer=self.renderer
         self.music.restart()
         if getattr(self,'frontend',None):self.frontend.new_run()
-        self.paused=False;self.keyboard.clear();self.shooting=False;self.slide_requested=False
+        self.paused=False;self.keyboard.consume();self.shooting=False;self.slide_requested=False
 
     def start_foundry(self):
         from omacontra.stages.dragon.foundry import Foundry
@@ -159,7 +159,7 @@ class BossApp:
             self.fullscreen=bool(client.get('fullscreen',0))
             self.visible=self.h.request('activeworkspace',True)['id']==self.workspace
             if not self.visible:
-                self.slide_requested=False;self.keyboard.clear();self.shooting=False
+                self.slide_requested=False;self.keyboard.consume();self.shooting=False
                 if getattr(self,'frontend',None) and not self.frontend.page:self.frontend.open()
         except Exception as error:print(f'OMACONTRA: {error}',flush=True);self.close();return False
         return True
@@ -196,22 +196,22 @@ class BossApp:
                 if self.intro.start_finished:
                     self.music.stop();self.intro=Intro(journey=True)
                     self.intro.unlimited_lives=getattr(self,'unlimited_lives',False)
-                    self.keyboard.clear();self.shooting=False
+                    self.keyboard.consume();self.shooting=False
                 elif self.intro.finished:
-                    self.intro=None;self.f=self.prepare_encounter(Fight(),1);self.keyboard.clear();self.shooting=False
+                    self.intro=None;self.f=self.prepare_encounter(Fight(),1);self.keyboard.consume();self.shooting=False
             elif not self.paused and getattr(self,'foundry_intro',None):
                 self.foundry_intro.step(dt);self.slide_requested=False
                 if self.foundry_intro.finished:
-                    self.foundry_intro=None;self.keyboard.clear();self.shooting=False
+                    self.foundry_intro=None;self.keyboard.consume();self.shooting=False
             elif not self.paused and getattr(self,'journey_cinema',None):
                 self.journey_cinema.step(dt);self.slide_requested=False
                 if self.journey_cinema.finished:
-                    self.journey_cinema=None;self.keyboard.clear();self.shooting=False
+                    self.journey_cinema=None;self.keyboard.consume();self.shooting=False
             elif not self.paused and self.chase_cinema:
                 self.chase_cinema.step(dt)
                 self.slide_requested=False
                 if self.chase_cinema.finished:
-                    self.chase_cinema=None;self.keyboard.clear();self.shooting=False
+                    self.chase_cinema=None;self.keyboard.consume();self.shooting=False
             elif not self.paused:
                 k=self.keys
                 self.f.step(dt,move=int(bool(k&{'d','right'}))-int(bool(k&{'a','left'})),jump=bool(k&{'space','k'}),duck=bool(k&{'s','down'}),shoot=self.shooting or bool(k&{'j','z'}),aim=(self.f.screen_to_world(self.aim) if self.level in (2,4) else self.aim) if self.shooting or (self.level==2 and self.f.state=='finisher') else None,aim_up=bool(k&{'w','up'}),slide=bool(k&{'shift_l','shift_r'}),slide_pressed=self.slide_requested,**({'interact':bool(k&{'e'})} if self.level==3 else {'vertical':int(bool(k&{'s','down'}))-int(bool(k&{'w','up'}))} if self.level==5 else {}))
@@ -219,11 +219,11 @@ class BossApp:
                 if self.level==2 and self.f.state=='won' and not self.chase_outro_seen:
                     from omacontra.stages.highway.chase_cinema import ChaseCinema
                     self.chase_cinema=ChaseCinema('outro');self.chase_cinema.age=.8;self.chase_outro_seen=True
-                    self.shooting=False;self.keyboard.clear()
+                    self.shooting=False;self.keyboard.consume()
                 if self.level==3 and self.f.state=='won' and not self.tide_outro_seen:
                     from omacontra.stages.harbor.journey_cinema import JourneyCinema
                     self.journey_cinema=JourneyCinema('outro');self.tide_outro_seen=True
-                    self.shooting=False;self.keyboard.clear()
+                    self.shooting=False;self.keyboard.consume()
             if not self.intro and self.f.state=='dead' and not getattr(self,'continue_screen',None):
                 self.death_wait=getattr(self,'death_wait',0.)+dt
                 if self.death_wait>=1.2:
@@ -231,7 +231,7 @@ class BossApp:
                     if self.continue_renderer is None:self.continue_renderer=ContinueRenderer()
                     self.continue_screen=ContinueScreen(hardcore=bool(front and front.record.hardcore));self.paused=False
                     self.continue_blocked_keys=set(self.keys)
-                    self.keyboard.clear();self.shooting=False;self.slide_requested=False
+                    self.keyboard.consume();self.shooting=False;self.slide_requested=False
             self.area.queue_draw()
         if front and self.placed and self.visible and not menu:front.observe(dt,old_f,old_hp,old_hits,active)
         if menu and self.placed and self.visible:self.area.queue_draw()
@@ -317,7 +317,7 @@ class BossApp:
             if event.button==1 and event.type==Gdk.EventType.BUTTON_PRESS:self.frontend.pointer((event.x-ox)/scale,(event.y-oy)/scale,True)
             return True
         self.motion(area,event)
-        if event.button==1:self.shooting=event.type==Gdk.EventType.BUTTON_PRESS
+        if event.button==1:self.shooting=event.type!=Gdk.EventType.BUTTON_RELEASE
         return True
 
     def key(self,win,event):
@@ -355,25 +355,25 @@ class BossApp:
                     if front and self.intro.start_age is None:
                         front.open('mode');return True
                     if self.intro.request_start():self.music.play_start()
-                    self.shooting=False;self.keyboard.clear()
+                    self.shooting=False;self.keyboard.consume()
                 else:self.intro.advance()
         elif self.level==5 and self.f.state in ('departure','encounter') and key=='return':
             if self.f.state=='departure':self.f.begin_encounter()
             else:self.f.skip()
-            self.keyboard.clear();self.shooting=False
+            self.keyboard.consume();self.shooting=False
         elif self.level==4 and self.f.state=='won' and key=='return':
-            self.advance_campaign();self.keyboard.clear();self.shooting=False;self.slide_requested=False
+            self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
         elif getattr(self,'foundry_intro',None) and key=='return':self.foundry_intro.skip()
         elif getattr(self,'journey_cinema',None) and self.journey_cinema.kind=='intro' and key=='return':self.journey_cinema.skip()
         elif self.chase_cinema and self.chase_cinema.kind=='intro' and key=='return':self.chase_cinema.skip()
         elif key=='p':self.paused=not self.paused
         elif key=='r':self.reset_encounter()
         elif key=='return' and self.level==1 and self.f.state=='won':
-            self.advance_campaign();self.keyboard.clear();self.shooting=False;self.slide_requested=False
+            self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
         elif key=='return' and self.level==2 and self.f.state=='won' and self.chase_cinema and self.chase_cinema.age>=5.5:
-            self.advance_campaign();self.keyboard.clear();self.shooting=False;self.slide_requested=False
+            self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
         elif key=='return' and self.level==3 and self.f.state=='won' and self.journey_cinema and self.journey_cinema.age>=5.5:
-            self.advance_campaign();self.keyboard.clear();self.shooting=False;self.slide_requested=False
+            self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
         return True
 
     def release(self,win,event):
@@ -384,7 +384,7 @@ class BossApp:
         return True
     def unfocus(self,*_):
         if getattr(self,'frontend',None) and self.placed and not self.frontend.page:self.frontend.open()
-        self.slide_requested=False;self.keyboard.clear();self.shooting=False
+        self.slide_requested=False;self.keyboard.consume();self.shooting=False
         if getattr(self,'weapon_audio',None):self.weapon_audio.silence()
         return False
 

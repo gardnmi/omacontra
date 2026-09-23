@@ -19,8 +19,10 @@ class Profile:
         try:
             data=json.loads(self.path.read_text())
             if not isinstance(data,dict):return
+            settings=data.get('settings')
+            if not isinstance(settings,dict):settings={}
             for k in DEFAULTS:
-                v=data.get('settings',{}).get(k,100)
+                v=settings.get(k,100)
                 if isinstance(v,(int,float)) and math.isfinite(v):self.settings[k]=max(0,min(150,int(v)))
             best=data.get('best',{})
             if isinstance(best,dict):self.best={k:v for k,v in best.items() if isinstance(v,(int,float)) and math.isfinite(v) and v>0}

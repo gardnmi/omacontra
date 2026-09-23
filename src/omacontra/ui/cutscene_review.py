@@ -58,7 +58,7 @@ class Review:
             from omacontra.stages.dragon.foundry import Foundry
             from omacontra.stages.dragon.foundry_art import FoundryRenderer, FoundryIntro
             self.f=Foundry();self.renderer=FoundryRenderer()
-            if name.endswith('intro'):self.scene=FoundryIntro()
+            if name.endswith('intro'):self.scene=FoundryIntro();self.duration=FoundryIntro.DURATION
             elif name=='foundry-disarm':self.f.begin_disarm()
             else:
                 self.f.state='rescue';self.f.rescue_start_x=315.;self.f.boss_hp=0;self.f.mount_hp=0;self.f.lava_age=7.;self.f.rescue_start_y=435.
@@ -150,7 +150,7 @@ def launch(name='ending',at=0):
         c.save();c.translate((w-1280*scale)/2,(h-720*scale)/2);c.scale(scale,scale)
         frame.draw(c,review.draw);c.restore()
     def key(_,event):
-        name=Gdk.keyval_name(event.keyval).lower()
+        name=(Gdk.keyval_name(event.keyval) or '').lower()
         if name=='escape':window.destroy()
         elif name=='space':toggle()
         elif name=='r':replay()

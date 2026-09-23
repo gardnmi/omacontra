@@ -73,6 +73,7 @@ def install(prefix):
     launcher.chmod(0o755)
     desktop.parent.mkdir(parents=True, exist_ok=True)
     command = str(launcher).replace('%', '%%').replace('\\', '\\\\').replace('"', '\\"').replace('`', '\\`').replace('$', '\\$')
+    command = command.replace('\\', '\\\\')  # Exec is also a string value: escape the quoting backslashes again.
     desktop.write_text('[Desktop Entry]\n# Managed by Omacontra\nType=Application\nName=Omacontra\nComment=Five worlds. One boss rush.\nExec="'+command+'"\nIcon='+str(target/'assets/omacontra-cover-v2.png')+'\nTerminal=false\nCategories=Game;ActionGame;\nStartupNotify=false\n')
     print(f'Installed {target}\nLaunch: {launcher}\nAlso available in your application menu as Omacontra.')
 

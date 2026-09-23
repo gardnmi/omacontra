@@ -42,8 +42,8 @@ class Cargo:
         # Swept contact; jumping above the lid clears the full trolley.
         if segment_box(old,f.deck_y(old)-27,self.x,ground-27,
                        (left-39,top-27,right+39,bottom+27)):
-            before=f.hp;f.hurt()
-            if f.hp<before and f.wave_phase==3:f.combo_failed=True
+            before=getattr(f,'damage_taken',0);f.hurt()
+            if getattr(f,'damage_taken',0)>before and f.wave_phase==3:f.combo_failed=True
 
 
 def step_cargos(f,dt):

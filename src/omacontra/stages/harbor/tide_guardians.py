@@ -114,7 +114,7 @@ class GuardianCombat:
     def advance_guardian(self):
         self.stage=1;self.guardians=[Guardian(1,timer=1.),Guardian(2,timer=2.5)]
         self.boss_max=sum(a.maximum for a in self.guardians);self.boss_hp=self.boss_max;self.hp=min(self.max_hp,self.hp+1)
-        self.open_time=0.;self.invuln=1.5;self.deck_roll=0.;self.deck_slope=0.
+        self.open_time=0.;self.invuln=max(self.invuln,1.5);self.deck_roll=0.;self.deck_slope=0.
         self.rects['arena']=(260.,0.,700.,657.);self.x=640.;self.y=min(self.y,self.floor)
         self.stage_switched=True
     def step_reveal(self,dt):
@@ -152,7 +152,9 @@ class GuardianCombat:
                     survivor.enraged=True;survivor.rage_age=0.
                     survivor.attack=survivor.warning=None;survivor.queue=[]
                     survivor.linked=False;survivor.exposed=0.;survivor.timer=.15;survivor.round=1
-            self.shots=[b for b in self.shots if not b.enemy]
+            # Expire in place: Fight.step is iterating a copy and would still let them hit.
+            for b in self.shots:
+                if b.enemy:b.life=0
 
             self.notice=('BLACK COAT DOWN' if a.kind==1 else 'DEAD ORBIT DOWN')+' / FINISH THE OTHER';self.notice_time=3.
         self.boss_hp=sum(g.hp for g in self.guardians)
@@ -197,7 +199,7 @@ class GuardianCombat:
                     self.shots.append(Bullet(sx,sy,math.cos(angle)*speed,math.sin(angle)*speed,True,2.8,kind='heavy_slug' if a.kind==1 else 'orbit_bolt'))
                     a.muzzle_flash=.12
                 if a.attack=='charge' and not self.sliding and abs(self.x-a.x)<95 and self.y>self.floor-125 and not a.hit:
-                    hp=self.hp;self.hurt();a.hit=self.hp<hp
+                    hp=getattr(self,'damage_taken',0);self.hurt();a.hit=getattr(self,'damage_taken',0)>hp
                 if a.attack=='slam' and old<.7<=a.age:
                     self.sound('slam')
                     if abs(self.x-a.end)<85 and self.y>self.floor-150:self.hurt()

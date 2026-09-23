@@ -343,7 +343,7 @@ class Fight:
             if self.exposed<=0:self.sound('reform');self.node_max=12+self.phase*2;self.nodes={'eye':12+self.phase*2,'raven':12+self.phase*2};self.notice='WEAK POINTS REFORMED';self.notice_time=2.
         if shoot and self.fire<=0:
             self.machine_shots=getattr(self,'machine_shots',0)+1
-            self.fire=.10
+            self.fire=.10+max(self.fire,-dt) # Carry frame overshoot: same rate at 30 or 144 fps.
             self.muzzle=.06
             self.shots.append(Bullet(px,py,math.cos(angle)*800,math.sin(angle)*800))
         if self.state!='play':return
@@ -376,6 +376,7 @@ class Fight:
                 self.prepare_scythe()
                 if self.scythe_pattern==('dash',) and self.dash_casts==0:self.warning_time=2.1
         for b in list(self.shots):
+            if b.life<=0:continue
             ox,oy=b.x,b.y;b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt
             if b.enemy:
                 if b.kind.startswith('scythe_'):

@@ -283,4 +283,13 @@ class ReleaseTests(unittest.TestCase):
         a.key(None,event);self.assertIn('return',a.frontend.blocked)
         a.release(None,event);self.assertNotIn('return',a.frontend.blocked)
 
+    def test_malformed_settings_fall_back_to_defaults(self):
+        p=Path(self.temp.name)/'profile.json'
+        for settings in (None,[1],'loud',7):
+            with self.subTest(settings=settings):
+                p.write_text(json.dumps({'settings':settings,'best':{'arcade':90.}}))
+                profile=Profile(p)
+                self.assertEqual(profile.settings,{'music':100,'effects':100})
+                self.assertEqual(profile.best,{'arcade':90.})
+
 if __name__=='__main__':unittest.main()

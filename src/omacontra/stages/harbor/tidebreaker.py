@@ -144,7 +144,7 @@ class Tidebreaker(GuardianCombat,Fight):
                 height=max(20,320*(1-min(1,max(0,hazard.age-.18)/.4))**2)
                 hit=.18<hazard.age<.58 and left<hazard.x+55 and right>hazard.x-55 and down>self.deck_y(hazard.x)-height
             if hit and not hazard.hit:
-                before=self.hp;self.hurt();hazard.hit=self.hp<before
+                before=getattr(self,'damage_taken',0);self.hurt();hazard.hit=getattr(self,'damage_taken',0)>before
                 if hazard.hit and self.wave_phase==3:self.combo_failed=True
         self.hazards=[h for h in self.hazards if -180<h.x<1480 and h.age<(1.1 if h.kind=='claw' else 4.)]
         if self.wave_phase==3:

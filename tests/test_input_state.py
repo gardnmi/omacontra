@@ -33,4 +33,11 @@ class KeyboardTests(unittest.TestCase):
         keys.release(50);self.assertEqual(keys.keys,{'shift_l'})
         keys.release(62);self.assertFalse(keys.keys)
 
+    def test_scene_change_needs_a_fresh_press_not_autorepeat(self):
+        keys=KeyboardState();self.assertEqual(keys.press(36,'Return'),('return',True))
+        keys.consume();self.assertFalse(keys.keys)
+        self.assertEqual(keys.press(36,'Return'),('return',False))
+        self.assertFalse(keys.keys)
+        keys.release(36);self.assertEqual(keys.press(36,'Return'),('return',True))
+
 if __name__=='__main__':unittest.main()

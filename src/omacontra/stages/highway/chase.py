@@ -217,7 +217,7 @@ class Chase:
         self.aim_target=aim if shoot and aim else None
         if shoot and self.fire<=0:
             self.machine_shots=getattr(self,'machine_shots',0)+1
-            self.fire=.08;self.muzzle=.055;mx,my=self.muzzle_position;a=self.gun_angle
+            self.fire=.08+max(self.fire,-dt);self.muzzle=.055;mx,my=self.muzzle_position;a=self.gun_angle
             self.shots.append(Bullet(mx,my,math.cos(a)*920,math.sin(a)*920,life=2.))
         if self.boss_x>850:self.boss_x=max(850,self.boss_x-dt*180)
         elif self.ram_time<=0:self.boss_x+=(850-self.boss_x)*min(1,dt*3)

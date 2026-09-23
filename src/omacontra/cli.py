@@ -12,6 +12,8 @@ def render_preview(path):
     import cairo
     from omacontra.ui.art import Renderer, W, H
     path=Path(path)
+    # ffmpeg -n exits 0 when it refuses to overwrite, so check first.
+    if path.exists():raise RuntimeError(f'Refusing to overwrite {path}')
     path.parent.mkdir(parents=True,exist_ok=True)
     renderer=Renderer()
     intro=Intro()
@@ -21,18 +23,22 @@ def render_preview(path):
         '-video_size',f'{W}x{H}','-framerate','30','-i','pipe:0','-an',
         '-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p',
         '-movflags','+faststart',str(path)],stdin=subprocess.PIPE)
+    stopped=False
     try:
         for frame in range(frames):
             surface=cairo.ImageSurface(cairo.FORMAT_ARGB32,W,H)
             renderer.draw(cairo.Context(surface),intro,W,H)
             surface.flush()
-            process.stdin.write(surface.get_data())
+            try:process.stdin.write(surface.get_data())
+            except BrokenPipeError:
+                stopped=True;break
             intro.step(1/30)
     finally:
-        process.stdin.close()
+        try:process.stdin.close()
+        except BrokenPipeError:pass
         code=process.wait()
-    if code:
-        raise RuntimeError(f'ffmpeg exited with {code}')
+    if code or stopped:
+        raise RuntimeError(f'ffmpeg exited with {code}' if code else 'ffmpeg stopped reading frames')
     print(f'Rendered {frames/30:.1f}s: {path}')
 
 
