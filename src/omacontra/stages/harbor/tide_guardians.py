@@ -98,10 +98,14 @@ class GuardianCombat:
         # Same playable deck: the defeated water dissipates in front of the duo.
         self.sound('wave_death')
         position=(self.x,self.y,self.vy,self.deck_roll,self.deck_slope)
-        arena=self.rects['arena']
         self.advance_guardian()
         self.x,self.y,self.vy,self.deck_roll,self.deck_slope=position
-        self.rects['arena']=arena
+        # Keep the guardian arena instead of restoring the wave's full deck.
+        height=self.floor-self.y
+        left,_,width,_=self.rects['arena']
+        self.x=max(left+22,min(left+width-22,self.x))
+        self.y=self.floor-height
+        self.respawn_anchor=(self.x,self.floor)
         self.wave_reveal=2.4
         self.guardians[0].timer=2.8;self.guardians[1].timer=3.5
         self.hazards=[];self.tide_warning=None;self.tide_followups=[]
@@ -111,7 +115,7 @@ class GuardianCombat:
         self.stage=1;self.guardians=[Guardian(1,timer=1.),Guardian(2,timer=2.5)]
         self.boss_max=sum(a.maximum for a in self.guardians);self.boss_hp=self.boss_max;self.hp=min(self.max_hp,self.hp+1)
         self.open_time=0.;self.invuln=1.5;self.deck_roll=0.;self.deck_slope=0.
-        self.rects['arena']=(260.,0.,760.,657.);self.x=640.;self.y=min(self.y,self.floor)
+        self.rects['arena']=(260.,0.,700.,657.);self.x=640.;self.y=min(self.y,self.floor)
         self.stage_switched=True
     def step_reveal(self,dt):
         self.transition_age+=dt;self.clock+=dt;self.vy+=1250*dt;self.y=min(self.floor,self.y+self.vy*dt)
