@@ -15,7 +15,7 @@ creates an **Omacontra** entry in the apps menu and an executable named
 at 720p internally by default and scales to your display, keeping detailed
 scene rendering independent of monitor resolution.
 
-### Quick install (when the GitHub release is public)
+### Quick install
 
 Run this in your Omarchy terminal:
 
@@ -29,26 +29,8 @@ needed), and creates the **Omacontra** app-menu entry and `omacontra` executable
 Run it as your normal user, without `sudo`. Re-run the command to update to the
 release selected by the installer; settings and personal bests are preserved.
 
-**The repository is currently private and the runtime release is not published**,
-so this unauthenticated command is not yet available to the public. Authorized testers can use the source installation
-below. A downloadable Arch package is also prepared; see
-[direct package builds and releases](packaging/arch/README.md). It can be hosted
-on GitHub Releases and installed directly, without AUR.
-
-### Testing a private release on another PC
-
-Copy `dist/omacontra-runtime.tar.gz` and `install.sh` from the development PC to
-the other PC, then run this from their download folder:
-
-```sh
-bash install.sh --archive ./omacontra-runtime.tar.gz
-omacontra
-```
-
-The archive is a generated release download, not a file included in a Git clone.
-Build it on the development PC with `python tools/build_release.py`. Use the
-matching `install.sh` from that release so its checksum matches. Alternatively,
-copy the generated `.pkg.tar.zst` and install it with `sudo pacman -U`.
+For direct Arch package installation and offline installs, see
+[direct package builds and releases](packaging/arch/README.md).
 
 ### Install from source
 
@@ -75,8 +57,6 @@ cd omacontra
 `--depth 1` skips old Git history, including retired artwork and original music
 files. Normal updates with `git pull --ff-only` still work. The source checkout
 includes development assets; the packaged download is smaller.
-
-> Before the public release, cloning requires a GitHub account with repository access.
 
 Run the game installer as your normal user. It creates:
 
