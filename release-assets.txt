@@ -385,7 +385,6 @@ screensaver/blackhole.ttframes
 screensaver/colorshift.ttframes
 screensaver/expand.ttframes
 screensaver/fireworks.ttframes
-screensaver/matrix.ttframes
 screensaver/rings.ttframes
 screensaver/swarm.ttframes
 shuttle-boarding-hatch.png

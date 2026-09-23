@@ -13,7 +13,7 @@ import re
 import cairo
 from omacontra.rendering import sprites
 
-EFFECTS=('beams','rings','blackhole','fireworks','swarm','matrix','expand','colorshift')
+EFFECTS=('beams','rings','blackhole','fireworks','swarm','expand','colorshift')
 SGR=re.compile(r'\x1b\[([0-9;]*)m')
 
 @lru_cache(maxsize=1)

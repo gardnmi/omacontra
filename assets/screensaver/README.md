@@ -11,7 +11,7 @@ using a 96 x 30 centered canvas and seed 42. Effects run at Omarchy's
 Animation paths, glyphs and colors come directly from ttfx; the game
 only dims their brightness to keep enemy projectiles readable.
 
-Included: beams, rings, blackhole, fireworks, swarm, matrix, expand,
+Included: beams, rings, blackhole, fireworks, swarm, expand,
 and colorshift. They cycle through the fight and reshuffle on repeat.
 No ttfx process, terminal window or Python TTE package is needed at runtime.
 
