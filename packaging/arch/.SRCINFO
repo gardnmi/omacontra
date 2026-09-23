@@ -1,6 +1,6 @@
 pkgbase = omacontra
 	pkgdesc = Contra-inspired wallpaper boss rush for Omarchy and Hyprland
-	pkgver = 1.0.1
+	pkgver = 1.0.2
 	pkgrel = 1
 	url = https://github.com/gardnmi/omacontra
 	arch = any
@@ -16,10 +16,10 @@ pkgbase = omacontra
 	depends = mpv
 	depends = sdl2-compat
 	depends = hyprland>=0.55
-	source = https://github.com/gardnmi/omacontra/releases/download/v1.0.1/omacontra-runtime.tar.gz
+	source = https://github.com/gardnmi/omacontra/releases/download/v1.0.2/omacontra-runtime.tar.gz
 	source = omacontra.sh
 	source = omacontra.desktop
-	sha256sums = 7e766b318c1fce2d875e16c5417787a2ce720b49e526fdc6f6305227db0cbcbd
+	sha256sums = 4c03098e7237cd1dd939a6c01e5f4cd52aa14b87451776e89bc8a55eb62a97b9
 	sha256sums = 49e077b23d7edeeccc6bca344c9433a7e673580b590742a405fe2c4d895d13fb
 	sha256sums = 6f45d09d1b7c2892d7b16b76964351741506d599f429795263fa976712955992
 

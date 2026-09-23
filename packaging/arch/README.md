@@ -101,7 +101,7 @@ After installing, run `/usr/bin/omacontra --help` from an unrelated directory an
 5. Run `python tools/check_release.py` to verify the version and checksum pins.
    Attach the files to the matching GitHub release. Preserve the project's existing licensing and asset/music attribution.
 
-The current recipe targets `v1.0.1`. For offline installs, transfer the native
+The current recipe targets `v1.0.2`. For offline installs, transfer the native
 package, or transfer the runtime archive plus its matching `install.sh` and run
 `bash install.sh --archive ./omacontra-runtime.tar.gz`.
 

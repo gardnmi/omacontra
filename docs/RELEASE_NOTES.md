@@ -1,5 +1,16 @@
 # Release notes
 
+## 1.0.2
+
+- Fix held keys replaying actions across scene changes and missed input after
+  returning to the game from another window.
+- Keep firing through double-clicks and preserve shot timing across frames.
+- Prevent lingering guardian projectiles from hitting after a guardian is defeated.
+- Correct harbor damage tracking for unlimited-lives runs.
+- Recover safely from invalid saved settings and improve launcher path escaping.
+- Harden preview tools and separate development checks from release checksum checks.
+- Thanks to Fred Nix (@nixfred) for the fixes in [PR #1](https://github.com/gardnmi/omacontra/pull/1).
+
 ## 1.0.1
 
 - Fix installation when a virtual environment, mise, or pyenv shadows system
