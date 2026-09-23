@@ -127,7 +127,7 @@ class BossApp:
         self.workspace=next(i for i in range(2,1000) if i not in used)
         self.title=f'Omacontra-{os.getpid()}-game'
         rule=f'omacontra_boss_{os.getpid()}';self.rules.append(rule)
-        self.h.request(f'eval {rule}=hl.window_rule({{name="{rule}",match={{initial_title="^{self.title}$"}},workspace="{self.workspace}",float=true,no_anim=true,no_blur=true,no_shadow=true,border_size=0,rounding=0,opacity="1 override 1 override"}})')
+        self.h.request(f'eval {rule}=hl.window_rule({{name="{rule}",match={{initial_title="^{self.title}$"}},workspace="{self.workspace}",float=false,no_anim=true,no_blur=true,no_shadow=true,border_size=0,rounding=0,opacity="1 override 1 override"}})')
         self.h.run(f'hl.dsp.focus({{workspace="{self.workspace}"}})')
         win=self.window=Gtk.Window(title=self.title);win.set_decorated(False);win.set_default_size(W,H)
         win.connect('delete-event',lambda *_:self.close() or True)
