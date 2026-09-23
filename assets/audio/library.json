@@ -1,10 +1,11 @@
 {
   "opening_theme": {
     "title": "Omacontra Opening Theme",
-    "file": "omacontra-opening-theme.mp3",
+    "file": "omacontra-opening-theme.opus",
     "source": "User-provided konami-hero-lead [usesuno.com].mp3",
     "usage": "Opening/title screen and menu music player only; excluded from gameplay shuffle",
-    "duration_seconds": 208.848
+    "duration_seconds": 208.848,
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
   },
   "start_impact": {
     "title": "Omacontra Start Impact",
@@ -13,44 +14,31 @@
     "usage": "One-shot explosion with blast, bass rumble and reverberant tail when Start is activated",
     "duration_seconds": 2.35
   },
-  "reaper_battle": {
-    "title": "Quattro (Let's Go, Nerds)",
-    "artist": "Patrick Castiglia",
-    "file": "reaper-quattro-lets-go-nerds.mp3",
-    "source": "https://radio.omarchy.org/playlist/quattro-lets-go-nerds",
-    "download": "https://radio.omarchy.org/tracks/patrick-castiglia-quattro-lets-go-nerds.mp3",
-    "usage": "Archived; excluded from playback and playlist",
-    "duration_seconds": 180.07075
-  },
   "wine_cellar_journey": {
     "title": "Off Duty Mercenary",
-    "file": "wine-cellar-off-duty-mercenary.mp3",
+    "file": "wine-cellar-off-duty-mercenary.opus",
     "source": "User-provided off-duty-mercenary [usesuno.com].mp3",
     "usage": "Continuous gameplay playlist; independent of scenes and levels",
-    "duration_seconds": 194.04
+    "duration_seconds": 194.04,
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
   },
   "quattro_run": {
     "title": "Omarchy Oligarchy (Synthwave Mix)",
     "artist": "YZL81",
-    "file": "quattro-run-omarchy-oligarchy.mp3",
+    "file": "quattro-run-omarchy-oligarchy.opus",
     "source": "https://radio.omarchy.org/playlist/omarchy-oligarchy-synthwave-mix",
     "download": "https://radio.omarchy.org/tracks/yzl81-omarchy-oligarchy-synthwave-mix.mp3",
     "usage": "Final level exclusive; starts at rocket boarding/departure cutscene and loops through Black Moon",
-    "duration_seconds": 276.8
+    "duration_seconds": 276.8,
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
   },
   "contra": {
     "title": "Contra",
-    "file": "contra.mp3",
+    "file": "contra.opus",
     "source": "User-provided contra [usesuno.com].mp3",
     "usage": "Continuous gameplay playlist",
-    "duration_seconds": 208.2
-  },
-  "the_descent": {
-    "title": "The Descent",
-    "file": "the-descent.mp3",
-    "source": "User-provided the-descent [usesuno.com].mp3",
-    "usage": "Manual playback in the menu soundtrack player only; excluded from gameplay shuffle",
-    "duration_seconds": 288.792
+    "duration_seconds": 208.2,
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
   },
   "gameplay_playlist": {
     "loop": true,
@@ -473,10 +461,11 @@
   },
   "boss_battle_protocol": {
     "title": "Boss Battle Protocol",
-    "file": "boss-battle-protocol.mp3",
+    "file": "boss-battle-protocol.opus",
     "source": "User-provided boss-battle-protocol [usesuno.com].mp3",
     "usage": "Shuffled gameplay playlist",
-    "duration_seconds": 245.952
+    "duration_seconds": 245.952,
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
   },
   "bullet_impacts": {
     "title": "Material-specific Bullet Impacts",
@@ -486,10 +475,11 @@
   },
   "arcade_armageddon": {
     "title": "Arcade Armageddon",
-    "file": "arcade-armageddon.mp3",
+    "file": "arcade-armageddon.opus",
     "source": "User-provided arcade-armageddon [usesuno.com].mp3",
     "usage": "Shuffled continuous gameplay playlist and menu music player",
-    "duration_seconds": 219.792
+    "duration_seconds": 219.792,
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
   },
   "space_laser_contact": {
     "title": "Continuous space laser contact",

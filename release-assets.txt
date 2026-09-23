@@ -1,8 +1,8 @@
 # Runtime assets and attribution. Paths are relative to assets/.
 # Keep original/reference assets in Git; add new runtime files explicitly.
 arrival-wallpaper.png
-audio/arcade-armageddon.mp3
-audio/boss-battle-protocol.mp3
+audio/arcade-armageddon.opus
+audio/boss-battle-protocol.opus
 audio/chase/armor.wav
 audio/chase/boost.wav
 audio/chase/boost_ready.wav
@@ -69,7 +69,7 @@ audio/continue/variants/death_blow-1.wav
 audio/continue/variants/death_blow-2.wav
 audio/continue/variants/tick-1.wav
 audio/continue/variants/tick-2.wav
-audio/contra.mp3
+audio/contra.opus
 audio/finale/curtain.wav
 audio/finale/death.wav
 audio/finale/defeat.wav
@@ -124,9 +124,9 @@ audio/menu/complete.wav
 audio/menu/confirm.wav
 audio/menu/move.wav
 audio/menu/open.wav
-audio/omacontra-opening-theme.mp3
+audio/omacontra-opening-theme.opus
 audio/omacontra-start-impact.wav
-audio/quattro-run-omarchy-oligarchy.mp3
+audio/quattro-run-omarchy-oligarchy.opus
 audio/reaper/armor.wav
 audio/reaper/break.wav
 audio/reaper/charge.wav
@@ -184,7 +184,6 @@ audio/sources/force-field/LICENSE.md
 audio/sources/kenney-impact/License.txt
 audio/sources/kenney-scifi/License.txt
 audio/sources/water/ezwa-water_splash/info.txt
-audio/the-descent.mp3
 audio/tide/breaker.wav
 audio/tide/cargo.wav
 audio/tide/cargo_bump.wav
@@ -264,7 +263,7 @@ audio/tide/water_crash.wav
 audio/tide/water_hit.wav
 audio/tide/wave_death.wav
 audio/unlimited-lives-unlock.wav
-audio/wine-cellar-off-duty-mercenary.mp3
+audio/wine-cellar-off-duty-mercenary.opus
 audio/wyrm/breath.wav
 audio/wyrm/core_hit.wav
 audio/wyrm/dash.wav

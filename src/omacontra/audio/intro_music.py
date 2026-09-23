@@ -7,13 +7,13 @@ import subprocess
 
 UNLOCK_SOUND=ASSETS/'audio/unlimited-lives-unlock.wav'
 START_SOUND=ASSETS/'audio/omacontra-start-impact.wav'
-TRACK=ASSETS/'audio/omacontra-opening-theme.mp3'
+TRACK=ASSETS/'audio/omacontra-opening-theme.opus'
 
-JOURNEY_TRACK=ASSETS/'audio/wine-cellar-off-duty-mercenary.mp3'
-FINALE_TRACK=ASSETS/'audio/quattro-run-omarchy-oligarchy.mp3'
+JOURNEY_TRACK=ASSETS/'audio/wine-cellar-off-duty-mercenary.opus'
+FINALE_TRACK=ASSETS/'audio/quattro-run-omarchy-oligarchy.opus'
 GAME_TRACKS=(JOURNEY_TRACK,
-             TRACK.parent/'contra.mp3',
-             TRACK.parent/'boss-battle-protocol.mp3',TRACK.parent/'arcade-armageddon.mp3')
+             TRACK.parent/'contra.opus',
+             TRACK.parent/'boss-battle-protocol.opus',TRACK.parent/'arcade-armageddon.opus')
 
 def shuffled_tracks():
     return tuple(random.sample(GAME_TRACKS,len(GAME_TRACKS)))

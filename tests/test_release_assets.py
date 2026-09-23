@@ -29,7 +29,7 @@ class ReleaseAssetsTests(unittest.TestCase):
 
     def test_all_music_and_screensavers_and_credits_are_included(self):
         assets = set(asset_paths(ROOT))
-        for track in (*GAME_TRACKS, TRACK, FINALE_TRACK, TRACK.parent/'the-descent.mp3', START_SOUND, UNLOCK_SOUND):
+        for track in (*GAME_TRACKS, TRACK, FINALE_TRACK, START_SOUND, UNLOCK_SOUND):
             self.assertIn('audio/' + track.name, assets)
         for effect in EFFECTS:
             self.assertIn(f'screensaver/{effect}.ttframes', assets)

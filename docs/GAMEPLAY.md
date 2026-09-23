@@ -364,7 +364,7 @@ Black Moon screensaver uses eight authentic animations exported from Omarchy’s
 
 After the shuttle launch, Black Moon now has a 14.5-second encounter cinematic: monster reveal, tether check, laser charge, push-off and thruster stabilization. Enter skips the current scene; the fight starts with a 2.25-second reaction window. Preview directly with `python main.py --cutscene encounter`.
 
-Opening music: `assets/audio/omacontra-opening-theme.mp3` (registered in `assets/audio/library.json`). Requires `mpv` for background audio playback. Playback volume is 85%. The track loops through the opening and title screen, pauses with the intro or when its workspace is hidden, restarts with R, and stops on Start or exit. Gameplay and post-Start story scenes use their own tracks.
+Opening music: `assets/audio/omacontra-opening-theme.opus` (registered in `assets/audio/library.json`). Requires `mpv` for background audio playback. Playback volume is 85%. The track loops through the opening and title screen, pauses with the intro or when its workspace is hidden, restarts with R, and stops on Start or exit. Gameplay and post-Start story scenes use their own tracks.
 
 The last-dive cinematic now uses three dedicated illustrated panels in the same narrow black-screen strip as the harbor scenes, with gentle pans and dialogue beneath. Space gameplay uses `dhh-space-laser.png`, an integrated astronaut-and-weapon pose. `src/omacontra/rendering/space_pose.py` shares the drawn muzzle position with beam collision and emission.
 
@@ -391,7 +391,7 @@ After Start, the wine-rack demonstration starts a looping playlist, shuffled onc
 3. Boss Battle Protocol
 4. Arcade Armageddon
 
-Each song plays to completion. The playlist continues across scenes, level changes, victory, death and retries. Pause or hiding the workspace pauses playback; closing the game stops it. Direct launches of levels 1–4 also start the playlist. Black Moon replaces it with Omarchy Oligarchy from the rocket boarding cutscene onward. The pre-Start opening theme and Start explosion remain separate. Quattro (Let’s Go, Nerds) is archived and no longer plays. Track sources and order are registered in `assets/audio/library.json`; all MP3s are local.
+Each song plays to completion. The playlist continues across scenes, level changes, victory, death and retries. Pause or hiding the workspace pauses playback; closing the game stops it. Direct launches of levels 1–4 also start the playlist. Black Moon replaces it with Omarchy Oligarchy from the rocket boarding cutscene onward. The pre-Start opening theme and Start explosion remain separate. Quattro (Let’s Go, Nerds) is archived and no longer plays. Track sources and order are registered in `assets/audio/library.json`; all music files are local 96 kbps VBR Opus.
 
 ### Secret title-screen code
 
@@ -701,8 +701,9 @@ Total shield health is 1,350 (up from 900); exposed-phase health is unchanged.
 Exposed jellyfish contact now uses the approved Reaper damage impacts at ten
 hits per second while the beam connects. The rejected static loop is removed.
 
-The Descent remains available for manual playback in the soundtrack player,
-but is excluded from the gameplay shuffle.
+The soundtrack contains six songs: four shuffled gameplay tracks, the opening
+theme, and the finale-exclusive track. The Descent and the retired Quattro /
+Let's Go Nerds song were removed from the music menu and current repository.
 
 ### Default 720p rendering
 

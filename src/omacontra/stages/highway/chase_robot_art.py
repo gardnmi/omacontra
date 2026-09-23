@@ -33,12 +33,9 @@ def robot(c,f,alpha=1,deploy=1):
         c.restore();return
     # Draw one connected silhouette, with both feet anchored to the road.
     sprites.draw(c,SHEET,(0,0,496,1024),left,top,238.08,491.52,alpha=alpha)
-    # Wheel hubs rotate inside their original armored sockets. All layers use
-    # the same body transform, so joints never detach or leave rectangular cuts.
-    for px,py,rx,ry in ((236,807,20,33),(419,689,19,28),(451,790,17,27),(482,422,13,26)):
-        c.save();c.translate(left+px*SCALE,top+py*SCALE);c.scale(rx*SCALE,ry*SCALE)
-        c.arc(0,0,1,0,math.tau);c.clip();c.rotate(f.robot_age*2.3)
-        sprites.draw(c,SHEET,(px-rx,py-ry,rx*2,ry*2),-1,-1,2,2,alpha=alpha);c.restore()
+    # The chassis wheels are fixed armor in robot form. Keep their painted
+    # perspective intact under the body transform; spinning flat cutouts here
+    # bends the oblique rims and drags tire/armor pixels across their sockets.
     # Short pressure releases from the shoulder vents accompany the brace.
     vent=(f.robot_age+1.2)%3.75
     if 0<vent<.8:

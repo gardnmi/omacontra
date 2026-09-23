@@ -43,8 +43,8 @@ class IntroMusicTests(unittest.TestCase):
             self.assertIn('--loop-file=no',args)
             self.assertEqual(args[args.index('--')+1:],[str(p) for p in GAME_TRACKS])
             self.assertEqual([p.name for p in GAME_TRACKS],[
-                'wine-cellar-off-duty-mercenary.mp3',
-                'contra.mp3','boss-battle-protocol.mp3','arcade-armageddon.mp3'])
+                'wine-cellar-off-duty-mercenary.opus',
+                'contra.opus','boss-battle-protocol.opus','arcade-armageddon.opus'])
             for _ in range(10):music.update(True)
             launch.assert_called_once();music.stop()
 

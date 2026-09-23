@@ -139,3 +139,21 @@ Current artwork and required original transparency masks are listed in
 - `assets/dhh-run-carry.png`
 - `assets/dhh-run-carry-v2.png`
 - `assets/reference/canonical-characters.png`
+
+## Retired soundtrack entries
+
+Removed from the current repository and music menu; prior files remain in Git
+history. Retained here for historical attribution:
+
+- **The Descent**: User-provided the-descent [usesuno.com].mp3.
+- **Quattro (Let's Go, Nerds)**: https://radio.omarchy.org/playlist/quattro-lets-go-nerds; artist: Patrick Castiglia.
+
+## Compact soundtrack release
+
+The six active songs now ship as stereo 48 kHz Opus, 96 kbps target VBR,
+using FFmpeg libopus (`-map 0:a:0 -map_metadata -1 -c:a libopus -b:a 96k
+-vbr on -application audio`). No trimming, normalization or gain changes.
+Original MP3 sources and their attribution remain recoverable in Git history;
+local comparison originals also remain under ignored `review/music-originals/`.
+Runtime music changed from 30.86 MiB to 15.57 MiB. All song roles and playlist
+behavior are unchanged; `assets/audio/library.json` retains original sources.
