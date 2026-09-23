@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-EFFECTS=('beams','rings','blackhole','fireworks','swarm','expand','colorshift')
+EFFECTS=('beams','rings','blackhole')
 
 def unpack(data):
     stream=io.BytesIO(data)

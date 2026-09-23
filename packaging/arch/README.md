@@ -104,7 +104,7 @@ After installing, run `/usr/bin/omacontra --help` from an unrelated directory an
 5. Make the release public before advertising the online installer command.
    Preserve the project's existing licensing and asset/music attribution.
 
-The current recipe targets `v0.1.0-lean.2`; it has not been published. For private
+The current recipe targets `v0.1.0-lean.3`; it has not been published. For private
 other-PC tests, transfer the native package directly, or transfer the runtime
 archive plus `install.sh` and run `bash install.sh --archive ./omacontra-runtime.tar.gz`.
 

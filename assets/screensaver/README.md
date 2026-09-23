@@ -11,8 +11,10 @@ using a 96 x 30 centered canvas and seed 42. Effects run at Omarchy's
 Animation paths, glyphs and colors come directly from ttfx; the game
 only dims their brightness to keep enemy projectiles readable.
 
-Included: beams, rings, blackhole, fireworks, swarm, expand,
-and colorshift. They cycle through the fight and reshuffle on repeat.
+Included at runtime: beams, rings, and blackhole, repeating in that order.
+Each animation holds its final frame for 0.6 seconds: total slots are 4.27,
+12.27, and 9.30 seconds respectively (25.83 seconds per complete cycle).
+Other retained exports are development-only and excluded from release downloads.
 No ttfx process, terminal window or Python TTE package is needed at runtime.
 
 ## Runtime performance

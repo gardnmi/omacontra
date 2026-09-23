@@ -382,11 +382,7 @@ screensaver/LICENSE-ttfx
 screensaver/README.md
 screensaver/beams.ttframes
 screensaver/blackhole.ttframes
-screensaver/colorshift.ttframes
-screensaver/expand.ttframes
-screensaver/fireworks.ttframes
 screensaver/rings.ttframes
-screensaver/swarm.ttframes
 shuttle-boarding-hatch.png
 shuttle-launch-gantry.png
 tide-overstock-cart.md

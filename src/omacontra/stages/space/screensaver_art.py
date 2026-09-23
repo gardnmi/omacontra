@@ -8,12 +8,11 @@ from functools import lru_cache
 import struct
 import zlib
 import json
-import random
 import re
 import cairo
 from omacontra.rendering import sprites
 
-EFFECTS=('beams','rings','blackhole','fireworks','swarm','expand','colorshift')
+EFFECTS=('beams','rings','blackhole')
 SGR=re.compile(r'\x1b\[([0-9;]*)m')
 
 @lru_cache(maxsize=1)
@@ -57,11 +56,9 @@ class Screensaver:
         self.cycle_duration=sum(len(c['frames'])/c['fps']+.6 for c in self.clips.values())
 
     def frame_at(self,t):
-        t=max(0,t);cycle=int(t/self.cycle_duration);t%=self.cycle_duration
+        t=max(0,t)%self.cycle_duration
         order=list(EFFECTS)
-        # Start with beams for an immediate visible transition; subsequent
-        # cycles reshuffle the same authentic effects like the screensaver.
-        if cycle:random.Random(73+cycle).shuffle(order)
+        # Repeat the chosen progression in the same order on every cycle.
         for name in order:
             clip=self.clips[name];duration=len(clip['frames'])/clip['fps']+.6
             if t<duration:

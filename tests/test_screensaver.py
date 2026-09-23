@@ -18,7 +18,13 @@ class ScreensaverTests(unittest.TestCase):
             self.assertEqual(s.frame_at(t+.001),(name,0))
             t+=len(clip['frames'])/clip['fps']+.6
         self.assertAlmostEqual(t,s.cycle_duration)
-        self.assertIn(s.frame_at(t+.01)[0],EFFECTS)
+        self.assertEqual(EFFECTS,('beams','rings','blackhole'))
+        for cycle in (1,2,10):
+            offset=cycle*t
+            for name in EFFECTS:
+                self.assertEqual(s.frame_at(offset+.001),(name,0))
+                clip=s.clips[name]
+                offset+=len(clip['frames'])/clip['fps']+.6
 
     def test_clock_driven_playback_and_frame_cache(self):
         s=Screensaver();surface=cairo.ImageSurface(cairo.FORMAT_ARGB32,1280,720)
