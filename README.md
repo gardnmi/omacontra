@@ -5,6 +5,8 @@
 A Contra-inspired **boss-only** fullscreen game. Five encounters bring wallpaper worlds to life: the Reaper, Quattro Run, Tidebreaker, the Mist Gate, and Black Moon. DHH runs, jumps, ducks,
 and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit firing stream.
 
+**Currently keyboard and mouse only. Controller support is not yet available.**
+
 ## Install on Omarchy
 
 Install Omacontra as a standalone app on your Omarchy desktop. The installer
