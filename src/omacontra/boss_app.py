@@ -159,7 +159,7 @@ class BossApp:
             self.fullscreen=bool(client.get('fullscreen',0))
             self.visible=self.h.request('activeworkspace',True)['id']==self.workspace
             if not self.visible:
-                self.slide_requested=False;self.keyboard.consume();self.shooting=False
+                self.slide_requested=False;self.keyboard.clear();self.shooting=False
                 if getattr(self,'frontend',None) and not self.frontend.page:self.frontend.open()
         except Exception as error:print(f'OMACONTRA: {error}',flush=True);self.close();return False
         return True
@@ -384,7 +384,8 @@ class BossApp:
         return True
     def unfocus(self,*_):
         if getattr(self,'frontend',None) and self.placed and not self.frontend.page:self.frontend.open()
-        self.slide_requested=False;self.keyboard.consume();self.shooting=False
+        # Releases may go to another app; do not retain consumed physical keys.
+        self.slide_requested=False;self.keyboard.clear();self.shooting=False
         if getattr(self,'weapon_audio',None):self.weapon_audio.silence()
         return False
 

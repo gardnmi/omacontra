@@ -30,5 +30,8 @@ jobs:
           desktop-file-validate packaging/arch/omacontra.desktop
       - name: Build runtime archive
         run: /usr/bin/python3 tools/build_release.py
-      - name: Verify archive matches installer pin
+      - name: Verify release archive matches installer pin
+        # Development commits intentionally differ from the published download.
+        # PRs still build the complete archive and run inventory/pin unit tests.
+        if: startsWith(github.ref, 'refs/tags/v')
         run: /usr/bin/python3 tools/check_release.py

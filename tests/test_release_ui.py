@@ -292,4 +292,25 @@ class ReleaseTests(unittest.TestCase):
                 self.assertEqual(profile.settings,{'music':100,'effects':100})
                 self.assertEqual(profile.best,{'arcade':90.})
 
+    def test_refocus_accepts_key_released_while_away(self):
+        from types import SimpleNamespace
+        for path in ('unfocus','hidden_workspace'):
+            with self.subTest(path=path):
+                a=self.app();a.frontend.open('pause')
+                event=SimpleNamespace(hardware_keycode=116,keyval=0)
+                with patch('omacontra.boss_app.Gdk.keyval_name',return_value='Down'):
+                    a.key(None,event)
+                    before=a.frontend.selection
+                    if path=='unfocus':a.unfocus()
+                    else:
+                        a.title='test';a.workspace=5;a.h=Mock()
+                        a.h.request.side_effect=lambda request,*_: ([{'initialTitle':'test','fullscreen':1}]
+                                                                  if request=='clients' else {'id':6})
+                        self.assertTrue(a.sync())
+                    # The compositor sends the release to another window.
+                    # Returning to the game must accept this genuinely new press.
+                    a.key(None,event)
+                    self.assertEqual(a.frontend.selection,before+1)
+                    self.assertFalse(a.keyboard.held)
+
 if __name__=='__main__':unittest.main()
