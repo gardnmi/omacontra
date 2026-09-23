@@ -22,6 +22,10 @@ class InstallTests(unittest.TestCase):
             shutil.copytree(installer.ROOT / 'src', source / 'src', ignore=shutil.ignore_patterns('__pycache__'))
             shutil.copy2(installer.ROOT / 'main.py', source / 'main.py')
             (source / 'README.md').write_text('Test installation')
+            shutil.copy2(installer.ROOT/'LICENSE',source/'LICENSE')
+            (source / 'docs').mkdir()
+            for name in ('SUPPORT.md','RELEASE_NOTES.md'):
+                shutil.copy2(installer.ROOT/'docs'/name,source/'docs'/name)
             (source / 'assets').mkdir()
             (source / 'assets/sentinel').write_text('asset')
             (source / 'release-assets.txt').write_text('sentinel\n')
@@ -32,6 +36,9 @@ class InstallTests(unittest.TestCase):
             with patch.object(installer, 'ROOT', source), patch.object(installer, 'check_dependencies'), redirect_stdout(io.StringIO()):
                 installer.install(prefix)
                 target, launcher, desktop = installer.locations(prefix)
+                self.assertEqual((target/'LICENSE').read_text(),(source/'LICENSE').read_text())
+                self.assertTrue((target/'docs/SUPPORT.md').is_file())
+                self.assertTrue((target/'docs/RELEASE_NOTES.md').is_file())
                 self.assertFalse((target / 'test_unused.py').exists())
                 self.assertFalse(list(target.rglob('__pycache__')))
                 self.assertTrue((target / 'assets/sentinel').exists())

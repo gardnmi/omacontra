@@ -29,6 +29,13 @@ def stage_game(root, target):
     target.mkdir(parents=True, exist_ok=True)
     for name in ('main.py', 'README.md'):
         shutil.copy2(root / name, target / name)
+    for name in ('LICENSE',):
+        if (root/name).is_file():shutil.copy2(root/name,target/name)
+    for name in ('SUPPORT.md','RELEASE_NOTES.md'):
+        source=root/'docs'/name
+        if source.is_file():
+            (target/'docs').mkdir(exist_ok=True)
+            shutil.copy2(source,target/'docs'/name)
     shutil.copytree(root / 'src', target / 'src',
                     ignore=shutil.ignore_patterns('__pycache__', '*.pyc', '*.pyo'))
     shutil.copytree(root / 'THIRD_PARTY', target / 'THIRD_PARTY')

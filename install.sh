@@ -3,6 +3,7 @@
 set -euo pipefail
 
 main() {
+    status() { printf '\n==> %s\n' "$*"; }
     local archive='' action=install
     local -a installer_args=()
     while (($#)); do
@@ -34,25 +35,29 @@ main() {
     work=$(mktemp -d -t omacontra-install.XXXXXXXX)
     # Expand the trusted mktemp path now; cleanup also runs on failed downloads.
     trap "rm -rf -- '$work'" EXIT
-    local release=v0.1.0-lean.8
-    local checksum=2b14eff62ca2dac94154c99e2609900080f67f585a0465f0d9f006da70d25c07
+    local release=v0.1.0-rc.1
+    local checksum=1986f0014c40f3375701079151e1af4876e40fc7f74259387bca48a7814b2403
     if [[ -n $archive ]]; then
+        status 'Using local release archive'
         cp -- "$archive" "$work/game.tar.gz"
     else
         command -v curl >/dev/null || { echo 'Install curl first.' >&2; return 1; }
-        echo 'Downloading the Omacontra runtime...'
+        status 'Downloading Omacontra (curl shows transfer progress)'
         if ! curl --fail --location --show-error --retry 3 --proto '=https' --tlsv1.2 \
             "https://github.com/gardnmi/omacontra/releases/download/$release/omacontra-runtime.tar.gz" -o "$work/game.tar.gz"; then
             echo 'Download failed. The selected GitHub release must be published and public; testers can use --archive FILE with the runtime download.' >&2
             return 1
         fi
     fi
+    status 'Verifying release checksum'
     printf '%s  %s\n' "$checksum" "$work/game.tar.gz" | sha256sum --check --status || {
         echo 'Download verification failed; nothing has been installed.' >&2
         return 1
     }
+    status 'Extracting game files'
     mkdir "$work/game"
     tar -xzf "$work/game.tar.gz" -C "$work/game" --strip-components=1 --no-same-owner --no-same-permissions
+    status 'Checking system dependencies'
     local -a required=(python)
     if [[ $action == install ]]; then
         required+=(python-gobject python-cairo gtk3 mpv sdl2-compat 'hyprland>=0.55')
@@ -80,7 +85,13 @@ main() {
             return 1
         }
     fi
+    if [[ $action == uninstall ]]; then
+        status 'Removing installed game'
+    else
+        status 'Installing game files and app-menu launcher'
+    fi
     python "$work/game/install.py" "${installer_args[@]}"
+    if [[ $action == install ]]; then status 'Ready — launch Omacontra from the apps menu or run omacontra'; fi
 }
 
 # Keep the whole script parsed before running, including when piped into bash.

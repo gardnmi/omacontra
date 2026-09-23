@@ -3,7 +3,6 @@
 This directory contains a native Arch package recipe, executable launcher,
 and desktop entry. Distribute the built package directly through GitHub Releases.
 **No AUR listing is needed or planned.**
-The source repository is currently private; builders need repository access.
 
 The lean download is built with `python tools/build_release.py`. The builder and
 per-user installer share `release_assets.py` and `release-assets.txt` with this
@@ -12,9 +11,9 @@ Original sound recordings and build intermediates remain development-only;
 retired artwork has been removed from the current repository tree. All active
 music, artwork, sound effects, and screensaver animation frames are unchanged.
 
-## Build and install now
+## Build and install
 
-From a checkout with access to the game's GitHub repository:
+From a checkout of the game repository:
 
 ```sh
 omarchy pkg add base-devel python
@@ -28,15 +27,13 @@ sudo pacman -U ./omacontra-*.pkg.tar.zst
 ```
 
 Run `makepkg` as your normal user. Dependency installation and `pacman -U` may
-request your password. The build uses the locally prepared runtime archive; after publication it can
-also download that same archive from GitHub Releases. Its checksum must match
+request your password. The build uses the locally prepared runtime archive; it can also download that same archive from GitHub Releases. Its checksum must match
 the recipe. It installs no development tools into the game itself. Later builds in the same
 directory can use `makepkg --syncdeps --cleanbuild --force`.
 
 The resulting `.pkg.tar.zst` is a normal Arch package. A release can distribute
 this file directly for installation with `sudo pacman -U <downloaded-package>`;
-users would not need to clone or build the game. Do not publish the package until
-the source and distribution terms are ready for release.
+users do not need to clone or build the game.
 
 ### Switching from the existing per-user install
 
@@ -88,12 +85,12 @@ After installing, run `/usr/bin/omacontra --help` from an unrelated directory an
 
 ## Updating and publishing direct downloads
 
-1. Run `python tools/build_release.py` from the project root. This creates
+1. Set `src/omacontra/version.py` to the new release version. Run `python tools/build_release.py` from the project root. This creates
    `dist/omacontra-runtime.tar.gz` and its `.sha256` file. The archive includes the
    local installer and its inventory, not tests, build tools, or unused assets.
 2. Set a new release tag in `_release` (PKGBUILD) and `release` (root `install.sh`).
    Update the archive checksum in both files from the builder's output. Keep the
-   matching script beside the archive when sharing a private test download.
+   matching script beside the archive when sharing an offline download.
 3. Update `pkgver`/`pkgrel`; regenerate `.SRCINFO` with
    `makepkg --printsrcinfo > .SRCINFO`. Build and test the package from the local
    archive as above. Copy the resulting `.pkg.tar.zst` to `dist/`.
@@ -101,12 +98,12 @@ After installing, run `/usr/bin/omacontra --help` from an unrelated directory an
    and package checksum to the selected GitHub Release when ready. Do not
    substitute GitHub's automatic full-source archive: that includes development
    data. No AUR listing or submission is needed.
-5. Make the release public before advertising the online installer command.
-   Preserve the project's existing licensing and asset/music attribution.
+5. Run `python tools/check_release.py` to verify the version and checksum pins.
+   Attach the files to the matching GitHub release. Preserve the project's existing licensing and asset/music attribution.
 
-The current recipe targets `v0.1.0-lean.8`; it has not been published. For private
-other-PC tests, transfer the native package directly, or transfer the runtime
-archive plus `install.sh` and run `bash install.sh --archive ./omacontra-runtime.tar.gz`.
+The current recipe targets `v0.1.0-rc.1`. For offline installs, transfer the native
+package, or transfer the runtime archive plus its matching `install.sh` and run
+`bash install.sh --archive ./omacontra-runtime.tar.gz`.
 
 Downloaded local packages do not receive package-manager updates from GitHub
 automatically. Install newer packages with `pacman -U`; per-user installations

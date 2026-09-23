@@ -5,7 +5,9 @@
     "source": "User-provided konami-hero-lead [usesuno.com].mp3",
     "usage": "Opening/title screen and menu music player only; excluded from gameplay shuffle",
     "duration_seconds": 208.848,
-    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming",
+    "creation_tool": "Suno (project owner attribution, 2026-09-22)",
+    "artist": "Suno / directed by gardnmi"
   },
   "start_impact": {
     "title": "Omacontra Start Impact",
@@ -20,7 +22,9 @@
     "source": "User-provided off-duty-mercenary [usesuno.com].mp3",
     "usage": "Continuous gameplay playlist; independent of scenes and levels",
     "duration_seconds": 194.04,
-    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming",
+    "creation_tool": "Suno (project owner attribution, 2026-09-22)",
+    "artist": "Suno / directed by gardnmi"
   },
   "quattro_run": {
     "title": "Omarchy Oligarchy (Synthwave Mix)",
@@ -30,7 +34,8 @@
     "download": "https://radio.omarchy.org/tracks/yzl81-omarchy-oligarchy-synthwave-mix.mp3",
     "usage": "Final level exclusive; starts at rocket boarding/departure cutscene and loops through Black Moon",
     "duration_seconds": 276.8,
-    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming",
+    "creation_tool": "Suno (project owner attribution, 2026-09-22)"
   },
   "contra": {
     "title": "Contra",
@@ -38,7 +43,9 @@
     "source": "User-provided contra [usesuno.com].mp3",
     "usage": "Continuous gameplay playlist",
     "duration_seconds": 208.2,
-    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming",
+    "creation_tool": "Suno (project owner attribution, 2026-09-22)",
+    "artist": "Suno / directed by gardnmi"
   },
   "gameplay_playlist": {
     "loop": true,
@@ -465,7 +472,9 @@
     "source": "User-provided boss-battle-protocol [usesuno.com].mp3",
     "usage": "Shuffled gameplay playlist",
     "duration_seconds": 245.952,
-    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming",
+    "creation_tool": "Suno (project owner attribution, 2026-09-22)",
+    "artist": "Suno / directed by gardnmi"
   },
   "bullet_impacts": {
     "title": "Material-specific Bullet Impacts",
@@ -479,7 +488,9 @@
     "source": "User-provided arcade-armageddon [usesuno.com].mp3",
     "usage": "Shuffled continuous gameplay playlist and menu music player",
     "duration_seconds": 219.792,
-    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming"
+    "encoding": "Opus, 96 kbps target VBR, stereo 48 kHz; transcoded from the credited MP3 source, no normalization or trimming",
+    "creation_tool": "Suno (project owner attribution, 2026-09-22)",
+    "artist": "Suno / directed by gardnmi"
   },
   "space_laser_contact": {
     "title": "Continuous space laser contact",

@@ -1,3 +1,4 @@
+from omacontra.version import __version__
 """Cached game artwork and lightweight animated arcade menu chrome."""
 from functools import lru_cache
 import math
@@ -88,6 +89,7 @@ def draw(c,f):
     # Small moving indicator, not a screen-wide shader or particle system.
     box(c,80,70,22,5,(*GREEN,.65+.25*math.sin(t*2)))
     text(c,116,80,'OMACONTRA',16,GREEN)
+    text(c,280,80,f'v{__version__}',12,MUTED)
     text(c,950,80,'MISSION DEBRIEF' if f.page=='results' else 'FIELD TERMINAL',13,MUTED)
     text(c,80,139,TITLES[f.page],34,width=1090)
     box(c,80,161,1120,1,(.24,.33,.27,1))
@@ -154,7 +156,7 @@ def controls(c):
             text(c,x+169,y+24,row[j*2+1],15,width=368)
 
 def credits(c,f):
-    pages=[('THE PEOPLE & THE PIXELS',['Created by gardnmi','DHH and Tobi: fictional action-adventure portrayals','Pixel artwork: AI-assisted original game assets','Visual direction: Omarchy wallpaper worlds','Movement inspiration: Contra','Gun-effect inspiration: Blazing Chrome']),('THE SOUNDTRACK',['Off Duty Mercenary / user-provided track','Omarchy Oligarchy (Synthwave Mix) / YZL81','Contra / user-provided track','Boss Battle Protocol / user-provided track','Arcade Armageddon / user-provided track','Omacontra Opening Theme / user-provided track','Sources: Omarchy Radio and supplied recordings']),('SOUND & TOOLS',['Kenney / Sci-Fi + Impact Sounds (CC0)','Force field hum / Hansjörg Malthaner (CC BY 4.0)','Free Firearm Sound Library (CC0)','Ben Jaszczak, Brian Nelson, Kevin Heras, Matthew Nanney','Ocean Splash / Thimras (CC0)','Short Water Splashes / ezwa, qubodup (CC0)','Original menu tones / Omacontra','Screensaver: Omarchy / terminal text effects','Source notes: assets/audio/sources/README.md'])]
+    pages=[('THE PEOPLE & THE PIXELS',['Direction and production / gardnmi','DHH and Tobi: fictional action-adventure portrayals','AI code and art / Codex, OpenAI GPT-6 Astra (medium)','Worlds inspired by Omarchy wallpapers','Movement inspiration: Contra','Gun-effect inspiration: Blazing Chrome']),('THE SOUNDTRACK',['Off Duty Mercenary / Suno','Omarchy Oligarchy (Synthwave Mix) / YZL81','Contra / Suno','Boss Battle Protocol / Suno','Arcade Armageddon / Suno','Omacontra Opening Theme / Suno','Music generated with Suno; YZL81 track via Omarchy Radio']),('SOUND & TOOLS',['Kenney / Sci-Fi + Impact Sounds (CC0)','Force field hum / Hansjörg Malthaner (CC BY 4.0)','Free Firearm Sound Library (CC0)','Ben Jaszczak, Brian Nelson, Kevin Heras, Matthew Nanney','Ocean Splash / Thimras (CC0)','Short Water Splashes / ezwa, qubodup (CC0)','Wind / remaxim (CC0); thunder / Jerimee (CC BY 3.0)','Screensaver: Omarchy / terminal text effects','Source notes: assets/audio/sources/README.md'])]
     heading,lines=pages[f.credits_page]
     text(c,80,207,heading,19,GREEN)
     for i,line in enumerate(lines):text(c,80,247+i*37,line,17,width=1090)

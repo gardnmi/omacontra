@@ -127,8 +127,8 @@ Generated review captures stay locally in `review/` and are excluded from Git.
 Asset provenance and source credits remain alongside assets and in `THIRD_PARTY/`.
 Optional asset-rebuild tools may additionally need ffmpeg, Pillow or ttfx; these
 are not needed to play the prebuilt game. The copied window helper retains its
-original MIT notice; this move does not assign a new license to the game's art
-or music.
+original MIT notice. Original game code and documentation are [MIT licensed](LICENSE);
+artwork and music retain their separate terms.
 
 ## Project layout
 
@@ -148,3 +148,16 @@ ships the runtime package and the assets listed in `release-assets.txt`; develop
 
 See [architecture](docs/ARCHITECTURE.md), [gameplay/design notes](docs/GAMEPLAY.md),
 and the [full game script](GAME_SCRIPT.md).
+
+## Version, release notes, and support
+
+Run `omacontra --version` to identify your installed build; the menus also show it.
+See [release notes](docs/RELEASE_NOTES.md), [known limitations and troubleshooting](docs/SUPPORT.md),
+and [report a bug](https://github.com/gardnmi/omacontra/issues/new/choose).
+
+## Credits and distribution terms
+
+Original code and documentation are [MIT licensed](LICENSE).
+See [sources and attribution](THIRD_PARTY/README.md) and the
+[asset permissions inventory](THIRD_PARTY/ASSET_RIGHTS.md). Third-party assets
+retain their own terms; the code license does not automatically cover music or artwork.
