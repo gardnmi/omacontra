@@ -14,15 +14,26 @@ class SecretCodeTests(unittest.TestCase):
         intro=Intro();intro.index=len(intro.beats)-1
         return intro
 
-    def test_exact_code_only_unlocks_on_title_and_only_once(self):
-        intro=Intro()
-        for key in SECRET_CODE:self.assertFalse(intro.enter_code(key))
-        intro=self.title()
-        for key in SECRET_CODE[:-1]:self.assertFalse(intro.enter_code(key))
+    def test_code_unlocks_during_every_opening_beat_and_only_once(self):
+        for index in range(len(Intro().beats)):
+            with self.subTest(beat=index):
+                intro=Intro();intro.index=index
+                for key in SECRET_CODE[:-1]:self.assertFalse(intro.enter_code(key))
+                self.assertTrue(intro.enter_code(SECRET_CODE[-1]))
+                self.assertTrue(intro.unlimited_lives)
+                for key in SECRET_CODE:self.assertFalse(intro.enter_code(key))
+
+    def test_code_survives_transition_to_title(self):
+        intro=Intro();intro.index=len(intro.beats)-2
+        for key in SECRET_CODE[:4]:intro.enter_code(key)
+        intro.step(intro.beat.duration)
+        for key in SECRET_CODE[4:-1]:intro.enter_code(key)
         self.assertTrue(intro.enter_code(SECRET_CODE[-1]))
-        self.assertTrue(intro.unlimited_lives)
-        for key in SECRET_CODE:self.assertFalse(intro.enter_code(key))
+
+    def test_code_disabled_after_start_and_during_journey(self):
         intro=self.title();intro.request_start()
+        for key in SECRET_CODE:self.assertFalse(intro.enter_code(key))
+        intro=Intro(journey=True)
         for key in SECRET_CODE:self.assertFalse(intro.enter_code(key))
 
     def test_wrong_sequence_resets_but_overlapping_prefix_can_recover(self):
@@ -57,7 +68,7 @@ class SecretCodeTests(unittest.TestCase):
         from omacontra.boss_app import BossApp
         from omacontra.input_state import KeyboardState
         from types import SimpleNamespace
-        app=BossApp.__new__(BossApp);app.intro=self.title()
+        app=BossApp.__new__(BossApp);app.intro=Intro()
         app.keyboard=KeyboardState();app.f=Fight();app.level=1
         app.unlimited_lives=False;app.unlock_sound=Mock()
         for index,key in enumerate(SECRET_CODE*2):
@@ -76,3 +87,15 @@ class SecretCodeTests(unittest.TestCase):
             intro.unlock_age=t
             s=cairo.ImageSurface(cairo.FORMAT_ARGB32,W,H)
             renderer.draw(cairo.Context(s),intro,W,H)
+
+    def test_opening_beat_shows_unlock_confirmation(self):
+        intro=Intro()
+        for key in SECRET_CODE:intro.enter_code(key)
+        renderer=Renderer()
+        surface=cairo.ImageSurface(cairo.FORMAT_ARGB32,W,H)
+        with patch.object(renderer,'unlock_banner') as banner:
+            renderer.draw(cairo.Context(surface),intro,W,H)
+            banner.assert_called_once()
+            intro.step(4)
+            renderer.draw(cairo.Context(surface),intro,W,H)
+            banner.assert_called_once()

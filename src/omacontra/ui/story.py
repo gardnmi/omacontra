@@ -68,7 +68,7 @@ class Intro:
         return self.journey and self.index==len(self.beats)-1 and self.age>=self.beat.duration
 
     def enter_code(self,key):
-        if self.beat.kind!='cover' or self.start_age is not None or self.unlimited_lives:return False
+        if self.journey or self.start_age is not None or self.unlimited_lives:return False
         self.code_keys=(*self.code_keys,key)[-len(SECRET_CODE):]
         if self.code_keys==SECRET_CODE:
             self.unlimited_lives=True;self.unlock_age=0.;self.code_keys=()

@@ -229,5 +229,7 @@ class Renderer:
         if kind!='cover' and not (intro.journey and kind=='wake'):
             text(c,'SPACE / NEXT    P / PAUSE    R / REPLAY    ESC / EXIT',H-16,10,GOLD)
             if t<.22:box(c,0,0,W,H,(0,0,0),1-t/.22)
+        if kind!='cover' and not intro.journey and intro.unlock_age is not None and intro.unlock_age<3.4:
+            self.unlock_banner(c,intro)
         if intro.paused:text(c,'PAUSED',H-34,12,CREAM)
         c.restore()
