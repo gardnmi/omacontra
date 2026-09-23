@@ -1,0 +1,37 @@
+# Maintainer: gardnmi <https://github.com/gardnmi>
+# Pinned pre-release snapshot; publish only after the source is public.
+pkgname=omacontra
+pkgver=0.1.0.r24.g40e9992
+pkgrel=1
+pkgdesc='Contra-inspired wallpaper boss rush for Omarchy and Hyprland'
+arch=('any')
+url='https://github.com/gardnmi/omacontra'
+# No project-wide distribution license has been assigned. Preserve the
+# existing notice; this metadata does not grant new distribution rights.
+license=('LicenseRef-Unknown')
+depends=('python' 'python-gobject' 'python-cairo' 'gtk3' 'mpv' 'sdl2-compat' 'hyprland>=0.55')
+makedepends=('git')
+_commit=40e99926b147aea0575d5f0d0c58d78a411baa2c
+source=("omacontra::git+${url}.git#commit=${_commit}"
+        'omacontra.sh'
+        'omacontra.desktop')
+sha256sums=('76f374273c594877e099287ff9eaa9374c02092db62c88c0199ad23b03ab23c2'
+            'dfe19c75ab0b0da99b3324aae5dfbd6dd56a41a8e13267ed6030f7bdaffffa02'
+            '6f45d09d1b7c2892d7b16b76964351741506d599f429795263fa976712955992')
+
+package() {
+    local game="${pkgdir}/usr/share/omacontra"
+    install -d "$game"
+    cp -r "${srcdir}/omacontra/"{src,assets,THIRD_PARTY} "$game/"
+    install -m644 "${srcdir}/omacontra/"{main.py,README.md} "$game/"
+    # Never ship developer bytecode or inherit writable/executable asset modes.
+    find "$game" -type d -name __pycache__ -prune -exec rm -rf {} +
+    find "$game" -type f -name '*.py[co]' -delete
+    find "$game" -type d -exec chmod 755 {} +
+    find "$game" -type f -exec chmod 644 {} +
+    install -Dm755 "${srcdir}/omacontra.sh" "${pkgdir}/usr/bin/omacontra"
+    install -Dm644 "${srcdir}/omacontra.desktop" "${pkgdir}/usr/share/applications/omacontra.desktop"
+    install -Dm644 "$game/assets/omacontra-cover-v2.png" "${pkgdir}/usr/share/pixmaps/omacontra.png"
+    install -Dm644 "$game/THIRD_PARTY/README.md" "${pkgdir}/usr/share/licenses/omacontra/NOTICE"
+    install -m644 "$game/THIRD_PARTY/hyprsplitter-LICENSE.txt" "${pkgdir}/usr/share/licenses/omacontra/"
+}

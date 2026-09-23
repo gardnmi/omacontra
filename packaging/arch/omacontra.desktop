@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Omacontra
+Comment=Five worlds. One boss rush.
+Exec=/usr/bin/omacontra
+TryExec=/usr/bin/omacontra
+Icon=omacontra
+Terminal=false
+Categories=Game;ActionGame;
+Keywords=Arcade;Boss;Omarchy;
+StartupNotify=false

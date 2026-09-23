@@ -13,6 +13,28 @@ creates an **Omacontra** entry in the apps menu and an executable named
 at 720p internally by default and scales to your display, keeping detailed
 scene rendering independent of monitor resolution.
 
+### Quick install (when the repository is public)
+
+Run this in your Omarchy terminal:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/gardnmi/omacontra/main/install.sh | bash
+```
+
+No Git checkout or AUR package is needed. The installer downloads a verified game
+snapshot, installs missing system dependencies (asking for your password if
+needed), and creates the **Omacontra** app-menu entry and `omacontra` executable.
+Run it as your normal user, without `sudo`. Re-run the command to update to the
+snapshot selected by the installer; settings and personal bests are preserved.
+
+**The repository is currently private**, so this unauthenticated command is not
+yet available to the public. Authorized testers can use the source installation
+below. A downloadable Arch package is also prepared; see
+[direct package builds and releases](packaging/arch/README.md). It can be hosted
+on GitHub Releases and installed directly, without AUR.
+
+### Install from source
+
 ### 1. Install the required packages
 
 Open a terminal in Omarchy and run:
