@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.1.0-rc.3
+
+- Move the spaceship hatch below the cockpit glass and align the elevator stop,
+  walkway, and boarding animation with the new entrance.
+
 ## 0.1.0-rc.2
 
 - Wider gaps between the dragon’s first-phase eye fireballs make platform crossings

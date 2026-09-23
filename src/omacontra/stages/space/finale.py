@@ -7,6 +7,7 @@ from omacontra.stages.reaper.combat import segment_box
 from omacontra.rendering.space_pose import laser_muzzle
 
 DEPARTURE_LAUNCH_AT=15.
+BOARDING_LANDING_Y=-65. # Hull hatch below the cockpit glass.
 DEPARTURE_DURATION=23.
 ENCOUNTER_DURATION=14.5
 REAR_VIEW_AT=14.4
@@ -20,8 +21,8 @@ def boarding_pose(t):
     rise=ease((t-5.8)/5.)
     cross=ease((t-11.4)/2.4)
     x=545+165*walk+260*cross
-    floor=495-640*rise
-    camera=590*rise
+    floor=495-(495-BOARDING_LANDING_Y)*rise
+    camera=(445-BOARDING_LANDING_Y)*rise
     door=1-ease((t-5.2)/.6)+ease((t-10.8)/.6)
     alpha=1-ease((t-13.4)/.6)
     moving=3<t<5.2 or 11.4<t<13.8

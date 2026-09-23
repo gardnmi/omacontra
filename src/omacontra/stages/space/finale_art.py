@@ -11,7 +11,7 @@ from omacontra.rendering import combat_fx as fx
 from omacontra.stages.dragon.wyrm_scene import ground as mist_ground, fog as mist_fog, lightning as mist_lightning
 from omacontra.rendering.laser_art import draw_arc_beam
 from omacontra.stages.space import containment_shield
-from omacontra.stages.space.finale import REAR_VIEW_AT, ENDING_DURATION, DEPARTURE_LAUNCH_AT, boarding_pose, ENCOUNTER_DURATION
+from omacontra.stages.space.finale import BOARDING_LANDING_Y, REAR_VIEW_AT, ENDING_DURATION, DEPARTURE_LAUNCH_AT, boarding_pose, ENCOUNTER_DURATION
 from omacontra.stages.reaper.battle_art import color, glow, line, label
 
 FRAMES=((50,0,410,510),(525,0,495,550),(1125,0,300,510),(70,510,375,510),(450,680,640,230),(1090,550,440,460))
@@ -192,7 +192,7 @@ class FinaleRenderer:
 
     def shuttle_hatch(self,c,t,front=False):
         # Ceramic pressure hatch shares the shuttle's white hull and teal glass.
-        x,y,w,h=933,-257,54,112
+        x,y,w,h=933,BOARDING_LANDING_Y-112,54,112
         closed=clamp((t-13.9)/.7)
         if not front:
             sprites.draw(c,'shuttle-boarding-hatch.png',(96,148,486,982),x,y,w,h)
@@ -217,8 +217,8 @@ class FinaleRenderer:
                 line(c,[(x,-333),(x,floor-105)],'cream',1,.6)
             # Ground boarding uses the existing foundry deck. A second
             # support platform here projected through its front wall.
-            fx.platform(c,775,952,-145,-115)
-            # Recessed hatch in the side of the cockpit hull.
+            fx.platform(c,775,952,BOARDING_LANDING_Y,BOARDING_LANDING_Y+30)
+            # Hatch and walkway share the solid hull landing below the cockpit.
             self.shuttle_hatch(c,t)
             color(c,'ink',.35);c.rectangle(648,floor-104,124,104);c.fill()
             return
