@@ -2,6 +2,7 @@
 """Install or remove Omacontra for the current user; no root access required."""
 import argparse
 import importlib
+import os
 from pathlib import Path
 import shlex
 import shutil
@@ -34,7 +35,8 @@ def check_dependencies():
     if not (find_library('SDL2') or find_library('SDL2-2.0')):
         missing.append('SDL2')
     if missing:
-        raise RuntimeError('Missing dependencies: '+', '.join(missing)+'. See README.md.')
+        raise RuntimeError('Missing dependencies: '+', '.join(missing)+
+                           f'. Python: {sys.executable}. On Omarchy, install python-gobject, python-cairo, gtk3, mpv and sdl2-compat with pacman. See README.md.')
 
 
 def locations(prefix):
@@ -67,7 +69,7 @@ def install(prefix):
                 backup.rename(target)
             raise
     launcher.parent.mkdir(parents=True, exist_ok=True)
-    launcher.write_text('#!/bin/sh\n# Managed by Omacontra\nexec '+shlex.quote(sys.executable)+' '+shlex.quote(str(target/'main.py'))+' "$@"\n')
+    launcher.write_text('#!/bin/sh\n# Managed by Omacontra\nexec '+shlex.quote(sys.executable)+' -E -s '+shlex.quote(str(target/'main.py'))+' "$@"\n')
     launcher.chmod(0o755)
     desktop.parent.mkdir(parents=True, exist_ok=True)
     command = str(launcher).replace('%', '%%').replace('\\', '\\\\').replace('"', '\\"').replace('`', '\\`').replace('$', '\\$')
@@ -88,6 +90,13 @@ def uninstall(prefix):
 
 
 def main():
+    # Arch packages install GI/Cairo for system Python, not mise/pyenv/venvs.
+    system_python=Path('/usr/bin/python')
+    if Path('/etc/arch-release').exists() and system_python.is_file():
+        if (Path(sys.executable).resolve()!=system_python.resolve()
+                or sys.prefix!=sys.base_prefix
+                or not sys.flags.ignore_environment or not sys.flags.no_user_site):
+            os.execv(str(system_python),[str(system_python),'-E','-s',str(ROOT/'install.py'),*sys.argv[1:]])
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--prefix', type=Path, default=Path.home()/'.local')
     parser.add_argument('--uninstall', action='store_true')

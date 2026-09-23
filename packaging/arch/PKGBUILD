@@ -1,7 +1,7 @@
 # Maintainer: gardnmi <https://github.com/gardnmi>
 # Pinned release archive; checksum must match install.sh.
 pkgname=omacontra
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc='Contra-inspired wallpaper boss rush for Omarchy and Hyprland'
 arch=('any')
@@ -9,12 +9,12 @@ url='https://github.com/gardnmi/omacontra'
 # MIT covers original code; bundled assets retain separate terms.
 license=('MIT' 'CC0-1.0' 'CC-BY-3.0' 'CC-BY-4.0' 'LicenseRef-Omacontra-Assets')
 depends=('python' 'python-gobject' 'python-cairo' 'gtk3' 'mpv' 'sdl2-compat' 'hyprland>=0.55')
-_release=v1.0.0
+_release=v1.0.1
 source=("${url}/releases/download/${_release}/omacontra-runtime.tar.gz"
         'omacontra.sh'
         'omacontra.desktop')
-sha256sums=('ad26f480f9c1a0451bd24af3af859ae20dc18f7f752896964bf0f1e5ade20ee3'
-            'dfe19c75ab0b0da99b3324aae5dfbd6dd56a41a8e13267ed6030f7bdaffffa02'
+sha256sums=('7e766b318c1fce2d875e16c5417787a2ce720b49e526fdc6f6305227db0cbcbd'
+            '49e077b23d7edeeccc6bca344c9433a7e673580b590742a405fe2c4d895d13fb'
             '6f45d09d1b7c2892d7b16b76964351741506d599f429795263fa976712955992')
 
 package() {

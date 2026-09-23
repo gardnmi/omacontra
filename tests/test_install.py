@@ -44,11 +44,12 @@ class InstallTests(unittest.TestCase):
                 self.assertTrue((target / 'assets/sentinel').exists())
                 self.assertFalse((target / 'assets/unused-original.wav').exists())
                 env = dict(os.environ)
-                env.pop('PYTHONPATH', None)
+                env['PYTHONPATH'] = str(root/'unrelated-python-libraries')
+                env['PYTHONHOME'] = str(root/'nonexistent-python-home')
                 result = subprocess.run([str(launcher), '--help'], cwd=root, env=env, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn('--guardians', result.stdout)
-                result = subprocess.run([sys.executable, '-c', 'import sys; sys.path.insert(0, sys.argv[1]); from omacontra.resources import ASSETS; print(ASSETS)', str(target / 'src')], cwd=root, env=env, capture_output=True, text=True, check=True)
+                result = subprocess.run([sys.executable, '-E', '-s', '-c', 'import sys; sys.path.insert(0, sys.argv[1]); from omacontra.resources import ASSETS; print(ASSETS)', str(target / 'src')], cwd=root, env=env, capture_output=True, text=True, check=True)
                 self.assertEqual(result.stdout.strip(), str(target / 'assets'))
                 (target / 'stale-module.py').write_text('old install')
                 installer.install(prefix)
@@ -73,3 +74,13 @@ class InstallTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 installer.uninstall(prefix)
             self.assertEqual(protected.read_text(), 'user data')
+
+    @unittest.skipUnless(Path('/etc/arch-release').exists(), 'Arch system-Python bootstrap')
+    def test_source_installer_reexecutes_system_python_from_virtual_environment(self):
+        with TemporaryDirectory() as temp:
+            venv=Path(temp)/'venv'
+            subprocess.run([sys.executable,'-m','venv','--without-pip',str(venv)],check=True)
+            result=subprocess.run([str(venv/'bin/python'),str(installer.ROOT/'install.py'),'--check'],
+                                  capture_output=True,text=True,timeout=20)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.assertIn('Runtime dependencies available',result.stdout)

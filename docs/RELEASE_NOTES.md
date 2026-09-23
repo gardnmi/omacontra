@@ -1,5 +1,12 @@
 # Release notes
 
+## 1.0.1
+
+- Fix installation when a virtual environment, mise, or pyenv shadows system
+  Python: use Arch’s system interpreter for GI and Cairo dependencies.
+- Ignore PYTHONHOME, PYTHONPATH, and user-site packages in installed launchers.
+- Include the interpreter path in missing-dependency diagnostics.
+
 ## 1.0.0
 
 First public release for Omarchy / Hyprland.

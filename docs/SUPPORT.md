@@ -38,3 +38,20 @@ Uninstalling preserves them. Back up that file before testing profile changes.
 
 Automated tests cover simulation, rendering, and installation, but hosted CI does
 not run the interactive Hyprland window test or replace a full human playthrough.
+
+## Missing gi or cairo
+
+The installer and installed launcher use `/usr/bin/python`, because Arch installs
+`python-gobject` and `python-cairo` for that interpreter. A mise/pyenv Python or a
+virtual environment may not have those modules. Update using the README installer
+command to get the interpreter fix introduced in 1.0.1.
+
+Check the system interpreter directly:
+
+```sh
+/usr/bin/python -E -s -c 'import gi, cairo; print("GTK/Cairo imports OK")'
+```
+
+If this also fails, install the system packages with
+`sudo pacman -S --needed python-gobject python-cairo gtk3`, then retry. Do not use
+`pip install gi` as a replacement for the Arch packages.

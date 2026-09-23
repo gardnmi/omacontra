@@ -35,8 +35,8 @@ main() {
     work=$(mktemp -d -t omacontra-install.XXXXXXXX)
     # Expand the trusted mktemp path now; cleanup also runs on failed downloads.
     trap "rm -rf -- '$work'" EXIT
-    local release=v1.0.0
-    local checksum=ad26f480f9c1a0451bd24af3af859ae20dc18f7f752896964bf0f1e5ade20ee3
+    local release=v1.0.1
+    local checksum=7e766b318c1fce2d875e16c5417787a2ce720b49e526fdc6f6305227db0cbcbd
     if [[ -n $archive ]]; then
         status 'Using local release archive'
         cp -- "$archive" "$work/game.tar.gz"
@@ -90,7 +90,7 @@ main() {
     else
         status 'Installing game files and app-menu launcher'
     fi
-    python "$work/game/install.py" "${installer_args[@]}"
+    /usr/bin/python -E -s "$work/game/install.py" "${installer_args[@]}"
     if [[ $action == install ]]; then status 'Ready — launch Omacontra from the apps menu or run omacontra'; fi
 }
 
