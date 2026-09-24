@@ -60,6 +60,30 @@ Use versioned deployment directories before enabling long-lived asset caching;
 `index.html`, `game.zip`, and the asset manifest must belong to the same build.
 This branch does not publish or alter the desktop installer/release.
 
+## Cloudflare Pages hosting
+
+Public game: **https://omacontra.pages.dev/**
+
+The `omacontra` Pages project serves only static files. It has no Pages
+Functions, server Worker, database, or R2 dependency. Under current Pages
+pricing, static requests are free and unlimited. Keep future deployments
+static-only to retain this hosting model.
+
+To publish an update from the repository root, after testing:
+
+```sh
+npm --prefix web run assets
+npm --prefix web run build
+npx --yes wrangler@4.138.0 pages deploy web/dist --project-name omacontra --branch main
+```
+
+Wrangler must be signed into the owning Cloudflare account (`wrangler login`).
+The `main` argument selects the Pages production environment; it does not merge
+or change the checked-out Git branch. Direct Upload publishes the local build;
+Git pushes do not automatically deploy it. Upload only `web/dist`, never the
+repository or credential files. For a non-production preview, use another
+`--branch` value. Keep Wrangler's local `.wrangler/` cache out of Git.
+
 ## Fidelity and performance
 
 The browser executes the **same Python encounter, cinematic, and UI source** as
