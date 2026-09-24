@@ -40,6 +40,8 @@ function send(message: any) {
 }
 function fatal(message: string) {
   failed = true;
+  gate.dataset.state = "error";
+  gate.setAttribute("aria-busy", "false");
   for (const p of pending.values()) p.reject(new Error(message));
   pending.clear();
   gate.hidden = false;
@@ -84,7 +86,9 @@ worker.onmessage = (e) => {
   pending.get(data.request)?.resolve(status);
   pending.delete(data.request);
   if (!active) {
-    loading.textContent = "The full campaign. Headphones recommended.";
+    gate.dataset.state = "ready";
+    gate.setAttribute("aria-busy", "false");
+    loading.textContent = "Cartridge loaded. Ready when you are.";
     play.hidden = false;
   }
   if (status.closed) {

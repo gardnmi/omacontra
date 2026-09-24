@@ -40,7 +40,7 @@ scope.onmessage = (event: MessageEvent) => {
         };
         scope.postMessage({
           type: "loading",
-          message: "Loading the game runtime…",
+          message: "Powering up…",
         });
         const { loadPyodide } = await import(
           /* @vite-ignore */ `${root}python/pyodide.mjs`
