@@ -58,9 +58,11 @@ export class CampaignAudio {
       this.limiter.curve = curve;
       this.limiter.connect(this.master);
     }
-    await this.context.resume();
+    const resumed = this.context.resume();
+    // Flush boot state synchronously, before gameplay can emit newer state.
     for (const state of this.pendingMusic) this.music(state);
     this.pendingMusic = [];
+    await resumed;
     this.preload(1);
   }
   visibility(hidden: boolean) {
@@ -146,7 +148,9 @@ export class CampaignAudio {
     // Apply the browser mix trim at the output, including saved volume settings.
     // Start/unlock cues share this player but must keep their effects volume.
     const outputGain = state.volume * (state.effect ? 1 : 0.25);
-    c.gain.gain.setTargetAtTime(outputGain, this.context.currentTime, 0.025);
+    if (this.context.state === "running")
+      c.gain.gain.setTargetAtTime(outputGain, this.context.currentTime, 0.025);
+    else c.gain.gain.value = outputGain;
     if (changed) {
       c.element.pause();
       c.index = 0;

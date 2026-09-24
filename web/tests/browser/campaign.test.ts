@@ -359,3 +359,24 @@ test("high DPI stays 720p, unavailable storage is safe, and loading errors are v
   );
   await broken.close();
 });
+
+test("unavailable audio never blocks campaign or prototype startup", async ({
+  browser,
+}) => {
+  for (const failure of ["pending", "rejected"]) {
+    const page = await browser.newPage();
+    await page.addInitScript((failure) => {
+      AudioContext.prototype.resume = () =>
+        failure === "pending"
+          ? new Promise<void>(() => {})
+          : Promise.reject(new Error("No audio device"));
+    }, failure);
+    await boot(page);
+    await expect.poll(async () => (await state(page)).intro).not.toBe(null);
+    await page.goto("/reaper.html");
+    await expect(page.locator("#start")).toBeEnabled();
+    await page.locator("#start").click();
+    await expect(page.locator("#panel")).toBeHidden();
+    await page.close();
+  }
+});

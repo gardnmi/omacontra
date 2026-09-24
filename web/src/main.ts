@@ -89,13 +89,17 @@ async function activate() {
   start.disabled = true;
   text("load-status", "PREPARING SOUND…");
   el("load-status").hidden = false;
-  try {
-    await audio.init(manifest);
-  } catch (error) {
-    console.warn("Audio unavailable; playing silently", error);
-    audio.setMuted(true);
-    text("mute", "SOUND OFF");
-  }
+  // Audio hardware is optional; a pending resume must never hold up Play.
+  void audio
+    .init(manifest)
+    .then(() => {
+      if (mode === "playing") return audio.resume();
+    })
+    .catch((error) => {
+      console.warn("Audio unavailable; playing silently", error);
+      audio.setMuted(true);
+      text("mute", "SOUND OFF");
+    });
   busy = false;
   start.disabled = false;
   newFight();

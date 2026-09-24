@@ -100,12 +100,16 @@ worker.onmessage = (e) => {
   if (perf.simulation + perf.render > 150) last = performance.now();
 };
 worker.postMessage({ type: "boot", root, profile, request: 0 });
-play.addEventListener("click", async () => {
+play.addEventListener("click", () => {
   if (failed) {
     location.reload();
     return;
   }
-  await audio.unlock();
+  // Some browsers never resolve resume() when no audio device is available.
+  // Start immediately; sound can join when the device becomes ready.
+  void audio
+    .unlock()
+    .catch((error) => console.warn("Audio unavailable", error));
   active = true;
   gate.hidden = true;
   canvas.focus();
