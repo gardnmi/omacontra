@@ -9,9 +9,10 @@ and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit
 
 ## Browser build
 
-The `feature/web-port` branch includes the full five-stage browser campaign.
-See [browser playtest and build instructions](web/README.md). The browser build
-uses the original game code and assets at 720p, with local browser saves.
+**[Play Omacontra in your browser](https://omacontra.pages.dev/)** — no installation required.
+
+The full five-stage browser campaign uses the original game code and assets at
+720p, with local browser saves. See [browser playtest and build instructions](web/README.md).
 
 ## Install on Omarchy
 

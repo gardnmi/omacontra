@@ -1,6 +1,6 @@
 # Omacontra — full browser campaign
 
-The complete five-stage game runs in the browser on `feature/web-port`:
+The complete five-stage game runs in the browser:
 Reaper, Quattro Run (including its robot phase), Tidebreaker and both guardians,
 the Mist Gate dragon, and Black Moon. This includes the original opening,
 inter-stage cinematics, Tobi's rescue, spaceship boarding, ending, menus,
@@ -58,7 +58,7 @@ Images load as scenes need them, short effects are cached, and music streams.
 Keep `campaign/credits/` and its runtime license/source notices with the build.
 Use versioned deployment directories before enabling long-lived asset caching;
 `index.html`, `game.zip`, and the asset manifest must belong to the same build.
-This branch does not publish or alter the desktop installer/release.
+Browser deployments do not publish or alter the desktop installer/release.
 
 ## Cloudflare Pages hosting
 
