@@ -372,7 +372,7 @@ class BossApp:
             self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
         elif key=='return' and self.level==2 and self.f.state=='won' and self.chase_cinema and self.chase_cinema.age>=5.5:
             self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
-        elif key=='return' and self.level==3 and self.f.state=='won' and self.journey_cinema and self.journey_cinema.age>=5.5:
+        elif key=='return' and self.level==3 and self.f.state=='won' and self.journey_cinema and self.journey_cinema.kind=='outro':
             self.advance_campaign();self.keyboard.consume();self.shooting=False;self.slide_requested=False
         return True
 

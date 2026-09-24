@@ -374,15 +374,24 @@ class FoundryTests(unittest.TestCase):
         from types import SimpleNamespace
         from omacontra.boss_app import BossApp
         from omacontra.input_state import KeyboardState
-        app=BossApp.__new__(BossApp);app.keyboard=KeyboardState();app.keys=app.keyboard.keys
-        app.level=3;app.f=SimpleNamespace(state='won',hp=2);app.journey_cinema=SimpleNamespace(kind='outro',age=6)
-        app.intro=None;app.chase_cinema=None;app.paused=False;app.shooting=True;app.slide_requested=False
-        app.key(None,SimpleNamespace(hardware_keycode=36,keyval=65293))
-        self.assertEqual(app.level,4);self.assertIsInstance(app.f,Foundry);self.assertEqual(app.f.hp,3)
-        self.assertFalse(app.shooting);self.assertIsNone(app.journey_cinema)
-        app.f.begin_rescue();app.reset_encounter()
-        self.assertEqual(app.f.state,'play');self.assertEqual(app.f.rescue_age,0)
-        self.assertEqual(app.foundry_intro.age,0)
+        for age in (0., .2, 2., 5.49, 6.):
+            with self.subTest(outro_age=age):
+                app=BossApp.__new__(BossApp);app.keyboard=KeyboardState();app.keys=app.keyboard.keys
+                app.level=3;app.f=SimpleNamespace(state='won',hp=2);app.journey_cinema=SimpleNamespace(kind='outro',age=age)
+                app.intro=None;app.chase_cinema=None;app.paused=False;app.shooting=True;app.slide_requested=True
+                event=SimpleNamespace(hardware_keycode=36,keyval=65293)
+                app.key(None,event)
+                self.assertEqual(app.level,4);self.assertIsInstance(app.f,Foundry);self.assertEqual(app.f.hp,3)
+                self.assertFalse(app.shooting);self.assertFalse(app.slide_requested);self.assertIsNone(app.journey_cinema)
+                # Holding Enter must not also skip the newly opened dragon intro.
+                app.key(None,event)
+                self.assertEqual(app.foundry_intro.age,0)
+                app.release(None,event);app.key(None,event)
+                self.assertTrue(app.foundry_intro.finished)
+                app.f.begin_rescue();app.reset_encounter()
+                self.assertEqual(app.f.state,'play');self.assertEqual(app.f.rescue_age,0)
+                self.assertEqual(app.foundry_intro.age,0)
+
 
 
 if __name__=='__main__':unittest.main()

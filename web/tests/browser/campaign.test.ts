@@ -127,7 +127,8 @@ test("all five encounters, uninterrupted progression, final music and results", 
     await script(page, 'app.f.state="won"');
     await expect.poll(async () => (await state(page)).cleared).toContain(level);
     if (level === 2) await script(page, "app.chase_cinema.age=6");
-    if (level === 3) await script(page, "app.journey_cinema.age=6");
+    // The guardian outro advertises Enter immediately; no hidden wait.
+    if (level === 3) await script(page, "app.journey_cinema.age=0");
     const hp = (await state(page)).hp;
     await page.keyboard.press("Enter");
     await expect.poll(async () => (await state(page)).level).toBe(level + 1);
