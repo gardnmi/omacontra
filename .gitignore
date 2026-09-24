@@ -13,3 +13,7 @@ output/
 *.mkv
 *.log
 .DS_Store
+node_modules/
+web/public/game/
+web/test-results/
+web/playwright-report/

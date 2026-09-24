@@ -1,0 +1,265 @@
+:root {
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  color: #dad5b1;
+  background: #080b0a;
+  color-scheme: dark;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  gap: 12px;
+}
+#game {
+  position: relative;
+  width: min(1280px, 100%, calc((100dvh - 72px) * 16 / 9));
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #101713;
+  box-shadow:
+    0 0 0 1px #354b38,
+    0 20px 80px #0009;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+#game:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#game:fullscreen canvas {
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: auto;
+  aspect-ratio: 16/9;
+}
+#game:fullscreen #hud {
+  inset: auto;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #536c43;
+  background: #17281c;
+  color: #bdd891;
+  padding: 12px 22px;
+  letter-spacing: 0.04em;
+}
+button:hover,
+button:focus-visible {
+  background: #314b2a;
+  outline: 2px solid #afcc87;
+  outline-offset: 2px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+a {
+  color: #abc888;
+}
+#panel {
+  position: absolute;
+  left: 9%;
+  top: 12%;
+  width: 70%;
+  max-width: 780px;
+  background: #080f0df2;
+  border: 1px solid #526c46;
+  border-left: 4px solid #b1cc85;
+  padding: clamp(14px, 3vw, 38px);
+  box-shadow: 0 18px 70px #0008;
+}
+h1 {
+  font-size: clamp(24px, 4vw, 48px);
+  letter-spacing: 0.06em;
+  margin: 18px 0;
+}
+p {
+  line-height: 1.6;
+  font-size: clamp(10px, 1.2vw, 15px);
+}
+.eyebrow {
+  font-size: clamp(10px, 1.1vw, 14px);
+  color: #afd17e;
+  letter-spacing: 0.08em;
+  display: flex;
+  justify-content: space-between;
+}
+.eyebrow span {
+  color: #758b7c;
+}
+#instructions {
+  color: #99a697;
+  margin: 20px 0;
+}
+#instructions b {
+  color: #dad5b1;
+}
+#instructions p {
+  margin: 8px 0;
+}
+#practice-row {
+  font-size: clamp(10px, 1.1vw, 14px);
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin: 16px 0;
+}
+input {
+  accent-color: #aacd7e;
+}
+#load-status {
+  font-size: 12px;
+  color: #94a780;
+}
+#panel button {
+  margin: 4px 10px 4px 0;
+}
+.fine {
+  color: #849487;
+  font-size: 11px;
+  margin-bottom: 0;
+}
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-size: clamp(9px, 1.1vw, 14px);
+  text-shadow:
+    1px 1px #000,
+    -1px -1px #000;
+}
+header {
+  height: 5.14%;
+  background: #0c1010;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.1%;
+  font-size: clamp(10px, 1.2vw, 15px);
+}
+#boss-track {
+  position: absolute;
+  top: 3.7%;
+  left: 1.1%;
+  right: 1.1%;
+  height: 0.45%;
+  background: #493329;
+}
+#boss-health {
+  height: 100%;
+  width: 100%;
+  background: #ed4732;
+}
+#player-status {
+  position: absolute;
+  top: 8%;
+  left: 1.2%;
+  line-height: 1.8;
+  max-width: 42%;
+}
+#lives {
+  font-size: clamp(12px, 1.65vw, 20px);
+  color: #b9d784;
+  letter-spacing: 3px;
+}
+#ability {
+  font-size: 0.8em;
+  color: #b4d887;
+}
+#notice {
+  margin-top: 12px;
+}
+#warning {
+  position: absolute;
+  top: 8%;
+  right: 3%;
+  color: #ffb095;
+  font-weight: bold;
+  max-width: 48%;
+  text-align: right;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.4% 1%;
+  font-size: clamp(8px, 0.9vw, 11px);
+  background: #0a0d0ce8;
+}
+nav {
+  width: min(1280px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #85957e;
+  gap: 10px;
+}
+nav button {
+  font-size: 10px;
+  padding: 8px 10px;
+  margin-left: 5px;
+}
+#performance {
+  position: absolute;
+  bottom: 5%;
+  right: 2%;
+  white-space: pre;
+  background: #06100dee;
+  padding: 10px;
+  color: #b6d795;
+  font-size: 12px;
+  pointer-events: none;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 700px) {
+  #instructions {
+    margin: 10px 0;
+  }
+  #panel {
+    top: 5%;
+    width: 90%;
+    left: 5%;
+    padding: 12px;
+  }
+  h1 {
+    margin: 8px 0;
+  }
+  #panel button {
+    padding: 7px 14px;
+  }
+  .fine,
+  #practice-row,
+  #load-status {
+    font-size: 9px;
+  }
+  nav > span {
+    display: none;
+  }
+  #panel p {
+    margin: 7px 0;
+  }
+}
