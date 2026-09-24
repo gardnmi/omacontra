@@ -88,7 +88,7 @@ worker.onmessage = (e) => {
   if (!active) {
     gate.dataset.state = "ready";
     gate.setAttribute("aria-busy", "false");
-    loading.textContent = "Cartridge loaded. Ready when you are.";
+    loading.textContent = "DHH is ready. Let’s go.";
     play.hidden = false;
   }
   if (status.closed) {

@@ -4,6 +4,7 @@ type Music = {
   active: boolean;
   paused: boolean;
   volume: number;
+  effect: boolean;
   loop: boolean;
   generation: number;
 };
@@ -141,7 +142,11 @@ export class CampaignAudio {
       c.state.generation !== state.generation ||
       c.state.tracks.join("|") !== state.tracks.join("|");
     c.state = state;
-    c.gain.gain.setTargetAtTime(state.volume, this.context.currentTime, 0.025);
+    // Music recordings are mastered much louder than the bounded effects mix.
+    // Apply the browser mix trim at the output, including saved volume settings.
+    // Start/unlock cues share this player but must keep their effects volume.
+    const outputGain = state.volume * (state.effect ? 1 : 0.25);
+    c.gain.gain.setTargetAtTime(outputGain, this.context.currentTime, 0.025);
     if (changed) {
       c.element.pause();
       c.index = 0;
@@ -256,6 +261,7 @@ export class CampaignAudio {
       paused: c.element.paused,
       track: c.state.tracks[c.index],
       time: c.element.currentTime,
+      gain: c.gain.gain.value,
     }));
   }
 }

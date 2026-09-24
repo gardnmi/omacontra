@@ -115,6 +115,7 @@ class BrowserMusic(OriginalMusic):
             "active": self.active,
             "paused": self.paused,
             "volume": self.volume / 100,
+            "effect": self.start_effect or all(p.endswith(".wav") for p in tracks),
             "loop": not self.start_effect and "--loop-file=no" not in self.extra_args,
             "generation": self.generation,
         }

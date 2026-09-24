@@ -94,92 +94,31 @@ h1 {
 h1 span {
   color: #ffaf47;
 }
-.cartridge-loader {
-  position: relative;
-  width: 116px;
-  height: 122px;
+.hero-loader {
+  width: 160px;
+  height: 140px;
   margin: 22px 0 14px;
-  transform-origin: left bottom;
 }
-.cartridge {
-  position: absolute;
-  width: 68px;
-  height: 88px;
-  left: 24px;
-  top: 0;
-  background: #aaa99c;
-  border: 4px solid #343b3d;
-  border-radius: 3px 3px 0 0;
-  box-shadow:
-    inset 3px 0 #dfd8bc,
-    inset -4px 0 #6c736e;
-  animation: insert-cartridge 2.4s ease-in-out infinite;
+.loading-dhh {
+  width: 128px;
+  height: 112px;
+  background: url("./assets/loading-dhh.png") 0 0 / 3968px 112px no-repeat;
+  image-rendering: pixelated;
+  transform: scale(1.25);
+  transform-origin: left top;
+  animation: dhh-run 0.65s steps(30) infinite;
 }
-.cartridge-ridges {
-  height: 11px;
-  margin: 3px 5px;
-  background: repeating-linear-gradient(0deg, #606a65 0 2px, #b5b6a5 2px 4px);
+#gate:not([data-state="loading"]) .loading-dhh {
+  animation: none;
+  background-position: -3840px 0;
 }
-.cartridge-label {
-  background: #542b26;
-  border: 2px solid #292d2c;
-  margin: 0 6px;
-  height: 45px;
-  text-align: center;
-  color: #eee0ac;
-  font-size: 9px;
-  padding-top: 3px;
-  line-height: 1.1;
+#gate[hidden] .loading-dhh {
+  animation-play-state: paused;
 }
-.cartridge-label span,
-.cartridge-label b {
-  display: block;
-}
-.cartridge-label i {
-  display: block;
-  color: #ffb642;
-  font-style: normal;
-  font-size: 13px;
-  margin-top: 2px;
-}
-.cartridge-contacts {
-  height: 8px;
-  width: 38px;
-  margin: 4px auto 0;
-  background: repeating-linear-gradient(90deg, #c7983c 0 4px, #51412b 4px 6px);
-}
-.console-slot {
-  position: absolute;
-  z-index: 2;
-  left: 8px;
-  bottom: 23px;
-  width: 100px;
-  height: 10px;
-  border: 3px solid #6c776d;
-  background: #040807;
-  box-shadow: 0 -3px #293331;
-}
-.console-base {
-  position: absolute;
-  z-index: 3;
-  bottom: 0;
-  width: 116px;
-  height: 25px;
-  border: 3px solid #4b5750;
-  background: #202d29;
-  box-shadow: inset 0 3px #737b66;
-}
-.console-base i {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin: 8px 5px 0 10px;
-  background: #c25d31;
-  animation: power-light 2.4s steps(1) infinite;
-}
-.console-base span {
-  color: #b8b898;
-  font-size: 8px;
+@keyframes dhh-run {
+  to {
+    background-position: -3840px 0;
+  }
 }
 #loading {
   color: #e2d9bb;
@@ -188,90 +127,14 @@ h1 span {
   line-height: 1.5;
   max-width: 32em;
 }
-.loading-pips {
-  display: flex;
-  gap: 6px;
-  height: 28px;
-}
-.loading-pips i {
-  width: 16px;
-  height: 5px;
-  background: #4c4d3d;
-  animation: load-pip 1.2s steps(1) infinite;
-}
-.loading-pips i:nth-child(2) {
-  animation-delay: 0.12s;
-}
-.loading-pips i:nth-child(3) {
-  animation-delay: 0.24s;
-}
-.loading-pips i:nth-child(4) {
-  animation-delay: 0.36s;
-}
-.loading-pips i:nth-child(5) {
-  animation-delay: 0.48s;
-}
 .load-hint {
   color: #8e9485;
   letter-spacing: 0.06em;
   font-size: clamp(7px, 0.85cqw, 12px);
   margin: 18px 0 0;
 }
-#gate:not([data-state="loading"]) .cartridge {
-  animation: none;
-  transform: translateY(17px);
-}
-#gate:not([data-state="loading"]) .console-base i {
-  animation: none;
-  background: #b4d582;
-  box-shadow: 0 0 7px #b4d58280;
-}
-#gate:not([data-state="loading"]) .loading-pips {
-  display: none;
-}
-#gate[data-state="error"] .console-base i {
-  background: #f65b37;
-}
-#gate[hidden] * {
-  animation-play-state: paused;
-}
-@keyframes insert-cartridge {
-  0%,
-  15%,
-  100% {
-    transform: translateY(0);
-  }
-  45%,
-  78% {
-    transform: translateY(17px);
-  }
-}
-@keyframes power-light {
-  0%,
-  40%,
-  90% {
-    background: #713624;
-    box-shadow: none;
-  }
-  45%,
-  85% {
-    background: #b4d582;
-    box-shadow: 0 0 7px #b4d58280;
-  }
-}
-@keyframes load-pip {
-  0%,
-  60%,
-  100% {
-    background: #4c4d3d;
-  }
-  20%,
-  50% {
-    background: #ffaf47;
-  }
-}
 @container (max-width: 700px) {
-  .cartridge-loader {
+  .hero-loader {
     zoom: 0.65;
     margin-top: 14px;
     margin-bottom: 10px;
@@ -291,13 +154,8 @@ h1 span {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cartridge,
-  .console-base i,
-  .loading-pips i {
+  .loading-dhh {
     animation: none;
-  }
-  .loading-pips i {
-    background: #ffaf47;
   }
 }
 button {

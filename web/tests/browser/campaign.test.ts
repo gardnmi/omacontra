@@ -24,6 +24,17 @@ test("original opening, secret code, mode selection, journey and controls", asyn
   page,
 }) => {
   await boot(page);
+  // Check the actual audio node, not just the saved menu setting.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          window.__campaign.music.find(
+            (m: any) => m.active && m.track.includes("opening-theme"),
+          )?.gain,
+      ),
+    )
+    .toBeCloseTo(0.1275, 4);
   for (const key of [
     "ArrowUp",
     "ArrowUp",
@@ -45,6 +56,16 @@ test("original opening, secret code, mode selection, journey and controls", asyn
       ),
     )
     .toBe(true);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          window.__campaign.music.find(
+            (m: any) => m.active && m.track.includes("unlock"),
+          )?.gain,
+      ),
+    )
+    .toBeGreaterThan(0.25);
   for (let i = 0; i < 6; i++) await page.keyboard.press("Enter");
   await expect.poll(async () => (await state(page)).intro).toBe("cover");
   await page.keyboard.press("Enter");
@@ -228,11 +249,9 @@ test("native renderer review states, all cinematic panels and menu pages", async
       page,
       "review_name,review_draw,review_f=next(review)\napp.draw=lambda area,c:review_draw(c,review_f)",
     );
-    await page
-      .locator("#game")
-      .screenshot({
-        path: `test-results/${info.project.name}-native-scene-${i}.png`,
-      });
+    await page.locator("#game").screenshot({
+      path: `test-results/${info.project.name}-native-scene-${i}.png`,
+    });
   }
   await script(page, "del app.draw");
   // Boundaries that are absent from the static art sheet: transformations,
