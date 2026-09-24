@@ -14,7 +14,7 @@ test("loads, moves, jumps, aims, pauses, recovers focus, and finishes", async ({
 }, testInfo) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/");
+  await page.goto("/reaper.html");
   await expect(page.locator("#start")).toBeEnabled();
   await page.screenshot({
     path: `test-results/${testInfo.project.name}-title.png`,
@@ -109,7 +109,7 @@ test("720p buffer stays fixed at high DPI", async ({ browser }) => {
     deviceScaleFactor: 2,
   });
   const page = await context.newPage();
-  await page.goto("http://127.0.0.1:5173");
+  await page.goto("http://127.0.0.1:5173/reaper.html");
   await expect(page.locator("#start")).toBeEnabled();
   expect(await page.locator("canvas").getAttribute("width")).toBe("1280");
   await context.close();
@@ -118,7 +118,7 @@ test("failed asset requests give a readable error", async ({ page }) => {
   await page.route("**/game/manifest.json", (route) =>
     route.fulfill({ status: 404, body: "missing" }),
   );
-  await page.goto("/");
+  await page.goto("/reaper.html");
   await expect(page.locator("#panel-title")).toHaveText("COULD NOT START");
   await expect(page.locator("#load-status")).toContainText(
     "Run npm run assets",
@@ -127,7 +127,7 @@ test("failed asset requests give a readable error", async ({ page }) => {
 test("standard clear stores a personal best and reload preserves it", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/reaper.html");
   await expect(page.locator("#start")).toBeEnabled();
   await page.locator("#start").click();
   await expect(page.locator("#panel")).toBeHidden();

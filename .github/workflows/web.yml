@@ -1,9 +1,9 @@
 name: Web playtest
 on:
   push:
-    paths: ['web/**', '.github/workflows/web.yml', 'assets/**', 'src/omacontra/rendering/**', 'src/omacontra/stages/reaper/**']
+    paths: ['web/**', '.github/workflows/web.yml', 'assets/**', 'src/omacontra/**', 'release-assets.txt', 'tools/asset_review.py']
   pull_request:
-    paths: ['web/**', '.github/workflows/web.yml', 'assets/**', 'src/omacontra/rendering/**', 'src/omacontra/stages/reaper/**']
+    paths: ['web/**', '.github/workflows/web.yml', 'assets/**', 'src/omacontra/**', 'release-assets.txt', 'tools/asset_review.py']
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,8 +26,11 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y python3-cairo
       - run: npm ci
       - run: npm run assets
+      - run: npm run assets:prototype
+      - run: npm run test:assets
       - run: /usr/bin/python3 tools/export_fixtures.py && git diff --exit-code -- tests/desktop-traces.json
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium firefox
       - run: npm run test:browser
+      - run: npm run test:parity

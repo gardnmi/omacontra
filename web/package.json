@@ -4,21 +4,26 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "assets": "/usr/bin/python3 tools/export_assets.py",
+    "assets": "/usr/bin/python3 tools/export_campaign.py",
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "tsx --test tests/*.test.ts",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "assets:prototype": "/usr/bin/python3 tools/export_assets.py",
+    "assets:code": "/usr/bin/python3 tools/export_campaign.py --code-only",
+    "test:assets": "/usr/bin/python3 tools/check_campaign.py",
+    "test:parity": "/usr/bin/python3 ../tools/asset_review.py --output test-results/native && /usr/bin/python3 tools/check_render_parity.py"
   },
   "dependencies": {
-    "pixi.js": "^8.0.0"
+    "pixi.js": "^8.0.0",
+    "pyodide": "314.0.7"
   },
   "devDependencies": {
-    "typescript": "^5.9.0",
-    "vite": "^7.0.0",
-    "tsx": "^4.20.0",
     "@playwright/test": "^1.55.0",
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
   }
 }

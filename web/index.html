@@ -2,66 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090e0c" />
-    <title>Omacontra — Web Playtest</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Omacontra</title>
   </head>
   <body>
-    <main id="game" aria-label="Omacontra">
-      <div id="hud" hidden>
-        <header><span>01 / THE REAPER</span><span id="phase"></span></header>
-        <div id="boss-track"><div id="boss-health"></div></div>
-        <div id="player-status">
-          <div id="lives"></div>
-          <div id="ability"></div>
-          <div id="notice"></div>
-        </div>
-        <div id="warning"></div>
-        <footer>
-          A/D MOVE · SPACE DOUBLE JUMP · SHIFT SLIDE / AIR DASH · MOUSE / J FIRE
-          · S DUCK · P PAUSE
-        </footer>
-      </div>
-      <section id="panel" aria-labelledby="panel-title">
-        <div class="eyebrow">OMACONTRA <span>WEB PLAYTEST / 01</span></div>
-        <h1 id="panel-title">THE REAPER</h1>
-        <p id="panel-copy">
-          The wallpaper is awake. Break the eye and raven to expose the Reaper’s
-          core.
-        </p>
-        <div id="instructions">
-          <p><b>A / D</b> MOVE <b>SPACE</b> JUMP / DOUBLE JUMP</p>
-          <p><b>SHIFT</b> SLIDE ON THE GROUND / DASH IN THE AIR</p>
-          <p><b>MOUSE + CLICK</b> AIM & FIRE <b>J</b> FIRE FORWARD</p>
-        </div>
-        <label id="practice-row"
-          ><input type="checkbox" id="practice" /> Unlimited lives for practice
-          (hits still counted)</label
-        >
-        <p id="load-status" role="status">PREPARING THE ARENA…</p>
-        <button id="start" disabled>LOADING…</button
-        ><button id="restart" hidden>RESTART ENCOUNTER</button>
-        <p id="result"></p>
-        <p class="fine">
-          First-encounter prototype · keyboard & mouse ·
-          <a
-            href="game/credits/THIRD_PARTY/README.md"
-            target="_blank"
-            rel="noopener"
-            >Credits</a
-          >
-        </p>
+    <main>
+      <canvas
+        id="game"
+        width="1280"
+        height="720"
+        tabindex="0"
+        aria-label="Omacontra game. Arrow keys or WASD to move, Space to jump, Shift to dash, mouse to aim and fire, Escape to pause."
+      ></canvas>
+      <section id="gate">
+        <h1>OMACONTRA</h1>
+        <p id="loading" role="status">Loading…</p>
+        <button id="play" hidden>PLAY</button>
       </section>
-      <output id="performance" hidden></output>
     </main>
-    <nav aria-label="Playtest controls">
-      <span>OMACONTRA / BROWSER PROTOTYPE</span>
-      <div>
-        <button id="mute" aria-pressed="false">SOUND ON</button
-        ><button id="stats" aria-pressed="false">PERFORMANCE</button
-        ><button id="fullscreen">FULLSCREEN</button>
-      </div>
-    </nav>
-    <script type="module" src="/src/main.ts"></script>
+    <footer>
+      <span
+        >Move: A/D / arrows · Jump: Space · Dash: Shift · Aim / fire: mouse ·
+        Pause: Esc</span
+      ><button id="fullscreen">Fullscreen</button>
+    </footer>
+    <script type="module" src="/src/campaign/main.ts"></script>
   </body>
 </html>

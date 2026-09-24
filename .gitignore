@@ -17,3 +17,5 @@ node_modules/
 web/public/game/
 web/test-results/
 web/playwright-report/
+
+web/public/campaign/

@@ -7,6 +7,12 @@ and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit
 
 **Currently keyboard and mouse only. Controller support is not yet available.**
 
+## Browser build
+
+The `feature/web-port` branch includes the full five-stage browser campaign.
+See [browser playtest and build instructions](web/README.md). The browser build
+uses the original game code and assets at 720p, with local browser saves.
+
 ## Install on Omarchy
 
 Install Omacontra as a standalone app on your Omarchy desktop. The installer

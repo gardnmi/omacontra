@@ -1,47 +1,46 @@
-# Omacontra browser playtest
+# Omacontra — full browser campaign
 
-A playable port of **the Reaper encounter**, on `feature/web-port`.
-The native game and installer remain separate from this browser build.
+The complete five-stage game runs in the browser on `feature/web-port`:
+Reaper, Quattro Run (including its robot phase), Tidebreaker and both guardians,
+the Mist Gate dragon, and Black Moon. This includes the original opening,
+inter-stage cinematics, Tobi's rescue, spaceship boarding, ending, menus,
+continue screen, hardcore mode, secret code, soundtrack player, and results.
 
 ## Play locally
 
-From this directory, with Node.js 22.12+ (or a newer supported LTS) and npm:
+Requires Node.js 22.12+ and npm to build. Asset preparation also needs system
+Python 3 and Pycairo, as used by the desktop game.
 
 ```sh
+cd web
 npm ci
 npm run assets
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173**. Click **Enter the fight** to enable audio and start.
-The asset preparation step uses system Python 3 and Pycairo, already required
-by the desktop game. The finished browser build needs neither Python nor GTK.
+Open **http://127.0.0.1:5173** and click **PLAY** to enable browser audio.
+The original intro and Start screen follow. Players only need a browser; they
+do not install Python, GTK, Hyprland, or the game itself.
 
-- A/D or arrows: move; W/up: aim upward when using keyboard firing.
-- Space/K: jump; release and press again for a double jump.
-- Shift: slide on the ground; dash once while airborne.
-- Mouse + left button: aim and fire; J/Z: fire with keyboard.
-- S/down: duck. P/Escape: pause. R: open pause/restart.
-- F3 or Performance: frame-time overlay. Fullscreen and sound controls sit below
-  the game. Moving to another tab/window automatically pauses and clears input.
-- Unlimited practice lives are optional. Hits are still counted, and practice
-  clears never overwrite the standard personal best.
+Keyboard/mouse controls match the desktop game:
 
-## Included
+- A/D or left/right: move. W/up: aim upward; S/down: duck.
+- Space/K: jump, then press again for a double jump.
+- Shift: ground slide or air dash.
+- Mouse + left button: aim/fire; J/Z: keyboard fire.
+- E: interact in the harbor. Space also operates the car's jump.
+- P/Escape: pause/menu. Enter: confirm and advance/skip eligible scenes.
+- Space-stage movement uses both axes. Its existing thruster/dash rules apply.
 
-Original arena and Reaper artwork; authored DHH run/carry frames, separate aiming
-rig, jump/slide/double-jump/air-dash rules; both turrets, exposure/reform, all scythe
-patterns, damage/respawn, boss destruction and stage clear. Existing Reaper sound
-samples and streamed Contra music. Standard clear times save in browser storage
-under `omacontra.web.reaper.best`, separately from desktop records.
+The built-in Controls menu explains stage-specific actions. Fullscreen is below
+the canvas. Switching tabs/windows pauses the game and clears held input.
 
-This first milestone does **not** yet include the full opening cinematic, the
-other four stages, full campaign menus/continue screen, or the complete shuffled
-soundtrack. Environmental effects are a lightweight browser implementation;
-visual/audio parity still needs human playtesting. Keyboard/mouse desktop browsers
-are the initial target; touch controls are not implemented.
+Settings and records save locally in this browser under
+`omacontra.campaign.profile.v1`. Standard, hardcore, and unlimited records remain
+separate; boss-select practice runs cannot replace campaign records. Storage
+errors are handled without preventing play.
 
-## Production build
+## Build for a static host
 
 ```sh
 npm run assets
@@ -49,51 +48,60 @@ npm run build
 npm run preview
 ```
 
-Serve `dist/` over HTTP(S) on a static host. Relative asset URLs support subpaths.
-Do not launch `dist/index.html` as a `file://` URL. No game server is required.
-Use compression for JS/CSS/JSON, and version the deployment path before applying
-long-lived caching to the generated `game/` assets. Keep the shipped credits.
-Publishing is a separate step; this branch does not deploy or change the release.
+The production playtest is **http://127.0.0.1:4173**. Deploy the contents of
+`dist/` on any static HTTP(S) host. Subdirectory hosting works with the relative
+build paths. Opening `index.html` directly using `file://` is unsupported.
+
+All runtime files are self-hosted, including the pinned Python/WebAssembly
+runtime. There is no CDN, account, game server, or Python server dependency.
+Images load as scenes need them, short effects are cached, and music streams.
+Keep `campaign/credits/` and its runtime license/source notices with the build.
+Use versioned deployment directories before enabling long-lived asset caching;
+`index.html`, `game.zip`, and the asset manifest must belong to the same build.
+This branch does not publish or alter the desktop installer/release.
+
+## Fidelity and performance
+
+The browser executes the **same Python encounter, cinematic, and UI source** as
+the desktop game, in a dedicated worker. A small platform adapter replaces GTK,
+Cairo's output surface, desktop audio processes, and profile storage. This avoids
+maintaining a second copy of every boss's rules. The renderer preserves the
+original artwork, sprite crops, masks, lighting, particles, and animations.
+Canvas and Cairo can differ slightly in edge/font rasterization.
+
+Rendering stays at **1280 × 720**, including on high-DPI displays. Static layers
+stay cached; moving-water strips and sprite draws have compact browser commands.
+The original Beams → Rings → Blackhole frame data plays in the original order.
+No attack patterns, hitboxes, or effects are removed to obtain the port.
+
+Current desktop Chromium and Firefox are tested. Touch controls and controllers
+are not implemented. Low-end hardware still needs hands-on playtesting; local
+headless measurements are not a guarantee of 60 FPS on every device. See
+[architecture and validation](../docs/WEB_PORT.md).
 
 ## Checks
 
 ```sh
+npm run test:assets
 npm test
+npm run assets:prototype  # prepare the retained Reaper reference prototype
 npx playwright install chromium firefox
 npm run test:browser
+npm run test:parity
 ```
 
-Playwright may require its documented host libraries on Linux. Browser tests use
-an isolated dev server, test-only access gated behind `import.meta.env.DEV`, and
-record screenshots under ignored `test-results/`. The production build removes
-that access. Tests cover combat, focus, controls, high DPI, failed loading,
-practice mode, standard results and persistent records. Python reference traces
-can be regenerated after intentional desktop-rule changes:
+The browser tests cover real keyboard/mouse handling, short taps, focus changes,
+secret entry, progression, life carry-over, standard/hardcore continues, music,
+records, settings, blocked storage, high DPI, loading errors, and original
+cinematic/renderer states in both browsers. Native/browser image comparisons
+cover twelve representative combat states. Captures/reports stay under ignored
+`test-results/`. Run `python tools/test.py` from the repository root for the
+native regression suite.
 
-```sh
-/usr/bin/python3 tools/export_fixtures.py
-```
+After Python-only changes, `npm run assets:code` rebuilds the source archive
+quickly; use the full `assets` command after changing any image or asset list.
+The development-only `window.__campaign` harness provides stage/scene setup and
+frame measurements for tests. It is removed from the production JavaScript.
 
-`tools/export_assets.py` reads original artwork through the desktop's alpha/chroma
-handling, prepares the authored poses at 2x display size, and packs them into one
-2048-square atlas. It does not generate new artwork. Build outputs are ignored;
-source assets and source credits remain authoritative.
-
-## Performance
-
-- Fixed 1280 x 720 drawing buffer, independent of display/device pixel ratio.
-- GPU sprite batching, reusable display objects, pooled bullets and particles.
-- 60 Hz simulation with interpolated player/projectile rendering, bounded
-  catch-up, and automatic pause when hidden.
-- Roughly 9.4 MiB of encounter assets including streamed music; arena + atlas
-  are about 3.4 MiB downloaded and 19.5 MiB of base decoded RGBA texture storage
-  (excludes browser/GPU overhead and audio).
-- Existing short effects decoded once; six simultaneous voices maximum. Music
-  streams separately. The player machine gun stays silent as in the native game.
-- Cosmetic particle counts automatically halve when the recent 95th percentile
-  frame interval exceeds 24 ms; collision geometry and attacks stay unchanged.
-
-The overlay's render time measures CPU submission, not total GPU execution.
-Headless Chromium/Firefox smoke runs are useful checks, not proof of performance
-on integrated graphics. Validate a normal browser on the intended low-end hardware
-before claiming the 60 FPS target. Stress later dragon/finale stages separately.
+The earlier TypeScript/PixiJS Reaper prototype is retained at `/reaper.html` on
+the dev server as a regression reference. It is not the production entry point.
