@@ -279,6 +279,8 @@ sys.modules[weapon.__name__] = weapon
 
 from omacontra.ui import release_ui
 
+# Use a quieter browser default; Profile still restores saved user settings.
+release_ui.DEFAULTS["music"] = 60
 OriginalProfile = release_ui.Profile
 
 

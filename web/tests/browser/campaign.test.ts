@@ -182,9 +182,10 @@ test("continue, hardcore, unlimited damage tracking, persisted options and sound
   );
   await expect.poll(async () => (await state(page)).continue).toBe("expired");
   await debug(page, "stage", { level: 1, skip: true });
+  expect((await state(page)).settings).toEqual({ music: 60, effects: 100 });
   await debug(page, "menu", { page: "options" });
   await page.keyboard.press("ArrowLeft");
-  await expect.poll(async () => (await state(page)).settings.music).toBe(95);
+  await expect.poll(async () => (await state(page)).settings.music).toBe(55);
   await debug(page, "menu", { page: "music" });
   await page.keyboard.press("Enter");
   await expect
@@ -208,7 +209,7 @@ test("continue, hardcore, unlimited damage tracking, persisted options and sound
     .toBe(true);
   await page.reload();
   await expect(page.locator("#play")).toBeVisible({ timeout: 30000 });
-  expect((await state(page)).settings.music).toBe(95);
+  expect((await state(page)).settings.music).toBe(55);
 });
 test("native renderer review states, all cinematic panels and menu pages", async ({
   page,
@@ -325,7 +326,7 @@ test("high DPI stays 720p, unavailable storage is safe, and loading errors are v
   ).toEqual([1280, 720]);
   await debug(page, "menu", { page: "options" });
   await page.keyboard.press("ArrowLeft");
-  await expect.poll(async () => (await state(page)).settings.music).toBe(95);
+  await expect.poll(async () => (await state(page)).settings.music).toBe(55);
   await context.close();
   const broken = await browser.newPage();
   await broken.route("**/campaign/game.zip", (route) =>
