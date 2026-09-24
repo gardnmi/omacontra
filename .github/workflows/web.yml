@@ -1,0 +1,36 @@
+name: Web playtest
+on:
+  push:
+    paths: ['web/**', '.github/workflows/web.yml', 'assets/**', 'src/omacontra/**', 'release-assets.txt', 'tools/asset_review.py']
+  pull_request:
+    paths: ['web/**', '.github/workflows/web.yml', 'assets/**', 'src/omacontra/**', 'release-assets.txt', 'tools/asset_review.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: sudo apt-get update && sudo apt-get install -y python3-cairo
+      - run: npm ci
+      - run: npm run assets
+      - run: npm run assets:prototype
+      - run: npm run test:assets
+      - run: /usr/bin/python3 tools/export_fixtures.py && git diff --exit-code -- tests/desktop-traces.json
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium firefox
+      - run: npm run test:browser
+      - run: npm run test:parity

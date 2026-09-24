@@ -14,7 +14,8 @@
     "file": "omacontra-start-impact.wav",
     "source": "Original procedural synthesis; tools/build_start_sound.py",
     "usage": "One-shot explosion with blast, bass rumble and reverberant tail when Start is activated",
-    "duration_seconds": 2.35
+    "duration_seconds": 2.35,
+    "mix": "Start cue reduced by 12 dB in the shared WAV; original timbre and tail retained; gameplay effects unchanged"
   },
   "wine_cellar_journey": {
     "title": "Off Duty Mercenary",

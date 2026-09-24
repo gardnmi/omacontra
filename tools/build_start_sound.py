@@ -25,8 +25,11 @@ for i,value in enumerate(dry):
     t=i/rate
     samples.append(value*min(1,max(0,(duration-t)/.55)))
 peak=max(map(abs,samples))
+# Keep the blast/tail intact, but soften this isolated menu cue by 12 dB.
+# Bake the trim into the shared asset so desktop and browser playback agree.
+start_gain=10**(-12/20)
 path=Path(__file__).resolve().parents[1]/'assets/audio/omacontra-start-impact.wav'
 with wave.open(str(path),'wb') as out:
     out.setparams((1,2,rate,0,'NONE','not compressed'))
-    out.writeframes(b''.join(struct.pack('<h',round(v/peak*.89*32767)) for v in samples))
+    out.writeframes(b''.join(struct.pack('<h',round(v/peak*.89*start_gain*32767)) for v in samples))
 print(path)

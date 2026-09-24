@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Omacontra</title>
+  </head>
+  <body>
+    <main>
+      <canvas
+        id="game"
+        width="1280"
+        height="720"
+        tabindex="0"
+        aria-label="Omacontra game. Arrow keys or WASD to move, Space to jump, Shift to dash, mouse to aim and fire, Escape to pause."
+      ></canvas>
+      <section id="gate" data-state="loading" aria-busy="true">
+        <div class="cover-wrap">
+          <img
+            class="loading-cover"
+            src="/src/campaign/assets/loading-cover.png"
+            alt="Omacontra box art featuring DHH, Tobi, the dragon, and the Quattro."
+            width="728"
+            height="900"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="load-panel">
+          <p class="load-eyebrow">OMATARI / BROWSER EDITION</p>
+          <h1>LOCK &amp;<br /><span>LOAD.</span></h1>
+          <div class="hero-loader" aria-hidden="true">
+            <div class="loading-dhh"></div>
+          </div>
+          <p id="loading" role="status">Loading…</p>
+          <button id="play" hidden>PLAY</button>
+          <p class="load-hint">FIVE BOSSES. ONE WAY THROUGH.</p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span
+        >Move: A/D / arrows · Jump: Space · Dash: Shift · Aim / fire: mouse ·
+        Pause: Esc</span
+      ><button id="fullscreen">Fullscreen</button>
+    </footer>
+    <script type="module" src="/src/campaign/main.ts"></script>
+  </body>
+</html>
