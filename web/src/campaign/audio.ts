@@ -43,6 +43,7 @@ export class CampaignAudio {
       })
       .catch(() => {});
   }
+  get unlocked() { return this.context?.state === "running"; }
   async unlock() {
     if (!this.context) {
       this.context = new AudioContext();

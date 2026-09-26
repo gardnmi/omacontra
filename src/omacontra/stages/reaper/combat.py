@@ -334,7 +334,10 @@ class Fight:
         movement_fx.step(self,dt,was_running,old_x,was_grounded)
         self.aim_target=aim if shoot and aim else (self.x+self.facing*100,self.player_center[1]-102) if aim_up else None
         # Face the target continuously; all poses share the same barrel geometry.
-        if self.aim_target:self.facing=1 if self.aim_target[0]>=self.x else -1
+        stick=getattr(self,'stick_aim',None) if self.aim_target is not None else None
+        if stick:
+            if abs(stick[0])>.001:self.facing=1 if stick[0]>0 else -1
+        elif self.aim_target:self.facing=1 if self.aim_target[0]>=self.x else -1
         px,py=muzzle_position(self,self.aim_target)
         self.muzzle_position=(px,py)
         angle=weapon_pose(self,self.aim_target)[2]

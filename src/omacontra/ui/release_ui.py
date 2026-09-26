@@ -10,7 +10,9 @@ from omacontra.audio.weapon_audio import SFX_BOOST
 from omacontra.audio.jukebox import Jukebox
 
 NAMES=('THE REAPER','QUATTRO RUN','TIDEBREAKER','THE MIST GATE','BLACK MOON')
-DEFAULTS={'music':100,'effects':100}
+DEFAULTS={'music':100,'effects':100,'deadzone':20}
+
+def setting_limits(name):return (5,40) if name=='deadzone' else (0,150)
 
 class Profile:
     def __init__(self,path=None):
@@ -22,8 +24,8 @@ class Profile:
             settings=data.get('settings')
             if not isinstance(settings,dict):settings={}
             for k in DEFAULTS:
-                v=settings.get(k,100)
-                if isinstance(v,(int,float)) and math.isfinite(v):self.settings[k]=max(0,min(150,int(v)))
+                v=settings.get(k,DEFAULTS[k])
+                if isinstance(v,(int,float)) and math.isfinite(v):self.settings[k]=max(setting_limits(k)[0],min(setting_limits(k)[1],int(v)))
             best=data.get('best',{})
             if isinstance(best,dict):self.best={k:v for k,v in best.items() if isinstance(v,(int,float)) and math.isfinite(v) and v>0}
         except (OSError,ValueError,TypeError):pass
@@ -77,6 +79,7 @@ class Frontend:
         self.app.weapon_audio.menu_effects.trigger(name)
 
     def open(self,page='pause'):
+        if getattr(self.app,'controller',None):self.app.controller.suspend()
         previous=self.page
         if previous=='music' and page!='music':self.jukebox.stop()
         if previous:self.menu_positions[previous]=self.selection
@@ -89,6 +92,7 @@ class Frontend:
         if page=='results' and previous is None:self.cue('complete')
         elif previous is None:self.cue('open')
     def resume(self):
+        if getattr(self.app,'controller',None):self.app.controller.suspend()
         self.jukebox.stop()
         self.blocked=set(self.app.keys)
         self.page=None;self.app.paused=False
@@ -139,7 +143,8 @@ class Frontend:
                 if self.page=='options' and i<len(DEFAULTS):
                     if y<ry+35 or x<rx+38 or x>rx+428:return
                     name=tuple(DEFAULTS)[i]
-                    value=max(0,min(150,round((x-rx-38)/390*30)*5))
+                    lo,hi=setting_limits(name)
+                    value=max(lo,min(hi,round((lo+(x-rx-38)/390*(hi-lo))/5)*5))
                     if value!=self.profile.settings[name]:
                         self.profile.settings[name]=value;self.apply_audio();self.profile.save();self.cue('adjust')
                 else:self.key('return')
@@ -166,7 +171,8 @@ class Frontend:
             self.jukebox.skip(1 if key=='right' else -1);self.selection=self.jukebox.index
         elif key in ('left','right','a','d') and self.page=='options' and self.selection<len(DEFAULTS):
             name=tuple(DEFAULTS)[self.selection];v=self.profile.settings[name]
-            self.profile.settings[name]=max(0,min(150,v+(5 if key in ('right','d') else -5)))
+            lo,hi=setting_limits(name)
+            self.profile.settings[name]=max(lo,min(hi,v+(5 if key in ('right','d') else -5)))
             self.apply_audio();self.profile.save()
         elif key in ('escape','p'):
             if self.page in ('pause','mode'):self.resume()

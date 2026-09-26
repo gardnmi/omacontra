@@ -1,5 +1,6 @@
 import "./style.css";
 import { CampaignAudio } from "./audio";
+import { readGamepad } from "./gamepad";
 const canvas = document.querySelector<HTMLCanvasElement>("#game")!,
   ctx = canvas.getContext("bitmaprenderer")!;
 const gate = document.querySelector<HTMLElement>("#gate")!,
@@ -117,9 +118,61 @@ play.addEventListener("click", () => {
   events.push({ type: "focus" });
   if (status?.closed) events.push({ type: "restart-session" });
 });
+const enableAudio=document.querySelector<HTMLButtonElement>('#enable-audio')!;
+enableAudio.addEventListener('click',()=>{
+  void audio.unlock().then(()=>{enableAudio.hidden=true}).catch(console.warn);
+  canvas.focus();
+});
+let padIndex: number | undefined;
+let startQueued=false, startHeld=false, controllerStarted=false;
+const startSuppressed=new Set<string>();
+const controllerStatus = document.querySelector<HTMLElement>('#controller-status')!;
+let controllerReportAt=0;
+function pollController(now: number) {
+  if (document.hidden || !document.hasFocus()) return null;
+  try {
+    if (!navigator.getGamepads) {
+      controllerStatus.textContent='Controller: unavailable in this browser';
+      return null;
+    }
+    const devices=navigator.getGamepads();
+    const pad=readGamepad(devices,padIndex);
+    padIndex=pad?.index;
+    if(now-controllerReportAt>250){
+      controllerReportAt=now;
+      const raw=Array.from(devices).find(p=>p?.connected);
+      controllerStatus.textContent=pad ? `Controller: connected${raw?.mapping !== 'standard' ? ' (GameSir)' : ''}`
+        : raw ? `Controller: unmapped — ${raw.id}` : 'Controller: not detected — press A';
+      // Read-only diagnostics for reporting hardware/browser compatibility.
+      (window as any).__controllerReport={focused:document.hasFocus(),active,
+        devices:Array.from(devices).filter(Boolean).map(p=>({id:p!.id,mapping:p!.mapping,
+          axes:[...p!.axes],buttons:p!.buttons.map(b=>b.value)})),state:pad?.state ?? null};
+    }
+    return pad;
+  } catch {
+    controllerStatus.textContent='Controller: browser blocked access';
+    return null;
+  }
+}
 function animate(now: number) {
   requestAnimationFrame(animate);
+  const pad=pollController(now);
+  const startDown=!!pad?.state.buttons.some(b=>b==='a' || b==='menu');
+  if(!active && !failed && startDown && !startHeld)startQueued=true;
+  startHeld=startDown;
+  if(!pad)startQueued=false;
+  if(!active && startQueued && gate.dataset.state==='ready'){
+    startQueued=false;controllerStarted=true;
+    for(const b of pad?.state.buttons ?? [])startSuppressed.add(b);
+    play.click();
+  }
+  if(controllerStarted && active)enableAudio.hidden=audio.unlocked;
   if (!active || failed || inflight || pending.size) return;
+  if(document.hasFocus() && !document.hidden){
+    for(const b of startSuppressed)if(!pad?.state.buttons.includes(b))startSuppressed.delete(b);
+    const state=pad ? {...pad.state,buttons:pad.state.buttons.filter(b=>!startSuppressed.has(b))} : null;
+    events.push({type:'gamepad',state});
+  }
   const dt = Math.min(0.04, (now - last) / 1000);
   last = now;
   send({ type: "tick", dt, events: events.splice(0) });

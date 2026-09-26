@@ -4,7 +4,7 @@
 
 Omarchy / Arch Linux with a running Hyprland session supporting the Lua API
 (Hyprland 0.55 or newer). Other compositors, Windows, and macOS are not supported.
-Keyboard and mouse only; controller support is not implemented.
+Keyboard/mouse and Xbox-style controllers are supported. Desktop uses SDL’s built-in controller mappings with normal user device permissions; never run the game as root. Web supports standard-mapped gamepads and the GameSir G7 SE Linux HID layout; embedded sites must permit gamepad access. The browser footer reports detection and mapping problems. Press A/Menu to start from the loading screen. If the browser requires a click to enable audio, use the Enable sound button. Adjust stick dead zone in Options. Rumble and custom button remapping are not implemented.
 
 The game renders at 1280 × 720 and scales to your display. Performance on lower-end
 hardware is not yet benchmarked; no minimum GPU or guaranteed frame rate is claimed.

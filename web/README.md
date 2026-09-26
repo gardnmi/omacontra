@@ -129,3 +129,7 @@ frame measurements for tests. It is removed from the production JavaScript.
 
 The earlier TypeScript/PixiJS Reaper prototype is retained at `/reaper.html` on
 the dev server as a regression reference. It is not the production entry point.
+
+## Controller support
+
+Xbox-style standard-mapped gamepads use the same controls as desktop: left stick/D-pad movement, right stick aim, RT/X fire, A jump, B/LB dash, Y interact, Menu pause. A confirms and B returns in menus. Options includes a saved stick dead-zone setting. Press A/Menu on the first loading screen; if still loading, the start is queued. Browsers that require a click for audio show Enable sound. Left stick/D-pad fires in eight directions while shooting; right stick overrides aim. Test gamepad permission when embedding on a third-party host such as itch.io.

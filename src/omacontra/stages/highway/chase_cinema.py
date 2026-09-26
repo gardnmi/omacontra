@@ -86,7 +86,7 @@ class ChaseCinema:
         if self.age>4.1:
             text='TOBI: GOOD THING WE TOOK THE QUATTRO.'
             label(c,150,550,text[:int((self.age-4.1)*28)],19,'cream')
-        if self.age>5.5:label(c,150,586,'ENTER / CONTINUE TO THE HARBOR     R / REPLAY     ESC / EXIT',11,'cream')
+        if self.age>5.5:label(c,150,586,('A / CONTINUE TO THE HARBOR     VIEW / MENU' if getattr(self,"controller_active",False) else 'ENTER / CONTINUE TO THE HARBOR     R / REPLAY     ESC / EXIT'),11,'cream')
 
     def draw(self,c,renderer,f):
         c.set_source_rgb(0,0,0);c.paint()
@@ -113,4 +113,4 @@ class ChaseCinema:
             elapsed=self.age if self.age<3.8 else self.age-3.8 if self.age<8.0 else self.age-8.0
             label(c,192,442,text[:int(elapsed*28)],17,'cream')
             label(c,192,138,'02 / QUATTRO RUN',12,'gold')
-            label(c,192,480,'ENTER / SKIP',10,'cream')
+            label(c,192,480,('A / SKIP' if getattr(self,"controller_active",False) else 'ENTER / SKIP'),10,'cream')

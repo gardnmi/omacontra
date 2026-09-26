@@ -61,6 +61,8 @@ class Chase:
     @property
     def gun_angle(self):
         x,y=self.gun_pivot
+        stick=getattr(self,"stick_aim",None) if self.aim_target is not None else None
+        if stick:return math.atan2(stick[1],stick[0])
         return math.atan2(self.aim_target[1]-y,self.aim_target[0]-x) if self.aim_target else -.12
     @property
     def muzzle_position(self):

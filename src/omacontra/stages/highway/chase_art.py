@@ -329,8 +329,9 @@ class ChaseRenderer:
         if f.notice_time>0:label(c,345,75,f.notice,15,'cream')
         if f.warning:
             cue={'ram':'RAM INCOMING / SHIFT BOOST','roller':'TIRE SHREDDER / SPACE JUMP','spread':'ROCKET FAN / FIND THE GAP','drones':'DRONES DEPLOYING','mortar':'MORTARS / MOVE OUT OF MARKED ZONES'}[f.warning]
+            if getattr(f,'controller_active',False):cue=cue.replace('SHIFT BOOST','B / LB BOOST').replace('SPACE JUMP','A JUMP')
             rect(c,380,110,510,35,'ink');label(c,402,133,cue,16,'gold')
-        elif not f.boss_active and 0<f.barrier_warning<1.5:label(c,350,130,'ROADBLOCK AHEAD / SPACE JUMP',17,'gold')
+        elif not f.boss_active and 0<f.barrier_warning<1.5:label(c,350,130,('ROADBLOCK AHEAD / A JUMP' if getattr(f,'controller_active',False) else 'ROADBLOCK AHEAD / SPACE JUMP'),17,'gold')
         if f.clock<.6 and f.state=='play':
             label(c,420,240,'QUATTRO RUN',34,'cream');label(c,430,272,'THE WALLPAPER KEEPS MOVING.',12,'cream')
         if f.state=='transform':
@@ -343,6 +344,7 @@ class ChaseRenderer:
             label(c,300,105,'BREAK MINES OR TURRET / RAMPS EXPOSE THE CORE',13,'cream')
         if f.state=='finisher':
             cue={'settle':'HEART BREACHED / GET READY','prompt':'SPACE / JUMP ON THE ROOF','climb':'DHH: MY TURN.','aim':'AIM AT THE HEART / CLICK TO FIRE','flight':'ROCKET AWAY!'}[f.finisher_phase]
+            if getattr(f,'controller_active',False):cue=cue.replace('SPACE /','A /').replace('CLICK TO FIRE','RT / X TO FIRE')
             rect(c,325,120,630,60,'ink');label(c,350,149,cue,21,'gold')
             if f.finisher_phase in ('prompt','aim'):
                 total=2.5 if f.finisher_phase=='prompt' else 6
@@ -351,4 +353,4 @@ class ChaseRenderer:
         if paused:label(c,570,330,'PAUSED',25)
         if f.state=='dead' and f.wreck_age>.8:label(c,420,300,'QUATTRO DOWN',24)
         if f.state=='won':label(c,380,300,'YOU CAN FIX ANYTHING.',28);label(c,465,336,'ROADBLOCK DESTROYED / R TO REPLAY',13)
-        rect(c,0,695,1280,25,'ink');label(c,18,713,'A/D OR ARROWS MOVE    MOUSE / J FIRE    SPACE JUMP    SHIFT BOOST    P PAUSE    R RESTART    ESC MENU',11)
+        rect(c,0,695,1280,25,'ink');label(c,18,713,('LEFT STICK / D-PAD MOVE    RIGHT STICK AIM    RT / X FIRE    A JUMP    B / LB BOOST    MENU PAUSE' if getattr(f,'controller_active',False) else 'A/D OR ARROWS MOVE    MOUSE / J FIRE    SPACE JUMP    SHIFT BOOST    P PAUSE    R RESTART    ESC MENU'),11)

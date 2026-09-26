@@ -277,6 +277,7 @@ class BattleRenderer:
         if f.state=='play':
             controls=('A / D   MOVE', 'J   FIRE', 'SPACE   JUMP / DOUBLE JUMP',
                       'SHIFT   SLIDE', 'SPACE + SHIFT   JUMP, THEN AIR DASH', 'S   DUCK')
+            if getattr(f,'controller_active',False):controls=('LEFT STICK / D-PAD   MOVE', 'RT / X   FIRE', 'A   JUMP / DOUBLE JUMP', 'B / LB   SLIDE / AIR DASH', 'RIGHT STICK   AIM', 'DOWN   DUCK / MENU   PAUSE')
             for i,control in enumerate(controls):
                 # Thin dark outline keeps text legible over detailed wallpaper.
                 yy=y+191+i*19
@@ -284,4 +285,4 @@ class BattleRenderer:
                     label(c,x+15+dx,yy+dy,control,11,'ink')
                 label(c,x+15,yy,control,11,'cream')
         if paused:label(c,x+w/2-45,y+h/2,'PAUSED',24)
-        if f.state=='won':label(c,x+w/2-110,y+h/2,'MERGE IT',18,'green');label(c,x+w/2-55,y+h/2+28,'ENTER / QUATTRO RUN   R / RESTART',11)
+        if f.state=='won':label(c,x+w/2-110,y+h/2,'MERGE IT',18,'green');label(c,x+w/2-55,y+h/2+28,('A / QUATTRO RUN   MENU / OPTIONS' if getattr(f,'controller_active',False) else 'ENTER / QUATTRO RUN   R / RESTART'),11)

@@ -10,6 +10,7 @@ from omacontra.desktop import Hyprland
 from omacontra.stages.reaper.combat import Fight, W, H
 from omacontra.stages.reaper.battle_art import BattleRenderer
 from omacontra.input_state import KeyboardState
+from omacontra.controller import Controller
 from omacontra.campaign_progress import prepare_encounter
 from omacontra.ui.story import Intro
 from omacontra.ui.art import Renderer
@@ -42,6 +43,7 @@ class BossApp:
         self.keyboard=KeyboardState();self.keys=self.keyboard.keys;self.slide_requested=False;self.shooting=False;self.aim=None;self.paused=False
         self.placed=False;self.visible=True;self.fullscreen=False;self.last=self.started=time.monotonic()
         self.frontend=Frontend(self)
+        self.input_device="keyboard";self.controller=Controller(self)
         try:self.setup(smoke)
         except Exception:self.close();raise
 
@@ -122,6 +124,8 @@ class BossApp:
         if getattr(self,'foundry_renderer',None) is None:self.foundry_renderer=FoundryRenderer()
 
     def setup(self,smoke):
+        from omacontra.linux_controller import LinuxController
+        self.controller_reader=LinuxController()
         self.previous=self.h.request('activeworkspace',True)['name']
         used={w['id'] for w in self.h.request('workspaces',True)}
         self.workspace=next(i for i in range(2,1000) if i not in used)
@@ -167,6 +171,15 @@ class BossApp:
     def tick(self):
         if self.closed:return False
         now=time.monotonic();dt=min(.04,now-self.last);self.last=now
+        controller=getattr(self,"controller",None)
+        if controller:
+            reader=getattr(self,"controller_reader",None)
+            if reader:
+                focused=self.visible and (not self.window or self.window.is_active())
+                if not focused:controller.suspend()
+                sample=reader.poll(now)
+                if focused:controller.sample(sample)
+            controller.tick(dt)
         front=getattr(self,'frontend',None)
         menu=bool(front and front.page)
         old_f=self.f;old_hp=self.f.hp;old_hits=getattr(self.f,'damage_taken',0)
@@ -214,7 +227,11 @@ class BossApp:
                     self.chase_cinema=None;self.keyboard.consume();self.shooting=False
             elif not self.paused:
                 k=self.keys
-                self.f.step(dt,move=int(bool(k&{'d','right'}))-int(bool(k&{'a','left'})),jump=bool(k&{'space','k'}),duck=bool(k&{'s','down'}),shoot=self.shooting or bool(k&{'j','z'}),aim=(self.f.screen_to_world(self.aim) if self.level in (2,4) else self.aim) if self.shooting or (self.level==2 and self.f.state=='finisher') else None,aim_up=bool(k&{'w','up'}),slide=bool(k&{'shift_l','shift_r'}),slide_pressed=self.slide_requested,**({'interact':bool(k&{'e'})} if self.level==3 else {'vertical':int(bool(k&{'s','down'}))-int(bool(k&{'w','up'}))} if self.level==5 else {}))
+                self.f.stick_aim=controller.direction if controller else None
+                aim=controller.aim if controller else None
+                if aim is None and self.level!=5 and (self.shooting or (self.level==2 and self.f.state=='finisher')):
+                    aim=self.f.screen_to_world(self.aim) if self.level in (2,4) else self.aim
+                self.f.step(dt,move=int(bool(k&{'d','right'}))-int(bool(k&{'a','left'})),jump=bool(k&{'space','k'}),duck=bool(k&{'s','down'}),shoot=self.shooting or bool(k&{'j','z'}),aim=aim,aim_up=bool(k&{'w','up'}),slide=bool(k&{'shift_l','shift_r'}),slide_pressed=self.slide_requested,**({'interact':bool(k&{'e'})} if self.level==3 else {'vertical':int(bool(k&{'s','down'}))-int(bool(k&{'w','up'}))} if self.level==5 else {}))
                 self.slide_requested=False
                 if self.level==2 and self.f.state=='won' and not self.chase_outro_seen:
                     from omacontra.stages.highway.chase_cinema import ChaseCinema
@@ -273,12 +290,23 @@ class BossApp:
             if not (front and front.page):
                 scene.save();self.draw_scene(area,scene);scene.restore()
             if front:front.draw(scene)
+            pad=getattr(self,'controller',None)
+            if pad and pad.aim and not (front and front.page):
+                x,y=pad.aim
+                if self.level in (2,4):y+=self.f.camera_y
+                scene.save();scene.set_source_rgba(.8,1,.65,.8);scene.set_line_width(1.5)
+                for dx,dy in ((-1,0),(1,0),(0,-1),(0,1)):
+                    scene.move_to(x+dx*5,y+dy*5);scene.line_to(x+dx*10,y+dy*10)
+                scene.stroke();scene.restore()
         c.save();c.translate(ox,oy);c.scale(scale,scale)
         self.frame.draw(c,render)
         c.restore()
 
     def draw_scene(self,area,c):
         # Native 1280x720 coordinates; display transforms belong in draw().
+        using_pad=getattr(self,'input_device','keyboard')=='controller'
+        for obj in (self.f,self.intro,getattr(self,'continue_screen',None),self.chase_cinema,getattr(self,'journey_cinema',None),getattr(self,'foundry_intro',None)):
+            if obj is not None:obj.controller_active=using_pad
         if getattr(self,'continue_screen',None):
             self.continue_renderer.draw(c,self.continue_screen)
             return
@@ -304,9 +332,11 @@ class BossApp:
         self.renderer.background(c,self.f,'arena')
         for role in ('eye','raven'):self.renderer.weak_point(c,self.f,role)
         aim=self.aim if self.shooting else (self.f.x+self.f.facing*100,self.f.player_center[1]-102) if self.keys&{'w','up'} else None
+        if getattr(self,"controller",None) and self.controller.aim is not None:aim=self.controller.aim
         self.renderer.objects(c,self.f,aim);self.renderer.hud(c,self.f,self.paused)
 
     def motion(self,area,event):
+        self.input_device="keyboard"
         ox,oy,scale=self.viewport();self.aim=((event.x-ox)/scale,(event.y-oy)/scale)
         if getattr(self,'frontend',None) and self.frontend.page:self.frontend.pointer(*self.aim)
         return True
@@ -321,7 +351,11 @@ class BossApp:
         return True
 
     def key(self,win,event):
-        key,fresh=self.keyboard.press(event.hardware_keycode,Gdk.keyval_name(event.keyval) or '')
+        self.input_device='keyboard'
+        return self.input_press(event.hardware_keycode,Gdk.keyval_name(event.keyval) or '')
+
+    def input_press(self,code,name):
+        key,fresh=self.keyboard.press(code,name)
         if not fresh:return True
         front=getattr(self,'frontend',None)
         if front:
@@ -377,12 +411,15 @@ class BossApp:
         return True
 
     def release(self,win,event):
-        self.keyboard.release(event.hardware_keycode)
-        if getattr(self,'frontend',None):self.frontend.blocked.discard((Gdk.keyval_name(event.keyval) or '').lower())
-        if getattr(self,'continue_blocked_keys',None):
-            self.continue_blocked_keys.discard((Gdk.keyval_name(event.keyval) or '').lower())
+        return self.input_release(event.hardware_keycode,Gdk.keyval_name(event.keyval) or '')
+
+    def input_release(self,code,name):
+        self.keyboard.release(code)
+        if getattr(self,'frontend',None):self.frontend.blocked.discard(name.lower())
+        if getattr(self,'continue_blocked_keys',None):self.continue_blocked_keys.discard(name.lower())
         return True
     def unfocus(self,*_):
+        if getattr(self,"controller",None):self.controller.suspend()
         if getattr(self,'frontend',None) and self.placed and not self.frontend.page:self.frontend.open()
         # Releases may go to another app; do not retain consumed physical keys.
         self.slide_requested=False;self.keyboard.clear();self.shooting=False
@@ -392,6 +429,7 @@ class BossApp:
     def close(self,*_):
         if self.closed:return False
         self.closed=True
+        if getattr(self,"controller_reader",None):self.controller_reader.close()
         if getattr(self,'weapon_audio',None):self.weapon_audio.close()
         if getattr(self,'music',None):self.music.stop()
         if getattr(self,'game_music',None):self.game_music.stop()

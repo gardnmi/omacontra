@@ -11,7 +11,7 @@ CREAM=(.89,.88,.76);GREEN=(.68,.85,.52);MUTED=(.48,.57,.51);AMBER=(.92,.57,.29)
 NAMES=('THE REAPER','QUATTRO RUN','TIDEBREAKER','THE MIST GATE','BLACK MOON')
 ART=('reaper-arena.png','quattro-coast.png','tidebreaker-arena.png','wyrm-mist-arena.png','finale-earth.png')
 DESCRIPTIONS=('A haunted wallpaper. A very real fight.','Tobi drives. DHH handles the firepower.','Ride out the storm. Face the guardians.','Circle the dragon. Claim its weapon.','Stay tethered. Finish what you started.')
-TITLES={'music':'SOUNDTRACK PLAYER','mode':'CHOOSE YOUR RUN','pause':'TAKE A BREATHER','options':'TUNE THE MIX','controls':'KNOW YOUR MOVES','results':'MISSION COMPLETE','bosses':'CHOOSE YOUR BATTLE','credits':'BEHIND THE GAME','confirm':'ONE MORE THING'}
+TITLES={'music':'SOUNDTRACK PLAYER','mode':'CHOOSE YOUR RUN','pause':'TAKE A BREATHER','options':'MAKE IT YOURS','controls':'KNOW YOUR MOVES','results':'MISSION COMPLETE','bosses':'CHOOSE YOUR BATTLE','credits':'BEHIND THE GAME','confirm':'ONE MORE THING'}
 
 def text(c,x,y,value,size=20,color=CREAM,width=None):
     c.select_font_face('monospace',cairo.FONT_SLANT_NORMAL,cairo.FONT_WEIGHT_BOLD)
@@ -61,13 +61,15 @@ def draw_rows(c,f,t):
             offset=2*math.sin(t*4)
             c.set_source_rgb(*GREEN);c.move_to(x+18+offset,y+h/2-5);c.line_to(x+25+offset,y+h/2);c.line_to(x+18+offset,y+h/2+5);c.fill()
         else:box(c,x,y,w,h,(.06,.085,.077,.8))
-        if f.page=='options' and i<2:
-            name=('music','effects')[i];value=f.profile.settings[name]
+        if f.page=='options' and i<len(f.profile.settings):
+            name=tuple(f.profile.settings)[i];value=f.profile.settings[name]
+            lo,hi=(5,40) if name=='deadzone' else (0,150)
+            fraction=(value-lo)/(hi-lo);default=((20 if name=='deadzone' else 100)-lo)/(hi-lo)
             text(c,x+38,y+24,name.upper(),17,GREEN if selected else CREAM)
             text(c,x+w-75,y+24,f'{value}%',17)
             for n in range(30):
-                box(c,x+38+n*13,y+43,9,9,(*(GREEN if n<value/5 else (.18,.23,.20)),1))
-            box(c,x+38+20*13-3,y+40,2,15,(*AMBER,1))
+                box(c,x+38+n*13,y+43,9,9,(*(GREEN if n<fraction*30 else (.18,.23,.20)),1))
+            box(c,x+38+default*30*13-3,y+40,2,15,(*AMBER,1))
         else:text(c,x+38,y+h/2+7,row.upper(),20,GREEN if selected else CREAM,width=w-58)
 
 def stage_panel(c,level,x=644,y=211,w=556,h=270):
@@ -110,12 +112,12 @@ def draw(c,f):
         lines=(['No continues. No encounter restarts.','Unlimited lives are disabled.','Your best time gets its own record.'] if hardcore else ['A 10-second countdown gives you another shot.','Lives carry forward between stages.','Clear a stage to earn an extra ribbon.'])
         for i,line in enumerate(lines):text(c,80,502+i*34,line,17,MUTED,width=755)
     elif f.page=='options':
-        text(c,654,248,'LET THE SOUNDTRACK LEAD.',23,GREEN,width=520)
+        text(c,654,248,'SOUND & CONTROLLER',23,GREEN,width=520)
         for i,line in enumerate(('MUSIC','The full soundtrack and final-level theme.','','EFFECTS','Combat, movement and menu feedback.')):
             text(c,654,298+i*36,line,16,CREAM if i in (0,3) else MUTED,width=530)
-        text(c,654,540,'Amber mark = original mix level.',14,AMBER)
-        text(c,80,568,'LEFT / RIGHT: 5%    CLICK METER: SET VOLUME',13,MUTED)
-    elif f.page=='controls':controls(c)
+        text(c,654,540,'DEADZONE / Increase to prevent stick drift.',14,AMBER)
+        text(c,80,610,'LEFT / RIGHT: ADJUST 5%    CLICK METER: SET',13,MUTED)
+    elif f.page=='controls':controls(c,getattr(f.app,'input_device','keyboard')=='controller')
     elif f.page=='credits':credits(c,f)
     elif f.page=='confirm':
         descriptions={'quit':('LEAVE THE GAME?','Your current run will end.'),'restart':('RESTART THIS ENCOUNTER?','This restart is recorded in your run.'),'title':('RETURN TO THE TITLE?','Your current run will end.')}
@@ -124,8 +126,8 @@ def draw(c,f):
         stage_panel(c,f.app.level,644,300,556,240)
     draw_rows(c,f,t)
     box(c,80,642,1120,1,(.20,.29,.23,1))
-    text(c,80,662,'ARROWS / SELECT     ENTER / CONFIRM     MOUSE / POINT + CLICK',12,MUTED)
-    text(c,1040,662,'ESC / BACK' if f.page!='results' else 'RUN COMPLETE',12,GREEN)
+    text(c,80,662,('D-PAD / SELECT     A / CONFIRM     B / BACK' if getattr(f.app,'input_device','keyboard')=='controller' else 'ARROWS / SELECT     ENTER / CONFIRM     MOUSE / POINT + CLICK'),12,MUTED)
+    text(c,1040,662,('B / BACK' if getattr(f.app,'input_device','keyboard')=='controller' else 'ESC / BACK') if f.page!='results' else 'RUN COMPLETE',12,GREEN)
     if f.profile.error:text(c,80,632,f.profile.error,13,AMBER)
 
 def results(c,f):
@@ -147,8 +149,9 @@ def results(c,f):
         text(c,690,y+36,'NO HIT' if cleared and not r.hits.get(i+1,0) else 'CLEARED' if cleared else 'NOT CLEARED',10,GREEN if cleared else MUTED)
     text(c,644,628,f'ENCOUNTER RESTARTS  {r.restarts}',12,MUTED)
 
-def controls(c):
+def controls(c,controller=False):
     entries=[('A / D','Move','SPACE / K','Jump / double jump'),('J / Z','Fire','MOUSE','Aim + left click to fire'),('S / DOWN','Crouch','SHIFT','Slide / air dash'),('QUATTRO','Space jumps','SHIFT','Boost the car'),('SPACE STAGE','W / A / S / D move','SHIFT','Thruster burst'),('ESC / P','Pause','R','Request encounter restart')]
+    if controller:entries=[('LEFT / D-PAD','Move / eight-way fire','RIGHT STICK','Aim independently'),('RT / X','Fire','A','Jump / double jump'),('B / LB','Slide / air dash','Y','Interact with crates'),('QUATTRO','A jumps; B / LB boosts','SPACE STAGE','Left stick moves freely'),('MENU','Pause / resume','A / B','Confirm / back in menus'),('OPTIONS','Adjust stick dead zone','KEYBOARD','Still available anytime')]
     for i,row in enumerate(entries):
         for j in range(2):
             x=80+j*570;y=203+i*58

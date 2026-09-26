@@ -67,7 +67,8 @@ def weapon_pose(f,aim=None):
     sw,sh=FRAMES[upper][2:]
     offset=sx*w/sw
     pivot=(left+(offset if f.facing>0 else w-offset),top+sy*h/sh)
-    angle=math.atan2(aim[1]-pivot[1],aim[0]-pivot[0]) if aim else (0 if f.facing>0 else math.pi)
+    stick=getattr(f,'stick_aim',None) if aim is not None else None
+    angle=math.atan2(stick[1],stick[0]) if stick else math.atan2(aim[1]-pivot[1],aim[0]-pivot[0]) if aim else (0 if f.facing>0 else math.pi)
     return pivot[0],pivot[1],angle
 
 

@@ -240,7 +240,7 @@ class FoundryRenderer:
         elif t<11.3:title='THE MIST GATE IS CLEAR';text='DHH: YOU JUST THREW A QUATTRO AT A DRAGON.'
         else:title='THE MIST GATE IS CLEAR';text="TOBI: YOU’RE WELCOME."
         label(c,70,65,title,17,'gold');label(c,70,660,text,17)
-        if f.state=='won':label(c,70,695,'ENTER / THE LAUNCH SITE / R REPLAY / ESC MENU',12)
+        if f.state=='won':label(c,70,695,('A / THE LAUNCH SITE / VIEW MENU' if getattr(f,"controller_active",False) else 'ENTER / THE LAUNCH SITE / R REPLAY / ESC MENU'),12)
 
 
 class FoundryIntro:
@@ -273,4 +273,4 @@ class FoundryIntro:
             label(c,55,45,'04 / THE MIST GATE',19)
             text='DHH: THERE’S THE SHIP.' if t<2.8 else 'DHH: SOMETHING IS IN THE FOG.' if t<5.4 else ''
             label(c,55,684,text,16)
-            label(c,1080,684,'ENTER / SKIP',11)
+            label(c,1080,684,('A / SKIP' if getattr(f,"controller_active",False) else 'ENTER / SKIP'),11)

@@ -126,14 +126,14 @@ class Finale:
                     self.shots.append(Shot(x,y+20,math.cos(a)*speed,math.sin(a)*speed,kind='shard',turn=.15))
         self.round+=1
     @property
-    def laser_muzzle(self):return laser_muzzle(self.x,self.y)
+    def laser_muzzle(self):return laser_muzzle(self.x,self.y,getattr(self,"laser_angle",-math.pi/2)+math.pi/2)
 
     def update_laser(self,dt,shoot):
         self.beam=[];self.beam_hit=False;self.laser_contact=None
         if shoot and not self.laser_held:self.sound('laser_start',.35)
         self.laser_held=shoot
         if not shoot:return
-        points=rope_path(*self.laser_muzzle,-math.pi/2,self.clock,1000.)
+        points=rope_path(*self.laser_muzzle,getattr(self,"laser_angle",-math.pi/2),self.clock,1000.)
         if self.phase==1:
             left,top,right,bottom=self.shield_hitbox
             # Both shield reserves cover the entire enclosure. Breaking one
@@ -155,7 +155,7 @@ class Finale:
                     self.beam_hit=True;self.boss_flash=.08
                     return
 
-    def step(self,dt,move=0,vertical=0,shoot=False,slide=False,slide_pressed=False,**unused):
+    def step(self,dt,move=0,vertical=0,shoot=False,slide=False,slide_pressed=False,aim=None,**unused):
         dt=max(0,min(.04,dt));self.clock+=dt
         self.beam=[];self.beam_hit=False;self.laser_contact=None
         if self.state in ('departure','encounter','ending'):
@@ -182,6 +182,8 @@ class Finale:
         self.x=max(45,min(1235,self.x+vx*speed*dt));self.y=max(310,min(655,self.y+vy*speed*dt))
         self.trail=[(x,y,life-dt) for x,y,life in self.trail if life>dt]
         if self.dash_time>0:self.trail.append((self.x,self.y,.20))
+        stick=getattr(self,"stick_aim",None) if aim is not None else None
+        self.laser_angle=math.atan2(stick[1],stick[0]) if stick else math.atan2(aim[1]-self.y,aim[0]-self.x) if aim else -math.pi/2
         self.update_laser(dt,shoot)
         self.volley-=dt
         if self.volley<=0:

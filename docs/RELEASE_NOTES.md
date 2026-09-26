@@ -1,5 +1,16 @@
 # Release notes
 
+## 1.1.0
+
+- Add Xbox-style controller support on desktop and web, including menus,
+  cinematics, continue screens, and the browser's first loading screen.
+- Aim and fire in eight directions with the left stick or D-pad; use the right
+  stick for independent aiming, including the final space encounter.
+- Add adjustable stick deadzone, controller prompts, GameSir G7 SE mapping,
+  focus/disconnect protection, and safe held-button handling between scenes.
+- Launch the browser version with shared desktop gameplay and cinematics.
+- Improve the guardian-to-dragon transition and soften the title Start explosion.
+
 ## 1.0.2
 
 - Fix held keys replaying actions across scene changes and missed input after

@@ -149,13 +149,14 @@ class FinaleRenderer:
                     radius=115-35*f.phase_age
                     line(c,[(bx+math.cos(a)*radius,by+math.sin(a)*radius),
                             (bx+math.cos(a)*(radius-12),by+math.sin(a)*(radius-12))],'gold',2,.7)
-            for x,y,life in f.trail:self.player(c,x,y,life*2)
+            for x,y,life in f.trail:self.player(c,x,y,life*2,getattr(f,"laser_angle",-math.pi/2)+math.pi/2)
             hit=max(0,1-(f.clock-getattr(f,'hit_clock',-99))/.4)
             if f.invuln<=0 or int(f.clock*15)%2:
                 c.save();c.translate(f.x,f.y);c.rotate(math.sin((1-hit)*12)*.2*hit)
-                self.player(c,0,0);c.restore()
+                self.player(c,0,0,rotation=getattr(f,"laser_angle",-math.pi/2)+math.pi/2);c.restore()
             if hit>0:glow(c,f.x,f.y,45,'cream',hit*.6)
-            glow(c,f.x,f.y+29,13,'gold',.65)
+            roll=getattr(f,'laser_angle',-math.pi/2)+math.pi/2
+            glow(c,f.x-29*math.sin(roll),f.y+29*math.cos(roll),13,'gold',.65)
             for b in f.shots:
                 if b.enemy:
                     fx.projectile(c,b.kind,b.x,b.y,b.vx,b.vy,f.clock)
@@ -176,12 +177,14 @@ class FinaleRenderer:
                 label(c,415,388,'CONTINUE SCREEN INCOMING',21)
         if paused:
             color(c,'ink',.7);c.paint();label(c,550,350,'PAUSED',26)
-    def player(self,c,x,y,alpha=1):
+    def player(self,c,x,y,alpha=1,rotation=0):
         # One integrated pose: the glove actually grips the stolen weapon.
         # Shared source coordinates keep the live beam on its aperture.
+        c.save();c.translate(x,y);c.rotate(rotation);x=y=0
         scale=SPACE_SCALE;ax,ay=SPACE_ANCHOR
         sprites.draw(c,'dhh-space-laser.png',(0,0,1024,1536),
                      x-ax*scale,y-ay*scale,1024*scale,1536*scale,alpha=alpha)
+        c.restore()
 
     def boarding_hero(self,c,t):
         x,floor,_,_,alpha,moving=boarding_pose(t)
@@ -306,7 +309,7 @@ class FinaleRenderer:
         elif t<9.6:text='DHH: WORKING ON IT.';spoken=t-6.6
         else:text="DHH: LET’S FINISH THIS.";spoken=t-9.6
         label(c,100,505,text[:int(spoken*40)],18)
-        label(c,100,549,'ENTER / SKIP TO THE FIGHT',11)
+        label(c,100,549,('A / SKIP TO THE FIGHT' if getattr(f,"controller_active",False) else 'ENTER / SKIP TO THE FIGHT'),11)
 
     def departure(self,c,f):
         t=f.age;self.sky(c,f.clock)
@@ -337,7 +340,7 @@ class FinaleRenderer:
             sprite(c,3,603,y,74,100)
             text='DHH: YOUR LAST RIDE EXPLODED.' if t<DEPARTURE_LAUNCH_AT+3 else 'TOBI: I WILL FIND SOMETHING FASTER.'
         self.bars(c,'THE LAST CONNECTION',text)
-        label(c,90,700,'ENTER / SKIP',11)
+        label(c,90,700,('A / SKIP' if getattr(f,"controller_active",False) else 'ENTER / SKIP'),11)
     def bars(self,c,title,text):
         c.set_source_rgb(0,0,0);c.rectangle(0,0,1280,105);c.rectangle(0,590,1280,130);c.fill()
         label(c,90,68,title,18,'gold');label(c,90,650,text,16)

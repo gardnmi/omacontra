@@ -351,6 +351,8 @@ def event(data):
             app.key(None, e)
         else:
             app.release(None, e)
+    elif kind == "gamepad":
+        app.controller.sample(data.get("state"))
     elif kind == "motion":
         app.motion(None, types.SimpleNamespace(x=data["x"], y=data["y"]))
     elif kind in ("press", "release"):
@@ -439,6 +441,10 @@ def status():
     f = app.f
     front = app.frontend
     return {
+        "controller": app.controller.connected,
+        "inputDevice": app.input_device,
+        "controllerAim": app.controller.aim,
+        "controllerDirection": app.controller.direction,
         "level": app.level,
         "state": f.state,
         "intro": app.intro.beat.kind if app.intro else None,

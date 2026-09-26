@@ -5,7 +5,11 @@
 A Contra-inspired **boss-only** fullscreen game. Five encounters bring wallpaper worlds to life: the Reaper, Quattro Run, Tidebreaker, the Mist Gate, and Black Moon. DHH runs, jumps, ducks,
 and fires a machine gun. Later encounters introduce an arc rifle and a spacesuit firing stream.
 
-**Currently keyboard and mouse only. Controller support is not yet available.**
+**Keyboard/mouse and Xbox-style controllers are supported on desktop and web.**
+
+Controller: left stick/D-pad moves and aims fire in eight directions (including straight up/down), right stick overrides aim, RT/X fires, A jumps, B/LB slides or air-dashes, Y interacts, and Menu pauses. In menus, A confirms and B goes back. Adjust stick dead zone under Options. Space uses both left-stick axes; the car uses A to jump and B/LB to boost.
+
+On the web, press A/Menu on the first loading screen to start (pressing during loading queues the start). If the browser blocks audio, click Enable sound once. The browser supports standard-mapped controllers plus the GameSir G7 SE Linux HID layout. The connection indicator below the game reports detection or permission problems. Desktop uses SDL’s built-in controller mappings with normal user device access; no root launch is needed. Disconnecting the active controller pauses the game. Keyboard and mouse remain available.
 
 ## Browser build
 

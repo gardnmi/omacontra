@@ -34,9 +34,9 @@ class InternalResolutionTests(unittest.TestCase):
         for level,attribute in ((2,'chase_cinema'),(3,'journey_cinema'),(4,'foundry_intro')):
             a.level=level;setattr(a,attribute,a.finale_renderer)
             a.draw(a.area,target);setattr(a,attribute,None)
-        a.intro=object();a.draw(a.area,target)
+        a.intro=SimpleNamespace();a.draw(a.area,target)
         self.assertEqual(a.intro_renderer.draw.call_args.args[2:],(1280,720))
-        a.intro=None;a.continue_screen=object();a.draw(a.area,target)
+        a.intro=None;a.continue_screen=SimpleNamespace();a.draw(a.area,target)
         a.continue_screen=None
         for menu in ('mode','pause','results','music','credits'):
             a.frontend.page=menu;a.draw(a.area,target)

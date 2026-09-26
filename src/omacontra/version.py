@@ -1,3 +1,3 @@
 """Release identity shared by CLI, menus, and packaging tools."""
 
-__version__ = "1.0.2"
+__version__ = "1.1.0"

@@ -147,6 +147,8 @@ class ReleaseTests(unittest.TestCase):
         a=self.app();a.frontend.open('options');a.frontend.key('left')
         self.assertEqual(a.frontend.profile.settings['music'],95);a.music.set_volume.assert_called_with(80.75)
         a.frontend.key('down');a.frontend.key('left');self.assertAlmostEqual(a.weapon_audio.effects.gain,.95*1.1)
+        a.frontend.key('down');self.assertTrue(a.frontend.rows()[a.frontend.selection].startswith('DEADZONE'))
+        a.frontend.key('left');self.assertEqual(a.frontend.profile.settings['deadzone'],15)
         a.frontend.key('down');self.assertEqual(a.frontend.rows()[a.frontend.selection],'Back')
         self.assertEqual(Profile(a.frontend.profile.path).settings,a.frontend.profile.settings)
     def test_records_separate_practice_unlimited_and_arcade(self):
@@ -289,7 +291,7 @@ class ReleaseTests(unittest.TestCase):
             with self.subTest(settings=settings):
                 p.write_text(json.dumps({'settings':settings,'best':{'arcade':90.}}))
                 profile=Profile(p)
-                self.assertEqual(profile.settings,{'music':100,'effects':100})
+                self.assertEqual(profile.settings,{'music':100,'effects':100,'deadzone':20})
                 self.assertEqual(profile.best,{'arcade':90.})
 
     def test_refocus_accepts_key_released_while_away(self):
@@ -312,5 +314,17 @@ class ReleaseTests(unittest.TestCase):
                     a.key(None,event)
                     self.assertEqual(a.frontend.selection,before+1)
                     self.assertFalse(a.keyboard.held)
+
+    def test_pause_does_not_turn_a_held_controller_direction_into_menu_input(self):
+        from omacontra.controller import Controller
+        a=self.app();a.input_device='controller';a.controller=Controller(a)
+        held={'connected':True,'buttons':['right','rt'],'axes':[0,0,0,0]}
+        a.controller.sample(held);self.assertIn('right',a.keys)
+        a.frontend.open('options');a.controller.sample(held);a.controller.tick(1)
+        self.assertEqual(a.frontend.profile.settings['music'],100)
+        self.assertFalse(a.keys)
+        a.controller.sample({'connected':True,'buttons':[],'axes':[0,0,0,0]})
+        a.controller.sample(held)
+        self.assertEqual(a.frontend.profile.settings['music'],105)
 
 if __name__=='__main__':unittest.main()

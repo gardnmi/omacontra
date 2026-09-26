@@ -256,7 +256,8 @@ class Foundry(Fight):
         if not self.laser or not shoot:return
         sx,sy=self.muzzle_position
         target=self.aim_target or (sx+self.facing*1300,sy)
-        angle=math.atan2(target[1]-sy,target[0]-sx)
+        stick=getattr(self,"stick_aim",None)
+        angle=math.atan2(stick[1],stick[0]) if stick else math.atan2(target[1]-sy,target[0]-sx)
         for x,y in rope_path(sx,sy,angle,self.clock):
             self.beam.append((x,y))
             if self.boss_x-125<x<self.boss_x+125 and 210<y<630:

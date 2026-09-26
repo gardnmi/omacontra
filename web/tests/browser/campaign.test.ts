@@ -204,7 +204,7 @@ test("continue, hardcore, unlimited damage tracking, persisted options and sound
   );
   await expect.poll(async () => (await state(page)).continue).toBe("expired");
   await debug(page, "stage", { level: 1, skip: true });
-  expect((await state(page)).settings).toEqual({ music: 60, effects: 100 });
+  expect((await state(page)).settings).toEqual({ music: 60, effects: 100, deadzone: 20 });
   await debug(page, "menu", { page: "options" });
   await page.keyboard.press("ArrowLeft");
   await expect.poll(async () => (await state(page)).settings.music).toBe(55);

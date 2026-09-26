@@ -203,3 +203,9 @@ footer button {
 body:fullscreen {
   background: #000;
 }
+
+footer { flex-wrap: wrap; row-gap: 4px; }
+#controller-status { color: #b3d982; }
+
+.controller-start-hint { font-size: 12px; color: #b3d982; }
+#enable-audio { position: fixed; top: 12px; right: 12px; z-index: 10; }

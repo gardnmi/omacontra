@@ -33,14 +33,17 @@
           </div>
           <p id="loading" role="status">Loading…</p>
           <button id="play" hidden>PLAY</button>
+          <p class="controller-start-hint">A / MENU: PLAY — press while loading to start when ready</p>
           <p class="load-hint">FIVE BOSSES. ONE WAY THROUGH.</p>
         </div>
       </section>
     </main>
+    <button id="enable-audio" hidden>Enable sound</button>
     <footer>
+      <span id="controller-status" role="status">Controller: press A to connect</span>
       <span
         >Move: A/D / arrows · Jump: Space · Dash: Shift · Aim / fire: mouse ·
-        Pause: Esc</span
+        Pause: Esc · Xbox controller supported</span
       ><button id="fullscreen">Fullscreen</button>
     </footer>
     <script type="module" src="/src/campaign/main.ts"></script>

@@ -39,7 +39,7 @@ class JourneyCinema:
             c.restore()
             label(c,100,143,'THE HARBOR / THE ROAD TO ORBIT',14,'gold')
             label(c,100,505,text[:int(elapsed*38)],18)
-            label(c,100,549,'ENTER / SKIP TO THE CROSSING',11)
+            label(c,100,549,('A / SKIP TO THE CROSSING' if getattr(self,"controller_active",False) else 'ENTER / SKIP TO THE CROSSING'),11)
             return
         t=max(0,self.age-HARBOR_DURATION) if self.kind=='intro' else self.age
         opening=smooth((t-5)/1.5) if self.kind=='intro' else 0.
@@ -53,4 +53,4 @@ class JourneyCinema:
             label(c,100,142,'03 / TIDEBREAKER' if self.kind=='intro' else 'THE UPLINK FALLS SILENT',14,'gold')
             text='DHH / RADIO: TOBI... THE OCEAN IS MOVING WRONG.' if self.kind=='intro' else 'TOBI / RADIO: THE SHIP IS BEYOND THE MIST. I FOUND A WAY OVER.'
             label(c,100,505,text[:int(t*32)],18)
-            label(c,100,549,'ENTER / SKIP' if self.kind=='intro' else 'ENTER / THE MIST GATE     R / REPLAY     ESC / EXIT',11)
+            label(c,100,549,('A / SKIP' if getattr(self,"controller_active",False) else 'ENTER / SKIP') if self.kind=='intro' else ('A / THE MIST GATE     VIEW / MENU' if getattr(self,"controller_active",False) else 'ENTER / THE MIST GATE     R / REPLAY     ESC / EXIT'),11)

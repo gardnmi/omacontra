@@ -114,7 +114,7 @@ class Renderer:
             for x in (78,W-78):lamp(c,x,264,58,.22+.12*math.sin(t*3))
         if kind=='resolve' and t>2:box(c,220,391,520,2,GOLD,.7)
 
-    def title(self,c,t,start_age=None):
+    def title(self,c,t,start_age=None,controller=False):
         self.atmosphere(c,t,.40)
         h=H-57;w=self.cover.get_width()*h/self.cover.get_height()
         x=(W-w)/2;y=15
@@ -127,7 +127,7 @@ class Renderer:
             if start_age>2.15:box(c,x,y,w,h,INK,min(1,(start_age-2.15)/.25))
         for side in (-1,1):
             lamp(c,W/2+side*(w/2+25),H*.55,38,.25+.08*math.sin(t*2))
-        text(c,'ENTER / START     R / REPLAY INTRO',H-13,11,CREAM)
+        text(c,('A / START     MENU / OPTIONS' if controller else 'ENTER / START     R / REPLAY INTRO'),H-13,11,CREAM)
         if t<.22:box(c,0,0,W,H,CREAM,.85*(1-t/.22))
 
     def unlock_banner(self,c,intro):
@@ -219,7 +219,7 @@ class Renderer:
         c.rectangle(0,0,W,H);c.clip()
         kind,t=intro.beat.kind,intro.age
         if kind=='cover':
-            self.title(c,t,intro.start_age)
+            self.title(c,t,intro.start_age,getattr(intro,"controller_active",False))
             if intro.unlimited_lives:self.unlock_banner(c,intro)
         elif intro.journey and kind=='wake':self.wallpaper_arrival(c,intro)
         elif not intro.journey:
@@ -227,7 +227,7 @@ class Renderer:
             else:self.story_card(c,intro)
         else:self.cinematic_strip(c,intro)
         if kind!='cover' and not (intro.journey and kind=='wake'):
-            text(c,'SPACE / NEXT    P / PAUSE    R / REPLAY    ESC / EXIT',H-16,10,GOLD)
+            text(c,('A / NEXT    VIEW / PAUSE' if getattr(intro,'controller_active',False) else 'SPACE / NEXT    P / PAUSE    R / REPLAY    ESC / EXIT'),H-16,10,GOLD)
             if t<.22:box(c,0,0,W,H,(0,0,0),1-t/.22)
         if kind!='cover' and not intro.journey and intro.unlock_age is not None and intro.unlock_age<3.4:
             self.unlock_banner(c,intro)

@@ -82,7 +82,7 @@ class ContinueRenderer:
             centered(c,'LET’S GO.',660,28,(.68,.9,.56))
         elif expired:
             if screen.hardcore:centered(c,'HARDCORE RUN ENDED / NO CONTINUES',616,22,(.95,.53,.35))
-            centered(c,'ENTER / TITLE SCREEN     ESC / MENU',662,20,(.76,.75,.65))
+            centered(c,('A / TITLE SCREEN     MENU / OPTIONS' if getattr(screen,"controller_active",False) else 'ENTER / TITLE SCREEN     ESC / MENU'),662,20,(.76,.75,.65))
         else:
             centered(c,str(screen.remaining),660,74,(1,.64,.22))
-            centered(c,'ENTER / SPACE / R  —  CONTINUE',704,17,(.76,.75,.65))
+            centered(c,('A / CONTINUE' if getattr(screen,"controller_active",False) else 'ENTER / SPACE / R  —  CONTINUE'),704,17,(.76,.75,.65))
